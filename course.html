@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <base href="/test_git/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - Student Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-purple: #6C5CE7;
+            --secondary-blue: #6C8BFF;
+            --secondary-pink: #F97A9A;
+            --bg-light: #F5F7FA;
+            --text-dark: #333;
+            --text-muted: #777;
+            --gradient: linear-gradient(135deg, #4361ee, #3f37c9);
+
+        }
+
+        body {
+            background-color: var(--bg-light);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 260px;
+            background: white;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar .logo {
+            padding: 24px;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-purple);
+        }
+
+        .sidebar .nav-link {
+            border-radius: 12px;
+            margin: 6px 12px;
+            padding: 12px 16px !important;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #666; 
+        }
+
+        .sidebar .nav-link:hover {
+            background: rgba(67, 97, 238, 0.1);
+            transform: translateX(8px);
+            color: var(--primary-dark);
+        }
+
+        .sidebar .nav-link.active {
+            background: var(--gradient) !important;
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.3);
+            color: white !important;
+
+            transform: translateX(4px);
+        }
+
+        .help-widget {
+            position: absolute;
+            bottom: 24px;
+            left: 16px;
+            right: 16px;
+            background: linear-gradient(135deg, var(--primary-purple), var(--secondary-blue));
+            border-radius: 12px;
+            padding: 16px;
+            color: white;
+        }
+
+        .help-badge {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 24px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Search and Filter Bar */
+        .filter-bar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-input {
+            border-radius: 10px;
+            padding: 10px 16px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .filter-select {
+            border-radius: 10px;
+            padding: 10px 16px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .btn-add-course {
+            background: linear-gradient(135deg, var(--primary-purple), var(--secondary-blue));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 24px;
+            font-weight: 600;
+        }
+
+        .btn-add-course:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.4);
+            color: white;
+        }
+
+        /* Course Cards */
+        .course-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            height: 100%;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-header {
+            padding: 20px;
+            color: white;
+            position: relative;
+            height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .course-header.blue {
+            background: linear-gradient(135deg, #6C8BFF, #4EABFF);
+        }
+
+        .course-header.purple {
+            background: linear-gradient(135deg, #6C5CE7, #9B8FF7);
+        }
+
+        .course-header.pink {
+            background: linear-gradient(135deg, #F97A9A, #FF9FB8);
+        }
+
+        .course-header.green {
+            background: linear-gradient(135deg, #00D97E, #39E196);
+        }
+
+        .course-header.orange {
+            background: linear-gradient(135deg, #FFA500, #FFB84D);
+        }
+
+        .course-header.teal {
+            background: linear-gradient(135deg, #20C997, #5FE3BD);
+        }
+
+        .course-code {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .course-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 8px 0 0 0;
+        }
+
+        .course-body {
+            padding: 20px;
+        }
+
+        .course-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .meta-item i {
+            color: var(--primary-purple);
+        }
+
+        .course-description {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .course-teacher {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .teacher-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-purple);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .teacher-info small {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-view {
+            background: var(--primary-purple);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-view:hover {
+            background: #5046c7;
+            transform: translateY(-2px);
+        }
+
+        .badge-status {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-active {
+            background: #D4EDDA;
+            color: #155724;
+        }
+
+        .badge-inactive {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+
+        .badge-upcoming {
+            background: #FFF3CD;
+            color: #856404;
+        }
+
+        /* Stats Cards */
+        .stats-row {
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-icon.blue {
+            background: rgba(108, 139, 255, 0.1);
+            color: var(--secondary-blue);
+        }
+
+        .stat-icon.purple {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary-purple);
+        }
+
+        .stat-icon.green {
+            background: rgba(0, 217, 126, 0.1);
+            color: #00D97E;
+        }
+
+        .stat-icon.orange {
+            background: rgba(255, 165, 0, 0.1);
+            color: #FFA500;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.3s;
+            margin-left: 8px;
+        }
+
+        .action-btn:hover {
+            border-color: var(--primary-purple);
+            color: var(--primary-purple);
+            background: var(--bg-light);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Left Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="bi bi-mortarboard-fill"></i> EduManage
+        </div>
+        <nav class="nav flex-column">
+            <a class="nav-link" href="index.html"><i class="bi bi-grid-fill me-2"></i> Dashboard</a>
+            <a class="nav-link" href="student-detail.html"><i class="bi bi-people me-2"></i> Students Detail</a>
+            <a class="nav-link text-muted" href="student-enroll.html"><i class="bi bi-person-plus-fill me-2"></i> Enroll
+                Student</a>
+            <a class="nav-link text-muted" href="student-list.html"><i class="bi bi-person-badge me-2"></i> List
+                Student</a>
+
+            <a class="nav-link active text-muted" href="course.html"><i class="bi bi-book me-2"></i> Courses</a>
+            <a class="nav-link" href="attendence.html"><i class="bi bi-calendar-check me-2"></i> Attendance</a>
+            <a class="nav-link" href="#"><i class="bi bi-graph-up me-2"></i> Reports</a>
+        </nav>
+
+        <div class="help-widget">
+            <div class="help-badge">
+                <i class="bi bi-headset"></i> 24/7
+            </div>
+            <div class="mb-2"><strong>Need Support?</strong></div>
+            <p class="small mb-2">Have questions about the system? Contact our support team.</p>
+            <button class="btn btn-light btn-sm w-100">Get Help</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="page-title">Courses Management</h2>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Courses</li>
+                        </ol>
+                    </nav>
+                </div>
+                <button class="btn btn-add-course">
+                    <i class="bi bi-plus-circle me-2"></i> Add New Course
+                </button>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="row stats-row g-3">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div>
+                        <div class="stat-number">42</div>
+                        <div class="stat-label">Total Courses</div>
+                    </div>
+                    <div class="stat-icon blue">
+                        <i class="bi bi-book-fill"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div>
+                        <div class="stat-number">35</div>
+                        <div class="stat-label">Active Courses</div>
+                    </div>
+                    <div class="stat-icon green">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div>
+                        <div class="stat-number">1,248</div>
+                        <div class="stat-label">Total Enrollments</div>
+                    </div>
+                    <div class="stat-icon purple">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div>
+                        <div class="stat-number">87</div>
+                        <div class="stat-label">Instructors</div>
+                    </div>
+                    <div class="stat-icon orange">
+                        <i class="bi bi-person-badge-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="text" class="form-control search-input border-start-0"
+                            placeholder="Search courses...">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select filter-select">
+                        <option selected>All Status</option>
+                        <option>Active</option>
+                        <option>Inactive</option>
+                        <option>Upcoming</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select filter-select">
+                        <option selected>All Grades</option>
+                        <option>Grade 9</option>
+                        <option>Grade 10</option>
+                        <option>Grade 11</option>
+                        <option>Grade 12</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select filter-select">
+                        <option selected>All Subjects</option>
+                        <option>Mathematics</option>
+                        <option>Science</option>
+                        <option>English</option>
+                        <option>History</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-funnel me-2"></i> Filter
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Courses Grid -->
+        <div class="row g-4">
+            <!-- Course Card 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="course-card">
+                    <div class="course-header blue">
+                        <div>
+                            <div class="course-code">MATH-101</div>
+                            <h5 class="course-title">Advanced Mathematics</h5>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-people-fill"></i>
+                                <span>32 Students</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-clock-fill"></i>
+                                <span>48 Hours</span>
+                            </div>
+                        </div>
+                        <p class="course-description">
+                            Comprehensive mathematics course covering algebra, calculus, and advanced problem-solving
+                            techniques for grade 11 students.
+                        </p>
+                        <div class="course-teacher">
+                            <div class="teacher-avatar">MK</div>
+                            <div class="teacher-info">
+                                <small>Instructor</small>
+                                <div><strong>Michael Kumar</strong></div>
+                            </div>
+                        </div>
+                        <div class="course-footer">
+                            <span class="badge-status badge-active">Active</span>
+                            <div>
+                                <button class="action-btn">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                <button class="btn-view">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="course-card">
+                    <div class="course-header purple">
+                        <div>
+                            <div class="course-code">SCI-201</div>
+                            <h5 class="course-title">Biology & Life Sciences</h5>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-people-fill"></i>
+                                <span>28 Students</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-clock-fill"></i>
+                                <span>40 Hours</span>
+                            </div>
+                        </div>
+                        <p class="course-description">
+                            Explore the fascinating world of biology including cell structure, genetics, evolution, and
+                            ecosystems.
+                        </p>
+                        <div class="course-teacher">
+                            <div class="teacher-avatar">LJ</div>
+                            <div class="teacher-info">
+                                <small>Instructor</small>
+                                <div><strong>Dr. Linda Johnson</strong></div>
+                            </div>
+                        </div>
+                        <div class="course-footer">
+                            <span class="badge-status badge-active">Active</span>
+                            <div>
+                                <button class="action-btn">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                <button class="btn-view">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="course-card">
+                    <div class="course-header pink">
+                        <div>
+                            <div class="course-code">ENG-301</div>
+                            <h5 class="course-title">English Literature</h5>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-people-fill"></i>
+                                <span>30 Students</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-clock-fill"></i>
+                                <span>36 Hours</span>
+                            </div>
+                        </div>
+                        <p class="course-description">
+                            Study classic and contemporary literature, developing critical thinking and analytical
+                            writing skills.
+                        </p>
+                        <div class="course-teacher">
+                            <div class="teacher-avatar">SP</div>
+                            <div class="teacher-info">
+                                <small>Instructor</small>
+                                <div><strong>Sarah Peterson</strong></div>
+                            </div>
+                        </div>
+                        <div class="course-footer">
+                            <span class="badge-status badge-active">Active</span>
+                            <div>
+                                <button class="action-btn">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                <button class="btn-view">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 4 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="course-card">
+                    <div class="course-header green">
+                        <div>
+                            <div class="course-code">CHEM-102</div>
+                            <h5 class="course-title">Chemistry Fundamentals</h5>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-people-fill"></i>
+                                <span>25 Students</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-clock-fill"></i>
+                                <span>44 Hours</span>
+                            </div>
+                        </div>
+                        <p class="course-description">
+                            Introduction to chemical principles including atomic structure, bonding, reactions, and
+                            laboratory techniques.
+                        </p>
+                        <div class="course-teacher">
+                            <div class="teacher-avatar">RW</div>
+                            <div class="teacher-info">
+                                <small>Instructor</small>
+                                <div><strong>Robert Williams</strong></div>
+                            </div>
+                        </div>
+                        <div class="course-footer">
+                            <span class="badge-status badge-upcoming">Upcoming</span>
+                            <div>
+                                <button class="action-btn">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                <button class="btn-view">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 5 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="course-card">
+                    <div class="course-header orange">
+                        <div>
+                            <div class="course-code">HIST-201</div>
+                            <h5 class="course-title">World History</h5>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-people-fill"></i>
+                                <span>35 Students</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-clock-fill"></i>
+                                <span>38 Hours</span>
+                            </div>
+                        </div>
+                        <p class="course-description">
+                            Journey through major historical events, civilizations, and cultural movements that shaped
+                            our world.
+                        </p>
+                        <div class="course-teacher">
+                            <div class="teacher-avatar">JM</div>
+                            <div class="teacher-info">
+                                <small>Instructor</small>
+                                <div><strong>Jennifer Martinez</strong></div>
+                            </div>
+                        </div>
+                        <div class="course-footer">
+                            <span class="badge-status badge-active">Active</span>
+                            <div>
+                                <button class="action-btn">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                <button class="btn-view">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Card 6 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="course-card">
+                    <div class="course-header teal">
+                        <div>
+                            <div class="course-code">PHYS-103</div>
+                            <h5 class="course-title">Physics & Mechanics</h5>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-people-fill"></i>
+                                <span>22 Students</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-clock-fill"></i>
+                                <span>42 Hours</span>
+                            </div>
+                        </div>
+                        <p class="course-description">
+                            Understanding the laws of physics, motion, energy, and forces through theory and practical
+                            experiments.
+                        </p>
+                        <div class="course-teacher">
+                            <div class="teacher-avatar">DT</div>
+                            <div class="teacher-info">
+                                <small>Instructor</small>
+                                <div><strong>David Thompson</strong></div>
+                            </div>
+                        </div>
+                        <div class="course-footer">
+                            <span class="badge-status badge-inactive">Inactive</span>
+                            <div>
+                                <button class="action-btn">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                                <button class="btn-view">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <div class="text-muted">Showing 1-6 of 42 courses</div>
+            <nav>
+                <ul class="pagination mb-0">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
