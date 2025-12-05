@@ -440,6 +440,82 @@
       }
     }
 
+    // Global variables for edit mode
+    let isEditMode = false;
+    let editingStudentId = null;
+
+    // Check if we're in edit mode
+    document.addEventListener('DOMContentLoaded', function() {
+      checkEditMode();
+    });
+
+    function checkEditMode() {
+      const editStudent = sessionStorage.getItem('editStudent');
+      if (editStudent) {
+        isEditMode = true;
+        const student = JSON.parse(editStudent);
+
+        // Update page title and button text
+        document.querySelector('.page-title').textContent = 'Edit Student Information';
+        document.querySelector('button[type="submit"]').innerHTML =
+          '<i class="bi bi-check-circle-fill me-2"></i>Update Student';
+        document.getElementById('progressBar').style.width = '100%';
+
+        // Populate form with student data
+        populateForm(student);
+
+        // Clear session storage
+        sessionStorage.removeItem('editStudent');
+        sessionStorage.removeItem('editMode');
+      }
+    }
+
+    function populateForm(student) {
+      editingStudentId = student.id;
+
+      // Set text inputs
+      document.querySelector('[name="firstName"]').value = student.firstName || '';
+      document.querySelector('[name="middleName"]').value = student.middleName || '';
+      document.querySelector('[name="lastName"]').value = student.lastName || '';
+      document.querySelector('[name="studentId"]').value = student.studentId || '';
+      document.querySelector('[name="dob"]').value = student.dob || '';
+      document.querySelector('[name="gender"]').value = student.gender || '';
+      document.querySelector('[name="nationality"]').value = student.nationality || '';
+      document.querySelector('[name="ethnicity"]').value = student.ethnicity || '';
+      document.querySelector('[name="personalEmail"]').value = student.personalEmail || '';
+      document.querySelector('[name="phone"]').value = student.phone || '';
+      document.querySelector('[name="program"]').value = student.program || '';
+      document.querySelector('[name="enrollmentDate"]').value = student.enrollmentDate || '';
+      document.querySelector('[name="previousSchool"]').value = student.previousSchool || '';
+      document.querySelector('[name="graduationYear"]').value = student.graduationYear || '';
+      document.querySelector('[name="parentGuardianName"]').value = student.parentGuardianName || '';
+      document.querySelector('[name="languagePreference"]').value = student.languagePreference || '';
+      document.querySelector('[name="accessibilityNeeds"]').value = student.accessibilityNeeds || '';
+      document.querySelector('[name="scholarship"]').value = student.scholarship || '';
+
+      // Set select options
+      document.querySelector('[name="gradeLevel"]').value = student.gradeLevel || '';
+
+      // Handle address fields (split if full address exists)
+      if (student.address) {
+        const addressParts = student.address.split(', ');
+        if (addressParts.length >= 4) {
+          document.querySelector('[name="address"]').value = addressParts[0] || '';
+          document.querySelector('[name="addressCity"]').value = addressParts[1] || '';
+          document.querySelector('[name="province"]').value = addressParts[2] || '';
+          document.querySelector('[name="postalCode"]').value = addressParts[3] || '';
+        }
+      }
+
+      // Emergency contact
+      if (student.emergencyContact) {
+        document.querySelector('[name="emergencyName"]').value = student.emergencyContact.name || '';
+        document.querySelector('[name="emergencyRelationship"]').value = student.emergencyContact.relationship || '';
+        document.querySelector('[name="emergencyPhone"]').value = student.emergencyContact.phone || '';
+        document.querySelector('[name="emergencyEmail"]').value = student.emergencyContact.email || '';
+      }
+    }
+
     // Initialize data if not exists
     if (!localStorage.getItem('students')) {
       const initialStudents = [
@@ -580,11 +656,10 @@
 
       // Create student object
       const student = {
-        id: DataManager.generateStudentId(),
         firstName: formData.get('firstName'),
         middleName: formData.get('middleName') || '',
         lastName: formData.get('lastName'),
-        studentId: formData.get('studentId') || DataManager.generateStudentId(),
+        studentId: formData.get('studentId'),
         dob: formData.get('dob'),
         gender: formData.get('gender'),
         nationality: formData.get('nationality') || 'Cambodian',
@@ -628,23 +703,45 @@
         return;
       }
 
-      // Save student
-      DataManager.add('students', student);
+      if (isEditMode && editingStudentId) {
+        // Update existing student
+        student.id = editingStudentId; // Keep the same ID
+        DataManager.update('students', editingStudentId, student);
+        alert(`Student ${student.firstName} ${student.lastName} updated successfully!`);
 
-      // Show success message
-      alert(`Student ${student.firstName} ${student.lastName} enrolled successfully!\nStudent ID: ${student.studentId}`);
+        // Redirect to student list
+        setTimeout(() => {
+          window.location.href = 'student-list.html';
+        }, 500);
+      } else {
+        // Create new student
+        student.id = DataManager.generateStudentId();
+        student.studentId = formData.get('studentId') || DataManager.generateStudentId();
 
-      // Reset form
-      e.target.reset();
+        // Check if student ID already exists
+        const existingStudents = DataManager.get('students', []);
+        const studentExists = existingStudents.some(s => s.studentId === student.studentId);
 
-      // Update progress bar
-      document.getElementById('progressBar').style.width = '100%';
+        if (studentExists) {
+          alert(`Student ID "${student.studentId}" already exists. Please use a different Student ID.`);
+          return;
+        }
 
-      // Redirect to student list to see the enrolled student
-      setTimeout(() => {
-        alert('Redirecting to student list...');
-        window.location.href = 'student-list.html';
-      }, 1500);
+        // Save new student
+        DataManager.add('students', student);
+        alert(`Student ${student.firstName} ${student.lastName} enrolled successfully!\nStudent ID: ${student.studentId}`);
+
+        // Reset form
+        e.target.reset();
+
+        // Update progress bar
+        document.getElementById('progressBar').style.width = '25%';
+
+        // Redirect to student list to see the enrolled student
+        setTimeout(() => {
+          window.location.href = 'student-list.html';
+        }, 1500);
+      }
     });
 
     // Photo upload handling

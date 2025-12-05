@@ -1279,10 +1279,10 @@
       function editStudent(studentId) {
         const student = DataManager.find('students', studentId);
         if (student) {
-          // Populate modal for editing
-          populateStudentForm(student, true);
-          // Since we can't access elements directly, you would need to add them to the modal or redirect to another page
-          alert('Edit functionality would open the enrollment form with pre-filled data.');
+          // Store the student data in sessionStorage and redirect to enrollment page for editing
+          sessionStorage.setItem('editStudent', JSON.stringify(student));
+          sessionStorage.setItem('editMode', 'true');
+          window.location.href = 'student-enroll.html';
         }
       }
 
