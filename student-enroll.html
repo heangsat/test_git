@@ -444,8 +444,41 @@
     let isEditMode = false;
     let editingStudentId = null;
 
+    // Authentication Check
+    class AuthenticationCheck {
+      static init() {
+        const currentSession = localStorage.getItem('currentSession');
+        if (!currentSession) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        try {
+          const session = JSON.parse(currentSession);
+          const now = new Date();
+          const expiresAt = new Date(session.expiresAt);
+
+          if (now > expiresAt) {
+            this.logout();
+            return;
+          }
+        } catch (e) {
+          this.logout();
+        }
+      }
+
+      static logout() {
+        localStorage.removeItem('currentSession');
+        localStorage.removeItem('rememberMe');
+        localStorage.removeItem('rememberedUser');
+        localStorage.removeItem('currentUser');
+        window.location.href = 'login.html';
+      }
+    }
+
     // Check if we're in edit mode
     document.addEventListener('DOMContentLoaded', function() {
+      AuthenticationCheck.init();
       checkEditMode();
     });
 

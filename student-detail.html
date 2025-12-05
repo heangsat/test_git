@@ -338,6 +338,35 @@
 
     // Load student details
     document.addEventListener('DOMContentLoaded', function() {
+      // Authentication Check
+      const currentSession = localStorage.getItem('currentSession');
+      if (!currentSession) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      try {
+        const session = JSON.parse(currentSession);
+        const now = new Date();
+        const expiresAt = new Date(session.expiresAt);
+
+        if (now > expiresAt) {
+          localStorage.removeItem('currentSession');
+          localStorage.removeItem('rememberMe');
+          localStorage.removeItem('rememberedUser');
+          localStorage.removeItem('currentUser');
+          window.location.href = 'login.html';
+          return;
+        }
+      } catch (e) {
+        localStorage.removeItem('currentSession');
+        localStorage.removeItem('rememberMe');
+        localStorage.removeItem('rememberedUser');
+        localStorage.removeItem('currentUser');
+        window.location.href = 'login.html';
+        return;
+      }
+
       const studentId = sessionStorage.getItem('selectedStudentId');
 
       if (!studentId) {

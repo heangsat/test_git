@@ -1139,8 +1139,58 @@
       }
     }
 
+    // Authentication Check and Logout
+    class AuthenticationCheck {
+      static init() {
+        // Check if user is logged in
+        const currentSession = localStorage.getItem('currentSession');
+        if (!currentSession) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        try {
+          const session = JSON.parse(currentSession);
+          const now = new Date();
+          const expiresAt = new Date(session.expiresAt);
+
+          if (now > expiresAt) {
+            // Session expired
+            this.logout();
+            return;
+          }
+
+          // Update user display
+          this.updateUserDisplay(session);
+
+        } catch (e) {
+          console.error('Invalid session:', e);
+          this.logout();
+        }
+      }
+
+      static updateUserDisplay(session) {
+        // Update welcome message
+        const welcomeEl = document.getElementById('welcomeMessage');
+        if (welcomeEl) {
+          welcomeEl.textContent = `Welcome back, ${session.name}!`;
+        }
+      }
+
+      static logout() {
+        localStorage.removeItem('currentSession');
+        localStorage.removeItem('rememberMe');
+        localStorage.removeItem('rememberedUser');
+        localStorage.removeItem('currentUser');
+        window.location.href = 'login.html';
+      }
+    }
+
     // Initialize Dashboard
     document.addEventListener('DOMContentLoaded', function() {
+      // Check authentication first
+      AuthenticationCheck.init();
+
       // Initialize all components
       DashboardUI.updateStats();
       DashboardUI.updateRecentStudents();
@@ -1161,6 +1211,16 @@
           link.href = 'student-list.html';
         }
       });
+
+      // Add logout functionality to admin profile button
+      const adminLoginBtn = document.querySelector('.right-sidebar .btn');
+      if (adminLoginBtn && adminLoginBtn.textContent.includes('Login')) {
+        adminLoginBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          AuthenticationCheck.logout();
+        });
+        adminLoginBtn.innerHTML = '<i class="bi bi-box-arrow-right me-1"></i>Logout';
+      }
     });
 
     // Global Search Function
