@@ -189,21 +189,25 @@
 
     <!-- Clean Welcome Banner -->
     <div class="welcome-banner mb-5">
-      <h2 class="fw-bold display-5">Welcome back, Admin!</h2>
-      <p class="lead mb-4">You have <strong>5 new student registrations</strong> and <strong>3 pending approvals</strong> today.</p>
-      <button class="btn btn-light btn-lg px-5 fw-semibold shadow">Review Now</button>
+      <h2 class="fw-bold display-5" id="welcomeMessage">Welcome back, Admin!</h2>
+      <p class="lead mb-4" id="welcomeStats">
+        You have <strong>0 new student registrations</strong> and <strong>0 pending approvals</strong> today.
+      </p>
+      <button class="btn btn-light btn-lg px-5 fw-semibold shadow" onclick="window.location.href='student-list.html'">
+        <i class="bi bi-eye me-2"></i>Review Now
+      </button>
     </div>
 
-    <!-- Statistics Cards -->
+    <!-- Comprehensive Statistics Cards -->
     <div class="row g-4 mb-5">
       <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100" style="border-radius: 18px;">
+        <div class="card border-0 shadow-sm h-100 stat-card" style="border-radius: 18px;" onclick="navigateTo('student-list.html')">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <h6 class="text-muted mb-2">Total Students</h6>
-                <h3 class="mb-0">1,248</h3>
-                <small class="text-success"><i class="bi bi-arrow-up"></i> 12% from last month</small>
+                <h3 class="mb-0 text-primary" id="totalStudents">0</h3>
+                <small class="text-success" id="studentsChange"><i class="bi bi-arrow-up"></i> 0 from last month</small>
               </div>
               <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
                 <i class="bi bi-people-fill text-primary" style="font-size: 28px;"></i>
@@ -213,29 +217,13 @@
         </div>
       </div>
       <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100" style="border-radius: 18px;">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <h6 class="text-muted mb-2">Total Teachers</h6>
-                <h3 class="mb-0">87</h3>
-                <small class="text-success"><i class="bi bi-arrow-up"></i> 5% from last month</small>
-              </div>
-              <div class="bg-success bg-opacity-10 p-3 rounded-circle">
-                <i class="bi bi-person-badge-fill text-success" style="font-size: 28px;"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100" style="border-radius: 18px;">
+        <div class="card border-0 shadow-sm h-100 stat-card" style="border-radius: 18px;" onclick="navigateTo('course.html')">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <h6 class="text-muted mb-2">Active Courses</h6>
-                <h3 class="mb-0">42</h3>
-                <small class="text-warning"><i class="bi bi-dash"></i> No change</small>
+                <h3 class="mb-0 text-warning" id="activeCourses">0</h3>
+                <small class="text-info" id="coursesChange"><i class="bi bi-info-circle"></i> Manage courses</small>
               </div>
               <div class="bg-warning bg-opacity-10 p-3 rounded-circle">
                 <i class="bi bi-book-fill text-warning" style="font-size: 28px;"></i>
@@ -245,18 +233,82 @@
         </div>
       </div>
       <div class="col-md-3">
-        <div class="card border-0 shadow-sm h-100" style="border-radius: 18px;">
+        <div class="card border-0 shadow-sm h-100 stat-card" style="border-radius: 18px;" onclick="navigateTo('student-enroll.html')">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="text-muted mb-2">Attendance Rate</h6>
-                <h3 class="mb-0">94.5%</h3>
-                <small class="text-success"><i class="bi bi-arrow-up"></i> 2% from last week</small>
+                <h6 class="text-muted mb-2">Pending Approvals</h6>
+                <h3 class="mb-0 text-danger" id="pendingStudents">0</h3>
+                <small class="text-warning" id="pendingChange"><i class="bi bi-clock"></i> Waiting approval</small>
+              </div>
+              <div class="bg-danger bg-opacity-10 p-3 rounded-circle">
+                <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 28px;"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100 stat-card" style="border-radius: 18px;" onclick="navigateTo('attendence.html')">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-2">Today's Attendance</h6>
+                <h3 class="mb-0 text-info" id="todayAttendance">0%</h3>
+                <small class="text-success" id="attendanceChange"><i class="bi bi-check-circle"></i> Present rate</small>
               </div>
               <div class="bg-info bg-opacity-10 p-3 rounded-circle">
                 <i class="bi bi-calendar-check-fill text-info" style="font-size: 28px;"></i>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions Row -->
+    <div class="row g-4 mb-5">
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm text-center p-4 stat-card" onclick="window.location.href='student-enroll.html'">
+          <div class="card-body">
+            <div class="bg-primary bg-opacity-10 p-3 rounded-circle mx-auto mb-3" style="width: 60px; height: 60px;">
+              <i class="bi bi-person-plus-fill text-primary" style="font-size: 24px;"></i>
+            </div>
+            <h6 class="fw-bold">Enroll Student</h6>
+            <small class="text-muted">Add new students to the system</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm text-center p-4 stat-card" onclick="markAttendance()">
+          <div class="card-body">
+            <div class="bg-success bg-opacity-10 p-3 rounded-circle mx-auto mb-3" style="width: 60px; height: 60px;">
+              <i class="bi bi-check-circle-fill text-success" style="font-size: 24px;"></i>
+            </div>
+            <h6 class="fw-bold">Mark Attendance</h6>
+            <small class="text-muted">Take daily attendance</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm text-center p-4 stat-card" onclick="window.location.href='course.html'">
+          <div class="card-body">
+            <div class="bg-warning bg-opacity-10 p-3 rounded-circle mx-auto mb-3" style="width: 60px; height: 60px;">
+              <i class="bi bi-book-fill text-warning" style="font-size: 24px;"></i>
+            </div>
+            <h6 class="fw-bold">Manage Courses</h6>
+            <small class="text-muted">Create and edit courses</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm text-center p-4 stat-card" onclick="generateReports()">
+          <div class="card-body">
+            <div class="bg-info bg-opacity-10 p-3 rounded-circle mx-auto mb-3" style="width: 60px; height: 60px;">
+              <i class="bi bi-graph-up text-info" style="font-size: 24px;"></i>
+            </div>
+            <h6 class="fw-bold">View Reports</h6>
+            <small class="text-muted">Analytics and insights</small>
           </div>
         </div>
       </div>
@@ -421,7 +473,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Data Management Functions
+    // Advanced Data Management System - Fully Connected Dashboard
     class DataManager {
       static get(key, defaultValue = []) {
         try {
@@ -433,14 +485,36 @@
         }
       }
 
+      static set(key, value) {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+        } catch (e) {
+          console.error('Error writing to localStorage:', e);
+        }
+      }
+
       static getStudentsCount() {
         const students = this.get('students', []);
+        const today = new Date().toISOString().split('T')[0];
+        const todayEnrollments = students.filter(s => s.enrollmentDate === today).length;
+
         return {
           total: students.length,
           active: students.filter(s => s.status === 'Active').length,
           inactive: students.filter(s => s.status === 'Inactive').length,
-          pending: students.filter(s => s.status === 'Pending').length
+          pending: students.filter(s => s.status === 'Pending').length,
+          newToday: todayEnrollments
         };
+      }
+
+      static getCoursesCount() {
+        const courses = this.get('courses', []);
+        return courses.length;
+      }
+
+      static getTeachersCount() {
+        const teachers = this.get('teachers', []);
+        return teachers.length;
       }
 
       static getTodayAttendance() {
@@ -448,251 +522,434 @@
         const today = new Date().toISOString().split('T')[0];
         const todayRecords = attendance.filter(a => a.date === today);
 
-        // If no attendance record for today, simulate some data for demo
-        if (todayRecords.length === 0) {
-          return {
-            total: 0,
-            present: 0,
-            absent: 0,
-            late: 0
-          };
-        }
-
         return {
           total: todayRecords.length,
           present: todayRecords.filter(a => a.status === 'Present').length,
           absent: todayRecords.filter(a => a.status === 'Absent').length,
-          late: todayRecords.filter(a => a.status === 'Late').length
+          late: todayRecords.filter(a => a.status === 'Late').length,
+          attendanceRate: todayRecords.length > 0 ?
+            Math.round((todayRecords.filter(a => a.status === 'Present').length / todayRecords.length) * 100) : 0
         };
       }
 
-      static getAttendanceStats() {
+      static getOverallAttendanceRate() {
         const attendance = this.get('attendance', []);
-        const totalRecords = attendance.length;
-        if (totalRecords === 0) return 94.5; // Default
+        const students = this.get('students', []);
 
-        const present = attendance.filter(a => a.status === 'Present').length;
-        return Math.round((present / totalRecords) * 100 * 10) / 10; // One decimal
-      }
+        if (attendance.length === 0 || students.length === 0) return 0;
 
-      static getRecentClasses() {
-        // Return mock recent classes data since we don't have course data
-        return [
-          {
-            name: 'Grade 10 - Science A',
-            students: 32,
-            teacher: 'Dr. Linda Johnson'
-          },
-          {
-            name: 'Grade 11 - Mathematics',
-            students: 28,
-            teacher: 'Michael Kumar'
-          },
-          {
-            name: 'Grade 9 - English Lit',
-            students: 30,
-            teacher: 'Sarah Peterson'
-          }
-        ];
+        // Calculate last 30 days attendance rate
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        const recentAttendance = attendance.filter(a =>
+          new Date(a.date) >= thirtyDaysAgo &&
+          students.some(s => s.studentId === a.studentId)
+        );
+
+        if (recentAttendance.length === 0) return 0;
+
+        const present = recentAttendance.filter(a => a.status === 'Present').length;
+        return Math.round((present / recentAttendance.length) * 100);
       }
 
       static getRecentStudents() {
         const students = this.get('students', []);
         return students
-          .filter(s => s.status === 'Active')
-          .sort((a, b) => new Date(b.enrollmentDate) - new Date(a.enrollmentDate))
-          .slice(0, 4); // Return 4 most recent
+          .filter(s => s.status === 'Active' || s.status === 'Pending')
+          .sort((a, b) => new Date(b.enrollmentDate || '2024-01-01') - new Date(a.enrollmentDate || '2024-01-01'))
+          .slice(0, 4);
       }
 
-      static calculateGrade(percentage) {
-        if (percentage >= 90) return 'A';
-        if (percentage >= 80) return 'B';
-        if (percentage >= 70) return 'C';
-        if (percentage >= 60) return 'D';
+      static getRecentClasses() {
+        const courses = this.get('courses', []);
+        const teachers = this.get('teachers', []);
+        const students = this.get('students', []);
+
+        if (courses.length === 0) {
+          // Fallback to mock data
+          return [
+            {
+              name: 'Grade 10 - Science A',
+              students: 32,
+              teacher: 'Dr. Linda Johnson'
+            },
+            {
+              name: 'Grade 11 - Mathematics',
+              students: 28,
+              teacher: 'Michael Kumar'
+            },
+            {
+              name: 'Grade 9 - English Lit',
+              students: 30,
+              teacher: 'Sarah Peterson'
+            }
+          ];
+        }
+
+        return courses.slice(0, 3).map(course => ({
+          name: course.name || (`Grade ${course.gradeLevel} - ${course.program}`),
+          students: course.studentIds ? course.studentIds.length : Math.floor(Math.random() * 35) + 25,
+          teacher: course.teacherName || 'Dr. Linda Johnson'
+        }));
+      }
+
+      static calculateGrade(studentId) {
+        const attendance = this.get('attendance', []);
+        const studentAttendance = attendance.filter(a => a.studentId === studentId);
+
+        if (studentAttendance.length === 0) return 'A-'; // Default
+
+        const present = studentAttendance.filter(a => a.status === 'Present').length;
+        const rate = (present / studentAttendance.length) * 100;
+
+        if (rate >= 90) return 'A';
+        if (rate >= 80) return 'B';
+        if (rate >= 70) return 'C';
+        if (rate >= 60) return 'D';
         return 'F';
       }
-    }
 
-    // Initialize dashboard when DOM loads
-    document.addEventListener('DOMContentLoaded', function() {
-      updateDashboardStats();
-      updateRecentStudents();
-      updateRecentClasses();
-      updateWelcomeMessage();
-    });
-
-    function updateDashboardStats() {
-      const students = DataManager.getStudentsCount();
-      const attendanceStats = DataManager.getAttendanceStats();
-      const todayAttendance = DataManager.getTodayAttendance();
-
-      // Update main stats
-      const statCards = document.querySelectorAll('.col-md-3');
-      if (statCards.length >= 4) {
-        // Total Students
-        statCards[0].querySelector('h3').textContent = students.total.toLocaleString();
-        statCards[0].querySelector('small').textContent = '12% from last month';
-        statCards[0].querySelector('small i').className = 'bi bi-arrow-up';
-
-        // Total Teachers (static for now)
-        statCards[1].querySelector('h3').textContent = '87';
-        statCards[1].querySelector('small').textContent = '5% from last month';
-        statCards[1].querySelector('small i').className = 'bi bi-arrow-up';
-
-        // Active Courses (static for now)
-        statCards[2].querySelector('h3').textContent = '42';
-        statCards[2].querySelector('small').textContent = 'No change';
-        statCards[2].querySelector('small i').className = 'bi bi-dash';
-
-        // Attendance Rate
-        statCards[3].querySelector('h3').textContent = attendanceStats + '%';
-        statCards[3].querySelector('small').textContent = '2% from last week';
-        statCards[3].querySelector('small i').className = 'bi bi-arrow-up';
+      static getSystemStats() {
+        return {
+          studentsCount: this.getStudentsCount(),
+          coursesCount: this.getCoursesCount(),
+          teachersCount: this.getTeachersCount(),
+          todayAttendance: this.getTodayAttendance(),
+          overallAttendanceRate: this.getOverallAttendanceRate()
+        };
       }
 
-      // Update welcome message
-      const welcomeParagraph = document.querySelector('.welcome-banner p');
-      if (welcomeParagraph) {
-        const pendingStudents = students.pending;
-        const newRegistrations = pendingStudents > 0 ? pendingStudents : 5; // Fallback
-        welcomeParagraph.innerHTML = `You have <strong>${newRegistrations} new student registrations</strong> and <strong>${students.pending} pending approvals</strong> today.`;
-      }
+      static getNotifications() {
+        const students = this.get('students', []);
+        const pending = students.filter(s => s.status === 'Pending');
+        const notifications = [];
 
-      // Update date
-      const dateElement = document.querySelector('.text-muted.fw-medium');
-      if (dateElement) {
-        const today = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        dateElement.textContent = today.toLocaleDateString('en-US', options);
+        if (pending.length > 0) {
+          notifications.push({
+            type: 'pending',
+            message: `${pending.length} student registrations pending approval`,
+            action: 'Review Now'
+          });
+        }
+
+        // Add other notifications
+        notifications.push({
+          type: 'info',
+          message: 'Parent-teacher meeting scheduled for tomorrow',
+          action: 'View Details'
+        });
+
+        return notifications;
       }
     }
 
-    function updateRecentClasses() {
-      const classes = DataManager.getRecentClasses();
-      const classesContainer = document.querySelector('.row.g-4.mb-5');
+    // UI Management Class
+    class DashboardUI {
+      static updateStats() {
+        const stats = DataManager.getSystemStats();
 
-      if (!classesContainer) return;
+        // Update main stat cards
+        const totalStudentsEl = document.getElementById('totalStudents');
+        const activeCoursesEl = document.getElementById('activeCourses');
+        const pendingStudentsEl = document.getElementById('pendingStudents');
+        const todayAttendanceEl = document.getElementById('todayAttendance');
 
-      classesContainer.innerHTML = '';
+        if (totalStudentsEl) totalStudentsEl.textContent = stats.studentsCount.total.toLocaleString();
+        if (activeCoursesEl) activeCoursesEl.textContent = stats.coursesCount.toLocaleString();
+        if (pendingStudentsEl) pendingStudentsEl.textContent = stats.studentsCount.pending.toLocaleString();
+        if (todayAttendanceEl) todayAttendanceEl.textContent = `${stats.todayAttendance.attendanceRate}%`;
 
-      classes.forEach((classItem, index) => {
-        const col = document.createElement('div');
-        col.className = 'col-md-4';
+        // Update change indicators
+        const studentsChangeEl = document.getElementById('studentsChange');
+        const attendanceChangeEl = document.getElementById('attendanceChange');
 
-        const colors = [
-          'linear-gradient(135deg, #4361ee, #3f37c9)',
-          'linear-gradient(135deg, #3f37c9, #7209b7)',
-          'linear-gradient(135deg, #f72585, #7209b7)'
-        ];
+        if (studentsChangeEl) {
+          studentsChangeEl.innerHTML = stats.studentsCount.newToday > 0 ?
+            `<i class="bi bi-arrow-up"></i> ${stats.studentsCount.newToday} new today` :
+            `<i class="bi bi-arrow-up"></i> 5 new this week`;
+        }
 
-        const initials = classItem.teacher.split(' ').map(n => n.charAt(0)).join('');
+        if (attendanceChangeEl) {
+          attendanceChangeEl.innerHTML = `<i class="bi bi-check-circle"></i> ${stats.overallAttendanceRate}% overall rate`;
+        }
 
-        col.innerHTML = `
-          <div class="class-card" style="background: ${colors[index % colors.length]};">
-            <h5 class="mb-3">${classItem.name}</h5>
-            <div class="d-flex align-items-center mb-3 opacity-90">
-              <i class="bi bi-people-fill me-2"></i> ${classItem.students} students
-            </div>
-            <div class="d-flex align-items-center">
-              <div class="avatar bg-white text-primary me-3">${initials}</div>
-              <div>
-                <small>Instructor</small><br>
-                <strong>${classItem.teacher}</strong>
+        // Update welcome message
+        this.updateWelcomeMessage(stats);
+      }
+
+      static updateWelcomeMessage(stats) {
+        const welcomeMessageEl = document.getElementById('welcomeMessage');
+        const welcomeStatsEl = document.getElementById('welcomeStats');
+
+        if (welcomeMessageEl) {
+          const adminName = localStorage.getItem('currentUser') || 'Admin';
+          welcomeMessageEl.textContent = `Welcome back, ${adminName}!`;
+        }
+
+        if (welcomeStatsEl) {
+          const newRegistrations = stats.studentsCount.newToday || stats.studentsCount.pending;
+          const pendingApprovals = stats.studentsCount.pending;
+          welcomeStatsEl.innerHTML = `You have <strong>${newRegistrations} new student registrations</strong> and <strong>${pendingApprovals} pending approvals</strong> today.`;
+        }
+      }
+
+      static updateRecentClasses() {
+        const classes = DataManager.getRecentClasses();
+        const classesContainer = document.querySelector('.row.g-4.mb-5');
+
+        if (!classesContainer) return;
+
+        classesContainer.innerHTML = '';
+
+        classes.forEach((classItem, index) => {
+          const col = document.createElement('div');
+          col.className = 'col-md-4';
+
+          const colors = [
+            'linear-gradient(135deg, #4361ee, #3f37c9)',
+            'linear-gradient(135deg, #3f37c9, #7209b7)',
+            'linear-gradient(135deg, #f72585, #7209b7)'
+          ];
+
+          const initials = classItem.teacher.split(' ').map(n => n.charAt(0)).join('');
+
+          col.innerHTML = `
+            <div class="class-card" style="background: ${colors[index % colors.length]};" onclick="DashboardActions.openClass('${classItem.name}')">
+              <h5 class="mb-3">${classItem.name}</h5>
+              <div class="d-flex align-items-center mb-3 opacity-90">
+                <i class="bi bi-people-fill me-2"></i> ${classItem.students} students
+              </div>
+              <div class="d-flex align-items-center">
+                <div class="avatar bg-white text-primary me-3">${initials}</div>
+                <div>
+                  <small>Instructor</small><br>
+                  <strong>${classItem.teacher}</strong>
+                </div>
               </div>
             </div>
-          </div>
-        `;
+          `;
 
-        classesContainer.appendChild(col);
-      });
-    }
+          classesContainer.appendChild(col);
+        });
+      }
 
-    function updateRecentStudents() {
-      const students = DataManager.getRecentStudents();
-      const tbody = document.querySelector('tbody');
+      static updateRecentStudents() {
+        const students = DataManager.getRecentStudents();
+        const tbody = document.querySelector('tbody');
 
-      if (!tbody || students.length === 0) return;
+        if (!tbody || students.length === 0) {
+          // Create placeholder if no students
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" class="text-center text-muted py-4">
+                <i class="bi bi-person-plus-fill fs-1 mb-2"></i><br>
+                No students enrolled yet. <a href="student-enroll.html" class="text-primary">Enroll first student</a>
+              </td>
+            </tr>
+          `;
+          return;
+        }
 
-      tbody.innerHTML = '';
+        tbody.innerHTML = '';
 
-      students.forEach((student, index) => {
-        const initials = (student.firstName.charAt(0) + student.lastName.charAt(0)).toUpperCase();
-        const avatarColors = ['#4361ee', '#f72585', '#00d97e', '#ffc107'];
-        const avatarColor = avatarColors[Math.floor(Math.random() * avatarColors.length)];
+        students.forEach((student) => {
+          const initials = (student.firstName.charAt(0) + student.lastName.charAt(0)).toUpperCase();
+          const avatarColors = ['#4361ee', '#f72585', '#00d97e', '#ffc107'];
+          const avatarColor = avatarColors[Math.floor(Math.random() * avatarColors.length)];
 
-        // Calculate attendance rate or use mock data
-        const attendanceRate = DataManager.calculateAttendanceRate(student.studentId) || Math.floor(Math.random() * 20) + 80;
-        const grade = DataManager.calculateGrade(attendanceRate);
+          const grade = DataManager.calculateGrade(student.studentId);
+          const enrollmentDate = new Date(student.enrollmentDate || Date.now());
+          const daysSinceEnrollment = Math.floor((Date.now() - enrollmentDate) / (1000 * 60 * 60 * 24));
 
-        // Mock last active time
-        const lastActiveHours = Math.floor(Math.random() * 24) + 1;
-        const timeText = lastActiveHours > 12 ?
-          `${Math.floor(lastActiveHours / 24) === 0 ? '1' : Math.floor(lastActiveHours / 24)} day${Math.floor(lastActiveHours / 24) !== 1 ? 's' : ''} ago` :
-          `${lastActiveHours} hour${lastActiveHours !== 1 ? 's' : ''} ago`;
+          const timeText = daysSinceEnrollment === 0 ? 'Today' :
+                          daysSinceEnrollment === 1 ? '1 day ago' :
+                          daysSinceEnrollment < 7 ? `${daysSinceEnrollment} days ago` :
+                          daysSinceEnrollment < 30 ? `${Math.floor(daysSinceEnrollment / 7)} weeks ago` :
+                          `${Math.floor(daysSinceEnrollment / 30)} months ago`;
 
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>
-            <div class="d-flex align-items-center">
-              <div class="avatar me-3" style="background: linear-gradient(135deg, ${avatarColor}, #3f37c9);">
-                ${initials}
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar me-3" style="background: linear-gradient(135deg, ${avatarColor}, #3f37c9);">
+                  ${initials}
+                </div>
+                <strong>${student.firstName} ${student.lastName}</strong>
               </div>
-              <strong>${student.firstName} ${student.lastName}</strong>
-            </div>
-          </td>
-          <td>${student.studentId}</td>
-          <td>${student.gradeLevel} - ${student.program || 'General'}</td>
-          <td>Dr. Linda Johnson</td>
-          <td>${timeText}</td>
-          <td><strong>${grade}</strong></td>
-          <td><span class="badge ${student.status === 'Active' ? 'bg-success' : 'bg-warning'} rounded-pill">${student.status}</span></td>
-        `;
+            </td>
+            <td>${student.studentId}</td>
+            <td>${student.gradeLevel || 'Grade 9'} - ${student.program || 'General'}</td>
+            <td>Dr. Linda Johnson</td>
+            <td>${timeText}</td>
+            <td><strong>${grade}</strong></td>
+            <td><span class="badge ${student.status === 'Active' ? 'bg-success' : student.status === 'Pending' ? 'bg-warning' : 'bg-danger'} rounded-pill">${student.status}</span></td>
+          `;
 
-        tbody.appendChild(row);
-      });
-    }
+          tbody.appendChild(row);
+        });
+      }
 
-    function updateWelcomeMessage() {
-      // Update the admin name and message if needed
-      const adminName = localStorage.getItem('currentUser') || 'Admin';
-      const nameElement = document.querySelector('.welcome-banner h2');
-      if (nameElement) {
-        nameElement.textContent = `Welcome back, ${adminName}!`;
+      static updateDate() {
+        const dateElement = document.querySelector('.text-muted.fw-medium');
+        if (dateElement) {
+          const today = new Date();
+          const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          dateElement.textContent = today.toLocaleDateString('en-US', options);
+        }
       }
     }
 
-    // Search functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const searchInput = document.querySelector('input[placeholder*="Search anything..."]');
-      if (searchInput) {
-        searchInput.addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            alert('Search functionality will be implemented with full search across all student and attendance records.');
+    // Dashboard Actions Class
+    class DashboardActions {
+      static navigateTo(page) {
+        window.location.href = page;
+      }
+
+      static markAttendance() {
+        const today = new Date().toISOString().split('T')[0];
+        const hasAttendance = DataManager.get('attendance', []).some(a => a.date === today);
+
+        if (hasAttendance) {
+          alert('Attendance for today has already been marked. View the attendance page to make changes.');
+        } else {
+          window.location.href = 'attendence.html';
+        }
+      }
+
+      static openClass(className) {
+        // Store the selected class and redirect to course page
+        sessionStorage.setItem('selectedClass', className);
+        window.location.href = 'course.html';
+      }
+
+      static generateReports() {
+        alert('Reports functionality will be available soon. This will include:\n\n• Student performance reports\n• Attendance analytics\n• Course completion rates\n• Enrollment trends\n• Teacher performance metrics');
+      }
+
+      static viewStudentDetails(studentId) {
+        sessionStorage.setItem('selectedStudentId', studentId);
+        window.location.href = 'student-detail.html';
+      }
+    }
+
+    // Global Navigation Functions
+    window.navigateTo = DashboardActions.navigateTo;
+    window.markAttendance = DashboardActions.markAttendance;
+    window.generateReports = DashboardActions.generateReports;
+
+    // Search Functionality
+    class SearchSystem {
+      static init() {
+        const searchInput = document.querySelector('input[placeholder*="Search anything..."]');
+        if (searchInput) {
+          searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+              SearchSystem.performSearch(this.value);
+            }
+          });
+        }
+      }
+
+      static performSearch(query) {
+        if (!query.trim()) return;
+
+        // Search across students, courses, attendance
+        const results = {
+          students: DataManager.get('students', []).filter(s =>
+            s.firstName.toLowerCase().includes(query.toLowerCase()) ||
+            s.lastName.toLowerCase().includes(query.toLowerCase()) ||
+            s.studentId.toLowerCase().includes(query.toLowerCase())
+          ),
+          courses: DataManager.get('courses', []).filter(c =>
+            c.name.toLowerCase().includes(query.toLowerCase())
+          ),
+          attendance: DataManager.get('attendance', []).filter(a =>
+            a.date.includes(query) || a.status.toLowerCase().includes(query.toLowerCase())
+          )
+        };
+
+        // Display results
+        this.displaySearchResults(results, query);
+      }
+
+      static displaySearchResults(results, query) {
+        const totalResults = results.students.length + results.courses.length + results.attendance.length;
+
+        if (totalResults === 0) {
+          alert(`No results found for "${query}"`);
+          return;
+        }
+
+        let message = `Search Results for "${query}":\n\n`;
+        message += `Students: ${results.students.length} found\n`;
+        message += `Courses: ${results.courses.length} found\n`;
+        message += `Attendance Records: ${results.attendance.length} found\n\n`;
+        message += 'Redirecting to most relevant page...';
+
+        alert(message);
+
+        // Redirect to most relevant page
+        if (results.students.length > 0) {
+          window.location.href = 'student-list.html';
+        } else if (results.courses.length > 0) {
+          window.location.href = 'course.html';
+        } else if (results.attendance.length > 0) {
+          window.location.href = 'attendence.html';
+        }
+      }
+    }
+
+    // Notification System
+    class NotificationSystem {
+      static init() {
+        // Add notification badge to relevant navigation items
+        const navItems = document.querySelectorAll('.nav-link');
+        const stats = DataManager.get('students', []);
+
+        navItems.forEach(item => {
+          if (item.href.includes('student-list.html') || item.href.includes('student-enroll.html')) {
+            const pendingCount = stats.filter(s => s.status === 'Pending').length;
+            if (pendingCount > 0) {
+              const badge = document.createElement('span');
+              badge.className = 'badge bg-danger ms-2';
+              badge.textContent = pendingCount;
+              item.parentNode.appendChild(badge);
+            }
           }
         });
       }
+    }
 
-      // Make review button functional
-      const reviewBtn = document.querySelector('.welcome-banner .btn');
-      if (reviewBtn) {
-        reviewBtn.addEventListener('click', function() {
-          window.location.href = 'student-list.html';
-        });
-      }
+    // Initialize Dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize all components
+      DashboardUI.updateStats();
+      DashboardUI.updateRecentStudents();
+      DashboardUI.updateRecentClasses();
+      DashboardUI.updateDate();
+      SearchSystem.init();
+      NotificationSystem.init();
 
-      // Make "View All" links functional
-      const viewAllLinks = document.querySelectorAll('a[href="#"]');
-      viewAllLinks.forEach(link => {
+      // Auto-refresh every 30 seconds
+      setInterval(() => {
+        DashboardUI.updateStats();
+        DashboardUI.updateDate();
+      }, 30000);
+
+      // Add click handlers to view all links
+      document.querySelectorAll('a[href="#"]').forEach(link => {
         if (link.textContent.includes('View All')) {
           link.href = 'student-list.html';
         }
       });
     });
 
-    // Auto-refresh dashboard data every 30 seconds
-    setInterval(function() {
-      updateDashboardStats();
-    }, 30000);
+    // Global Search Function
+    function performGlobalSearch() {
+      const query = document.querySelector('input[placeholder*="Search anything..."]').value;
+      SearchSystem.performSearch(query);
+    }
   </script>
 </body>
 </html>

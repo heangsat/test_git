@@ -1062,12 +1062,13 @@
 
         console.log('Filter elements:', { searchInput, gradeFilter, statusFilter, sortFilter });
 
-        // Search
+        // Search - optimized debounce
         if (searchInput) {
           searchInput.addEventListener('input', debounce(function() {
-            console.log('Search input:', searchInput.value);
-            filterStudents();
-          }, 300));
+            const searchValue = searchInput.value.toLowerCase();
+            console.log('Search input:', searchValue);
+            filterStudentsOptimized(searchValue);
+          }, 400));
         } else {
           console.error('Search input not found');
         }
@@ -1120,6 +1121,58 @@
         }
       }
 
+      // Optimized search cache
+      let searchCache = new Map();
+      let lastSearchTerm = '';
+      let lastFilteredStudents = [];
+
+      // Optimized search filter function
+      function filterStudentsOptimized(searchTerm) {
+        const gradeFilterValue = gradeFilter?.value || '';
+        const statusFilterValue = statusFilter?.value || '';
+
+        // Use cache for repeated searches or small changes
+        const cacheKey = searchTerm + '|' + gradeFilterValue + '|' + statusFilterValue;
+        if (searchCache.has(cacheKey) && Math.abs(searchTerm.length - lastSearchTerm.length) <= 2) {
+          renderStudents(searchCache.get(cacheKey));
+          return;
+        }
+
+        // Fast filtering using pre-computed data
+        let filtered = currentStudents.filter(student => {
+          // Check grade filter first (faster)
+          const matchesGrade = !gradeFilterValue || student.gradeLevel === gradeFilterValue;
+          if (!matchesGrade) return false;
+
+          // Check status filter
+          const matchesStatus = !statusFilterValue || student.status === statusFilterValue;
+          if (!matchesStatus) return false;
+
+          // Search filter (most expensive, do last)
+          if (searchTerm) {
+            const firstNameLower = student.firstName.toLowerCase();
+            const lastNameLower = student.lastName.toLowerCase();
+            const studentIdLower = student.studentId.toLowerCase();
+            const emailLower = student.email.toLowerCase();
+
+            return firstNameLower.includes(searchTerm) ||
+                   lastNameLower.includes(searchTerm) ||
+                   studentIdLower.includes(searchTerm) ||
+                   emailLower.includes(searchTerm);
+          }
+
+          return true;
+        });
+
+        // Cache the result
+        searchCache.set(cacheKey, filtered);
+        lastSearchTerm = searchTerm;
+        lastFilteredStudents = filtered;
+
+        // Apply sorting and render
+        applySortingAndRender(filtered);
+      }
+
       function filterStudents() {
         const searchTerm = searchInput?.value.toLowerCase() || '';
         const gradeFilterValue = gradeFilter?.value || '';
@@ -1139,13 +1192,19 @@
           return matchesSearch && matchesGrade && matchesStatus;
         });
 
+        applySortingAndRender(filtered);
+      }
+
+      function applySortingAndRender(students) {
+        const sortValue = sortFilter?.value || '';
+
         // Sort
-        filtered.sort((a, b) => {
+        students.sort((a, b) => {
           switch (sortValue) {
             case 'Name (A-Z)':
               return (a.firstName + a.lastName).localeCompare(b.firstName + b.lastName);
             case 'Name (Z-A)':
-              return (b.firstName + b.lastName).localeCompare(a.firstName + a.lastName);
+              return (b.firstName + b.lastName).localeCompare(a.firstName + b.lastName);
             case 'Date (Newest)':
               return new Date(b.enrollmentDate) - new Date(a.enrollmentDate);
             default:
@@ -1153,7 +1212,7 @@
           }
         });
 
-        renderStudents(filtered);
+        renderStudents(students);
       }
 
       function toggleView(isCardView) {
