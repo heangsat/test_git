@@ -195,28 +195,28 @@
               <div class="row g-3">
                 <div class="col-md-4">
                   <label class="form-label fw-semibold">First Name <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" required>
+                  <input type="text" class="form-control" name="firstName" required>
                 </div>
                 <div class="col-md-4">
                   <label class="form-label fw-semibold">Middle Name</label>
-                  <input type="text" class="form-control">
+                  <input type="text" class="form-control" name="middleName">
                 </div>
                 <div class="col-md-4">
                   <label class="form-label fw-semibold">Last Name <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" required>
+                  <input type="text" class="form-control" name="lastName" required>
                 </div>
                 <div class="col-md-4">
                   <label class="form-label fw-semibold">Student ID <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" placeholder="e.g. STD-2025-001" required>
+                  <input type="text" class="form-control" name="studentId" placeholder="e.g. STD-2025-001" required>
                 </div>
                 <div class="col-md-4">
                   <label class="form-label fw-semibold">Date of Birth <span class="text-danger">*</span></label>
-                  <input type="date" class="form-control" required>
+                  <input type="date" class="form-control" name="dob" required>
                 </div>
                 <div class="col-md-4">
                   <label class="form-label fw-semibold">Gender</label>
-                  <select class="form-select">
-                    <option selected>Select...</option>
+                  <select class="form-select" name="gender">
+                    <option selected value="">Select...</option>
                     <option>Male</option>
                     <option>Female</option>
                     <option>Non-binary</option>
@@ -226,11 +226,11 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Nationality</label>
-                  <input type="text" class="form-control" placeholder="e.g. Cambodian">
+                  <input type="text" class="form-control" name="nationality" placeholder="e.g. Cambodian">
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Ethnicity / Race (Optional)</label>
-                  <input type="text" class="form-control">
+                  <input type="text" class="form-control" name="ethnicity">
                 </div>
               </div>
             </div>
@@ -247,21 +247,21 @@
               <div class="row g-3">
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Personal Email</label>
-                  <input type="email" class="form-control">
+                  <input type="email" class="form-control" name="personalEmail">
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Mobile Phone <span class="text-danger">*</span></label>
-                  <input type="tel" class="form-control" required>
+                  <input type="tel" class="form-control" name="phone" required>
                 </div>
                 <div class="col-12">
                   <label class="form-label fw-semibold">Physical Address</label>
                   <div class="row g-3">
-                    <div class="col-md-8"><input type="text" class="form-control" placeholder="Street Address"></div>
-                    <div class="col-md-4"><input type="text" class="form-control" placeholder="City"></div>
-                    <div class="col-md-4"><input type="text" class="form-control" placeholder="State/Province"></div>
-                    <div class="col-md-4"><input type="text" class="form-control" placeholder="Postal/ZIP Code"></div>
+                    <div class="col-md-8"><input type="text" class="form-control" name="address" placeholder="Street Address"></div>
+                    <div class="col-md-4"><input type="text" class="form-control" name="addressCity" placeholder="City"></div>
+                    <div class="col-md-4"><input type="text" class="form-control" name="province" placeholder="State/Province"></div>
+                    <div class="col-md-4"><input type="text" class="form-control" name="postalCode" placeholder="Postal/ZIP Code"></div>
                     <div class="col-md-4">
-                      <select class="form-select">
+                      <select class="form-select" name="country">
                         <option>Country</option>
                         <option selected>Cambodia</option>
                         <option>Thailand</option>
@@ -274,10 +274,10 @@
                 <div class="col-12 mt-4">
                   <h6 class="fw-bold text-primary"><i class="bi bi-exclamation-triangle-fill"></i> Emergency Contact</h6>
                   <div class="row g-3">
-                    <div class="col-md-4"><input type="text" class="form-control" placeholder="Full Name" required></div>
-                    <div class="col-md-3"><input type="text" class="form-control" placeholder="Relationship" required></div>
-                    <div class="col-md-3"><input type="tel" class="form-control" placeholder="Phone" required></div>
-                    <div class="col-md-2"><input type="email" class="form-control" placeholder="Email"></div>
+                    <div class="col-md-4"><input type="text" class="form-control" name="emergencyName" placeholder="Full Name" required></div>
+                    <div class="col-md-3"><input type="text" class="form-control" name="emergencyRelationship" placeholder="Relationship" required></div>
+                    <div class="col-md-3"><input type="tel" class="form-control" name="emergencyPhone" placeholder="Phone" required></div>
+                    <div class="col-md-2"><input type="email" class="form-control" name="emergencyEmail" placeholder="Email"></div>
                   </div>
                 </div>
               </div>
@@ -295,11 +295,11 @@
               <div class="row g-3">
                 <div class="col-md-4">
                   <label class="form-label fw-semibold">Enrollment Date <span class="text-danger">*</span></label>
-                  <input type="date" class="form-control" required>
+                  <input type="date" class="form-control" name="enrollmentDate" required>
                 </div>
                 <div class="col-md-4">
                   <label class="form-label fw-semibold">Grade Level / Year <span class="text-danger">*</span></label>
-                  <select class="form-select" required>
+                  <select class="form-select" name="gradeLevel" required>
                     <option selected>Choose...</option>
                     <option>Grade 9</option>
                     <option>Grade 10</option>
@@ -309,15 +309,15 @@
                 </div>
                 <div class="col-md-4">
                   <label class="form-label fw-semibold">Program / Major</label>
-                  <input type="text" class="form-control" placeholder="e.g. General Education, IB, A-Level">
+                  <input type="text" class="form-control" name="program" placeholder="e.g. General Education, IB, A-Level">
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Previous School (if transfer)</label>
-                  <input type="text" class="form-control">
+                  <input type="text" class="form-control" name="previousSchool">
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Expected Graduation Year</label>
-                  <input type="text" class="form-control" placeholder="e.g. 2028">
+                  <input type="text" class="form-control" name="graduationYear" placeholder="e.g. 2028">
                 </div>
               </div>
             </div>
@@ -334,11 +334,11 @@
               <div class="row g-3">
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Parent/Guardian Name</label>
-                  <input type="text" class="form-control">
+                  <input type="text" class="form-control" name="parentGuardianName">
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Language Preference</label>
-                  <select class="form-select">
+                  <select class="form-select" name="languagePreference">
                     <option>English</option>
                     <option>ភាសាខ្មែរ (Khmer)</option>
                     <option>Français</option>
@@ -346,11 +346,11 @@
                 </div>
                 <div class="col-12">
                   <label class="form-label fw-semibold">Accessibility Needs / Disability Accommodations</label>
-                  <textarea class="form-control" rows="3" placeholder="e.g. visual impairment, dyslexia support, wheelchair access..."></textarea>
+                  <textarea class="form-control" rows="3" name="accessibilityNeeds" placeholder="e.g. visual impairment, dyslexia support, wheelchair access..."></textarea>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Scholarship / Financial Aid</label>
-                  <select class="form-select">
+                  <select class="form-select" name="scholarship">
                     <option>None</option>
                     <option>Full Scholarship</option>
                     <option>Partial Scholarship</option>
@@ -640,8 +640,11 @@
       // Update progress bar
       document.getElementById('progressBar').style.width = '100%';
 
-      // Optionally redirect to student list
-      // setTimeout(() => window.location.href = 'student-list.html', 2000);
+      // Redirect to student list to see the enrolled student
+      setTimeout(() => {
+        alert('Redirecting to student list...');
+        window.location.href = 'student-list.html';
+      }, 1500);
     });
 
     // Photo upload handling
