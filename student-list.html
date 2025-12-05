@@ -946,13 +946,16 @@
         sort: ''
       };
 
-      // DOM elements
-      const studentsTable = document.querySelector('#studentsTable tbody');
-      const statisticsCards = document.querySelectorAll('.stat-number');
-      const searchInput = document.querySelector('input[placeholder*="Search"]');
-      const gradeFilter = document.querySelectorAll('select')[0];
-      const statusFilter = document.querySelectorAll('select')[1];
-      const sortFilter = document.querySelectorAll('select')[2];
+      // DOM elements - more specific selectors
+      let searchInput, gradeFilter, statusFilter, sortFilter;
+
+      function getFilterElements() {
+        searchInput = document.querySelector('.search-filter-bar input[type="text"]');
+        const filterSelects = document.querySelectorAll('.search-filter-bar .form-select');
+        gradeFilter = filterSelects[0]; // All Classes
+        statusFilter = filterSelects[1]; // All Status
+        sortFilter = filterSelects[2]; // Sort By
+      }
 
       // Initialize page
       document.addEventListener('DOMContentLoaded', function() {
@@ -1054,20 +1057,47 @@
       }
 
       function setupEventListeners() {
+        // Get filter elements first
+        getFilterElements();
+
+        console.log('Filter elements:', { searchInput, gradeFilter, statusFilter, sortFilter });
+
         // Search
         if (searchInput) {
-          searchInput.addEventListener('input', debounce(filterStudents, 300));
+          searchInput.addEventListener('input', debounce(function() {
+            console.log('Search input:', searchInput.value);
+            filterStudents();
+          }, 300));
+        } else {
+          console.error('Search input not found');
         }
 
         // Filters
         if (gradeFilter) {
-          gradeFilter.addEventListener('change', filterStudents);
+          gradeFilter.addEventListener('change', function() {
+            console.log('Grade filter changed:', gradeFilter.value);
+            filterStudents();
+          });
+        } else {
+          console.error('Grade filter not found');
         }
+
         if (statusFilter) {
-          statusFilter.addEventListener('change', filterStudents);
+          statusFilter.addEventListener('change', function() {
+            console.log('Status filter changed:', statusFilter.value);
+            filterStudents();
+          });
+        } else {
+          console.error('Status filter not found');
         }
+
         if (sortFilter) {
-          sortFilter.addEventListener('change', filterStudents);
+          sortFilter.addEventListener('change', function() {
+            console.log('Sort filter changed:', sortFilter.value);
+            filterStudents();
+          });
+        } else {
+          console.error('Sort filter not found');
         }
 
         // View toggle

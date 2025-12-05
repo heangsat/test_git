@@ -643,173 +643,19 @@
                         <span class="text-muted">32 Students</span>
                     </div>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table" id="attendanceTable">
                             <thead>
                                 <tr>
                                     <th>Student</th>
                                     <th>Student ID</th>
+                                    <th>Class</th>
                                     <th>Status</th>
                                     <th>Time</th>
                                     <th>Notes</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="student-info">
-                                            <div class="student-avatar" style="background: #6C8BFF;">EW</div>
-                                            <div>
-                                                <strong>Emma Wilson</strong>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>STD-2024-001</td>
-                                    <td>
-                                        <div class="attendance-status">
-                                            <button class="btn-status btn-present active" title="Present">
-                                                <i class="bi bi-check"></i>
-                                            </button>
-                                            <button class="btn-status btn-absent" title="Absent">
-                                                <i class="bi bi-x"></i>
-                                            </button>
-                                            <button class="btn-status btn-late" title="Late">
-                                                <i class="bi bi-clock"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td><small class="text-muted">08:15 AM</small></td>
-                                    <td><small class="text-muted">-</small></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="student-info">
-                                            <div class="student-avatar" style="background: #F97A9A;">JD</div>
-                                            <div>
-                                                <strong>James Davis</strong>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>STD-2024-002</td>
-                                    <td>
-                                        <div class="attendance-status">
-                                            <button class="btn-status btn-present" title="Present">
-                                                <i class="bi bi-check"></i>
-                                            </button>
-                                            <button class="btn-status btn-absent active" title="Absent">
-                                                <i class="bi bi-x"></i>
-                                            </button>
-                                            <button class="btn-status btn-late" title="Late">
-                                                <i class="bi bi-clock"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td><small class="text-muted">-</small></td>
-                                    <td><small class="text-muted">Sick leave</small></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="student-info">
-                                            <div class="student-avatar" style="background: #00D97E;">SM</div>
-                                            <div>
-                                                <strong>Sophia Martinez</strong>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>STD-2024-003</td>
-                                    <td>
-                                        <div class="attendance-status">
-                                            <button class="btn-status btn-present" title="Present">
-                                                <i class="bi bi-check"></i>
-                                            </button>
-                                            <button class="btn-status btn-absent" title="Absent">
-                                                <i class="bi bi-x"></i>
-                                            </button>
-                                            <button class="btn-status btn-late active" title="Late">
-                                                <i class="bi bi-clock"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td><small class="text-muted">08:45 AM</small></td>
-                                    <td><small class="text-muted">30 min late</small></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="student-info">
-                                            <div class="student-avatar" style="background: #6C5CE7;">LB</div>
-                                            <div>
-                                                <strong>Liam Brown</strong>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>STD-2024-004</td>
-                                    <td>
-                                        <div class="attendance-status">
-                                            <button class="btn-status btn-present active" title="Present">
-                                                <i class="bi bi-check"></i>
-                                            </button>
-                                            <button class="btn-status btn-absent" title="Absent">
-                                                <i class="bi bi-x"></i>
-                                            </button>
-                                            <button class="btn-status btn-late" title="Late">
-                                                <i class="bi bi-clock"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td><small class="text-muted">08:10 AM</small></td>
-                                    <td><small class="text-muted">-</small></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="student-info">
-                                            <div class="student-avatar" style="background: #FFA500;">OJ</div>
-                                            <div>
-                                                <strong>Olivia Johnson</strong>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>STD-2024-005</td>
-                                    <td>
-                                        <div class="attendance-status">
-                                            <button class="btn-status btn-present active" title="Present">
-                                                <i class="bi bi-check"></i>
-                                            </button>
-                                            <button class="btn-status btn-absent" title="Absent">
-                                                <i class="bi bi-x"></i>
-                                            </button>
-                                            <button class="btn-status btn-late" title="Late">
-                                                <i class="bi bi-clock"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td><small class="text-muted">08:20 AM</small></td>
-                                    <td><small class="text-muted">-</small></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="student-info">
-                                            <div class="student-avatar" style="background: #20C997;">NM</div>
-                                            <div>
-                                                <strong>Noah Miller</strong>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>STD-2024-006</td>
-                                    <td>
-                                        <div class="attendance-status">
-                                            <button class="btn-status btn-present active" title="Present">
-                                                <i class="bi bi-check"></i>
-                                            </button>
-                                            <button class="btn-status btn-absent" title="Absent">
-                                                <i class="bi bi-x"></i>
-                                            </button>
-                                            <button class="btn-status btn-late" title="Late">
-                                                <i class="bi bi-clock"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td><small class="text-muted">08:05 AM</small></td>
-                                    <td><small class="text-muted">-</small></td>
-                                </tr>
+                            <tbody id="attendanceTbody">
+                                <!-- Dynamic content will be loaded here -->
                             </tbody>
                         </table>
                     </div>
@@ -868,5 +714,506 @@
                 <!-- Calendar View -->
                 <div class="calendar-card">
                     <div class="calendar-header">
-                        <h6 class="mb-0">December 2022</h6>
+                        <h6 class="mb-0">December 2025</h6>
                         <div>
+                            <button class="btn btn-sm btn-link text-muted"><i class="bi bi-chevron-left"></i></button>
+                            <button class="btn btn-sm btn-link text-muted"><i class="bi bi-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-day-header">Mon</div>
+                        <div class="calendar-day-header">Tue</div>
+                        <div class="calendar-day-header">Wed</div>
+                        <div class="calendar-day-header">Thu</div>
+                        <div class="calendar-day-header">Fri</div>
+                        <div class="calendar-day-header">Sat</div>
+                        <div class="calendar-day-header">Sun</div>
+
+                        <!-- Days will be populated by JS -->
+                        <div class="calendar-day"></div><div class="calendar-day"></div><div class="calendar-day"></div>
+                        <div class="calendar-day"></div><div class="calendar-day"></div><div class="calendar-day">1</div><div class="calendar-day">2</div>
+                        <div class="calendar-day">3</div><div class="calendar-day">4</div><div class="calendar-day">5</div><div class="calendar-day">6</div>
+                        <div class="calendar-day">7</div><div class="calendar-day">8</div><div class="calendar-day">9</div><div class="calendar-day">10</div>
+                        <div class="calendar-day">11</div><div class="calendar-day">12</div><div class="calendar-day">13</div><div class="calendar-day">14</div>
+                        <div class="calendar-day">15</div><div class="calendar-day">16</div><div class="calendar-day">17</div><div class="calendar-day">18</div>
+                        <div class="calendar-day">19</div><div class="calendar-day">20</div><div class="calendar-day today">21</div><div class="calendar-day">22</div>
+                        <div class="calendar-day">23</div><div class="calendar-day">24</div><div class="calendar-day">25</div><div class="calendar-day">26</div>
+                        <div class="calendar-day">27</div><div class="calendar-day">28</div><div class="calendar-day">29</div><div class="calendar-day">30</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Data Management Functions
+      class DataManager {
+        static get(key, defaultValue = []) {
+          try {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : defaultValue;
+          } catch (e) {
+            console.error('Error reading from localStorage:', e);
+            return defaultValue;
+          }
+        }
+
+        static set(key, value) {
+          try {
+            localStorage.setItem(key, JSON.stringify(value));
+          } catch (e) {
+            console.error('Error writing to localStorage:', e);
+          }
+        }
+
+        static add(key, item) {
+          const data = this.get(key);
+          data.push(item);
+          this.set(key, data);
+        }
+
+        static update(key, id, updatedItem) {
+          const data = this.get(key);
+          const index = data.findIndex(item => item.id === id);
+          if (index !== -1) {
+            data[index] = { ...data[index], ...updatedItem };
+            this.set(key, data);
+            return true;
+          }
+          return false;
+        }
+
+        static delete(key, id) {
+          const data = this.get(key);
+          const filtered = data.filter(item => item.id !== id);
+          this.set(key, filtered);
+          return filtered.length !== data.length;
+        }
+
+        static find(key, id) {
+          const data = this.get(key);
+          return data.find(item => item.id === id);
+        }
+      }
+
+      // Initialize attendance tracking
+      let currentAttendance = [];
+      let currentDate = new Date().toISOString().split('T')[0];
+      let currentStudents = [];
+      let currentFilter = {
+        date: currentDate,
+        class: 'All Classes',
+        status: 'All Status'
+      };
+
+      // Load page data
+      document.addEventListener('DOMContentLoaded', function() {
+        loadStudents();
+        loadAttendance();
+        updateStatistics();
+        setupEventListeners();
+      });
+
+      function loadStudents() {
+        currentStudents = DataManager.get('students', []);
+        console.log('Loaded students:', currentStudents.length);
+      }
+
+      function loadAttendance() {
+        // Filter students by active status and enrollment
+        const activeStudents = currentStudents.filter(s => s.status === 'Active');
+
+        // Get existing attendance for current date
+        const allAttendance = DataManager.get('attendance', []);
+        const todayAttendance = allAttendance.filter(a => a.date === currentDate);
+
+        const tbody = document.getElementById('attendanceTbody');
+        tbody.innerHTML = '';
+
+        activeStudents.forEach(student => {
+          const existingRecord = todayAttendance.find(a => a.studentId === student.studentId);
+          const attendanceStatus = existingRecord ? existingRecord.status : 'Not Marked';
+          const attendanceTime = existingRecord ? existingRecord.time : '';
+          const attendanceNotes = existingRecord ? existingRecord.notes : '';
+
+          const row = createAttendanceRow(student, attendanceStatus, attendanceTime, attendanceNotes);
+          tbody.appendChild(row);
+        });
+
+        updateStudentCount(activeStudents.length);
+      }
+
+      function createAttendanceRow(student, status = 'Not Marked', time = '', notes = '') {
+        const row = document.createElement('tr');
+        row.setAttribute('data-student-id', student.studentId);
+
+        // Generate avatar color
+        const colors = ['#6C8BFF', '#F97A9A', '#00D97E', '#FFC107', '#6C5CE7'];
+        const avatarColor = colors[Math.floor(Math.random() * colors.length)];
+        const initials = (student.firstName.charAt(0) + student.lastName.charAt(0)).toUpperCase();
+
+        // Determine active button
+        let statusButtons = '';
+        const buttons = [
+          { class: 'btn-present', icon: 'bi-check', status: 'Present' },
+          { class: 'btn-absent', icon: 'bi-x', status: 'Absent' },
+          { class: 'btn-late', icon: 'bi-clock', status: 'Late' },
+          { class: 'btn-excused', icon: 'bi-shield-check', status: 'Excused' }
+        ];
+
+        buttons.forEach(btn => {
+          const isActive = status === btn.status ? 'active' : '';
+          statusButtons += `
+            <button class="btn-status ${btn.class} ${isActive}"
+                    onclick="markAttendance('${student.studentId}', '${btn.status}')"
+                    title="${btn.status}">
+              <i class="bi ${btn.icon}"></i>
+            </button>
+          `;
+        });
+
+        const timeDisplay = time || (status !== 'Not Marked' ? new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-');
+        const notesDisplay = notes || (status === 'Absent' || status === 'Late' ? 'Click to add notes' : '-');
+
+        row.innerHTML = `
+          <td>
+            <div class="student-info">
+              <div class="student-avatar" style="background: ${avatarColor};">
+                ${initials}
+              </div>
+              <div>
+                <strong>${student.firstName} ${student.middleName || ''} ${student.lastName}</strong>
+              </div>
+            </div>
+          </td>
+          <td><strong>${student.studentId}</strong></td>
+          <td>${student.gradeLevel} - ${student.program || 'General'}</td>
+          <td>
+            <div class="attendance-status">
+              ${statusButtons}
+            </div>
+          </td>
+          <td><small class="text-muted">${timeDisplay}</small></td>
+          <td>
+            <input type="text" class="form-control form-control-sm" placeholder="Optional notes"
+                   value="${notes}" onchange="updateAttendanceNotes('${student.studentId}', this.value)">
+          </td>
+        `;
+
+        return row;
+      }
+
+      function markAttendance(studentId, status) {
+        const today = new Date().toISOString().split('T')[0];
+        const currentTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+        // Get existing attendance
+        let attendance = DataManager.get('attendance', []);
+
+        // Update or create attendance record
+        const existingIndex = attendance.findIndex(a => a.studentId === studentId && a.date === today);
+
+        if (existingIndex >= 0) {
+          // Update existing record
+          attendance[existingIndex].status = status;
+          attendance[existingIndex].time = currentTime;
+          attendance[existingIndex].updatedAt = new Date().toISOString();
+        } else {
+          // Create new record
+          const newRecord = {
+            id: 'ATT-' + Date.now() + '-' + studentId,
+            studentId: studentId,
+            date: today,
+            status: status,
+            time: currentTime,
+            notes: '',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          };
+          attendance.push(newRecord);
+        }
+
+        // Save to localStorage
+        DataManager.set('attendance', attendance);
+
+        // Update UI
+        updateRowStatus(studentId, status, currentTime);
+        updateStatistics();
+        updateDashboardStats();
+
+        console.log(`Marked ${studentId} as ${status}`);
+      }
+
+      function updateAttendanceNotes(studentId, notes) {
+        const today = new Date().toISOString().split('T')[0];
+
+        // Get existing attendance
+        let attendance = DataManager.get('attendance', []);
+        const existingIndex = attendance.findIndex(a => a.studentId === studentId && a.date === today);
+
+        if (existingIndex >= 0) {
+          attendance[existingIndex].notes = notes;
+          attendance[existingIndex].updatedAt = new Date().toISOString();
+          DataManager.set('attendance', attendance);
+        }
+
+        console.log(`Updated notes for ${studentId}`);
+      }
+
+      function updateRowStatus(studentId, status, time) {
+        const row = document.querySelector(`tr[data-student-id="${studentId}"]`);
+        if (row) {
+          // Update active button states
+          const buttons = row.querySelectorAll('.btn-status');
+          buttons.forEach(btn => {
+            btn.classList.remove('active');
+          });
+
+          // Set new active button
+          const btnMap = {
+            'Present': 'btn-present',
+            'Absent': 'btn-absent',
+            'Late': 'btn-late',
+            'Excused': 'btn-excused'
+          };
+
+          const activeBtn = row.querySelector(`.${btnMap[status]}`);
+          if (activeBtn) {
+            activeBtn.classList.add('active');
+          }
+
+          // Update time display
+          const timeCell = row.querySelector('td:nth-child(5) small');
+          if (timeCell) {
+            timeCell.textContent = time;
+          }
+        }
+      }
+
+      function updateStatistics() {
+        const attendance = DataManager.get('attendance', []);
+        const today = new Date().toISOString().split('T')[0];
+        const todayRecords = attendance.filter(a => a.date === today);
+
+        const totalPresent = todayRecords.filter(a => a.status === 'Present').length;
+        const totalAbsent = todayRecords.filter(a => a.status === 'Absent').length;
+        const totalLate = todayRecords.filter(a => a.status === 'Late').length;
+        const total = todayRecords.length;
+
+        const attendanceRate = total > 0 ? Math.round((totalPresent / total) * 100) : 0;
+
+        // Update stat cards
+        const statNumbers = document.querySelectorAll('.stat-number');
+        if (statNumbers.length >= 4) {
+          statNumbers[0].textContent = attendanceRate + '%';
+          statNumbers[1].textContent = totalPresent.toString();
+          statNumbers[2].textContent = totalAbsent.toString();
+          statNumbers[3].textContent = totalLate.toString();
+        }
+
+        console.log('Updated statistics:', { rate: attendanceRate, present: totalPresent, absent: totalAbsent, late: totalLate });
+      }
+
+      function updateDashboardStats() {
+        // Update dashboard if it exists in another tab/window
+        try {
+          // This will trigger a refresh when user visits dashboard
+          localStorage.setItem('attendance_updated', new Date().toISOString());
+        } catch (e) {
+          console.log('Could not update dashboard stats:', e);
+        }
+      }
+
+      function updateStudentCount(count) {
+        const countDisplay = document.querySelector('.table-header span');
+        if (countDisplay) {
+          countDisplay.textContent = `${count} Students`;
+        }
+      }
+
+      function setupEventListeners() {
+        // Date filter
+        const dateSelect = document.querySelector('.filter-bar select');
+        if (dateSelect) {
+          dateSelect.addEventListener('change', function() {
+            currentFilter.date = this.value === 'Today - Dec 12, 2022' ? new Date().toISOString().split('T')[0] : this.value;
+            // Reload attendance for selected date
+            loadAttendance();
+          });
+        }
+
+        // Class filter
+        const classSelects = document.querySelectorAll('.filter-bar .form-select');
+        if (classSelects[1]) {
+          classSelects[1].addEventListener('change', function() {
+            currentFilter.class = this.value;
+            filterAttendanceByClass(this.value);
+          });
+        }
+
+        // Status filter
+        if (classSelects[2]) {
+          classSelects[2].addEventListener('change', function() {
+            currentFilter.status = this.value;
+            filterAttendanceByStatus(this.value);
+          });
+        }
+
+        // Apply filter button
+        const applyBtn = document.querySelector('.filter-bar .btn-outline-secondary');
+        if (applyBtn) {
+          applyBtn.addEventListener('click', function() {
+            applyFilters();
+          });
+        }
+
+        // Quick Actions
+        const quickActions = document.querySelectorAll('.quick-action-btn');
+        if (quickActions.length >= 4) {
+          // Mark all present
+          quickActions[0].addEventListener('click', function() {
+            markAllAttendance('Present');
+          });
+
+          // Export (placeholder)
+          quickActions[1].addEventListener('click', function() {
+            exportAttendanceData();
+          });
+
+          // Notifications (placeholder)
+          quickActions[2].addEventListener('click', function() {
+            alert('Notification system would alert parents about absences.');
+          });
+
+          // Analytics (placeholder)
+          quickActions[3].addEventListener('click', function() {
+            alert('Analytics view would show detailed attendance reports.');
+          });
+        }
+
+        // Export button
+        const exportBtn = document.querySelector('.btn-export');
+        if (exportBtn) {
+          exportBtn.addEventListener('click', function() {
+            exportAttendanceData();
+          });
+        }
+      }
+
+      function filterAttendanceByClass(classFilter) {
+        // Filter students by class
+        let filteredStudents = currentStudents;
+
+        if (classFilter !== 'All Classes') {
+          const [grade, program] = classFilter.split(' - ');
+          filteredStudents = currentStudents.filter(s =>
+            s.gradeLevel === grade && (program ? s.program === program : true)
+          );
+        }
+
+        // Reload attendance for filtered students
+        renderFilteredAttendance(filteredStudents);
+      }
+
+      function filterAttendanceByStatus(statusFilter) {
+        // Filter by attendance status
+        if (statusFilter === 'All Status') {
+          loadAttendance();
+          return;
+        }
+
+        const allAttendance = DataManager.get('attendance', []);
+        const todayAttendance = allAttendance.filter(a => a.date === currentDate);
+
+        const tbody = document.getElementById('attendanceTbody');
+        tbody.innerHTML = '';
+
+        currentStudents.filter(s => s.status === 'Active').forEach(student => {
+          const record = todayAttendance.find(a => a.studentId === student.studentId);
+          const currentStatus = record ? record.status : 'Not Marked';
+
+          if (statusFilter === currentStatus || (statusFilter === 'Present' && currentStatus === 'Not Marked')) {
+            const row = createAttendanceRow(student, currentStatus, record?.time || '', record?.notes || '');
+            tbody.appendChild(row);
+          }
+        });
+      }
+
+      function renderFilteredAttendance(students) {
+        const tbody = document.getElementById('attendanceTbody');
+        tbody.innerHTML = '';
+
+        const allAttendance = DataManager.get('attendance', []);
+        const todayAttendance = allAttendance.filter(a => a.date === currentDate);
+
+        students.forEach(student => {
+          const record = todayAttendance.find(a => a.studentId === student.studentId);
+          const row = createAttendanceRow(student, record?.status || 'Not Marked', record?.time || '', record?.notes || '');
+          tbody.appendChild(row);
+        });
+
+        updateStudentCount(students.length);
+      }
+
+      function applyFilters() {
+        console.log('Applying filters:', currentFilter);
+        // Apply all current filters
+        filterAttendanceByClass(currentFilter.class);
+      }
+
+      function markAllAttendance(status) {
+        if (!confirm(`Mark ALL students as ${status.toLowerCase()} for today?`)) {
+          return;
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+        const currentTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+        // Get active students
+        const activeStudents = currentStudents.filter(s => s.status === 'Active');
+
+        // Mark attendance for all students
+        activeStudents.forEach(student => {
+          markAttendance(student.studentId, status);
+        });
+
+        alert(`All ${activeStudents.length} students marked as ${status.toLowerCase()}`);
+      }
+
+      function exportAttendanceData() {
+        const attendance = DataManager.get('attendance', []);
+        const today = new Date().toISOString().split('T')[0];
+        const todayRecords = attendance.filter(a => a.date === today);
+
+        // Find students for names
+        const students = DataManager.get('students', []);
+
+        const csvContent = 'data:text/csv;charset=utf-8,' +
+          'Student ID,Name,Class,Status,Time,Notes\n' +
+          todayRecords.map(a => {
+            const student = students.find(s => s.studentId === a.studentId);
+            const name = student ? `${student.firstName} ${student.lastName}` : a.studentId;
+            const className = student ? `${student.gradeLevel} - ${student.program || 'General'}` : 'Unknown';
+            return `${a.studentId},"${name}","${className}",${a.status},${a.time},"${a.notes || ''}"`;
+          }).join('\n');
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', `attendance_${today}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      // Update page title with current date
+      document.querySelector('.page-title').textContent = `Attendance Management - ${new Date().toLocaleDateString()}`;
+
+      // Make global functions available
+      window.markAttendance = markAttendance;
+      window.updateAttendanceNotes = updateAttendanceNotes;
+    </script>
+</body>
+
+</html>
