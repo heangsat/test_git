@@ -1191,6 +1191,38 @@
       // Check authentication first
       AuthenticationCheck.init();
 
+      // Check user permissions and adjust UI
+      const currentUser = AuthManager.getCurrentUser();
+      const isAdmin = currentUser && currentUser.role === 'administrator';
+      const canEdit = isAdmin;
+
+      // Hide/disable admin-only buttons for non-admin users
+      if (!canEdit) {
+        // Hide add student buttons
+        document.querySelectorAll('.btn-add-student, .stat-card[onclick*="student-enroll"], .no-students .btn').forEach(btn => {
+          if (btn) btn.style.display = 'none';
+        });
+
+        // Hide edit/delete buttons in table rows
+        document.querySelectorAll('.btn-edit, .btn-delete').forEach(btn => {
+          if (btn) btn.style.display = 'none';
+        });
+
+        // Show read-only message for non-admin users
+        const welcomeBanner = document.querySelector('.welcome-banner');
+        if (welcomeBanner) {
+          const message = welcomeBanner.querySelector('.lead');
+          if (message) {
+            message.innerHTML = '<strong>You have read-only access to view student data and system statistics.</strong>';
+          }
+          // Disable review button
+          const reviewBtn = welcomeBanner.querySelector('.btn');
+          if (reviewBtn) {
+            reviewBtn.style.display = 'none';
+          }
+        }
+      }
+
       // Initialize all components
       DashboardUI.updateStats();
       DashboardUI.updateRecentStudents();

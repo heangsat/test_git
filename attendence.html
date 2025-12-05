@@ -835,6 +835,32 @@
       // Load page data
       document.addEventListener('DOMContentLoaded', function() {
         AuthenticationCheck.init();
+
+        // Check user permissions and adjust UI
+        const currentUser = AuthManager.getCurrentUser();
+        const isAdmin = currentUser && currentUser.role === 'administrator';
+        const canEdit = isAdmin;
+
+        // Hide admin-only features for non-admin users
+        if (!canEdit) {
+          // Hide mark attendance functionality
+          document.querySelector('.btn-filter').style.display = 'none';
+
+          // Disable attendance marking buttons
+          document.addEventListener('click', function(e) {
+            if (e.target.closest('.btn-present, .btn-absent, .btn-late')) {
+              e.preventDefault();
+              alert('You do not have permission to mark attendance. Contact an administrator.');
+              return false;
+            }
+          });
+
+          // Show read-only message
+          setTimeout(() => {
+            alert('You have read-only access to attendance records. Contact an administrator to make changes.');
+          }, 1000);
+        }
+
         loadStudents();
         loadAttendance();
         updateStatistics();

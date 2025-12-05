@@ -839,6 +839,39 @@
       // Initialize page
       document.addEventListener('DOMContentLoaded', function() {
         AuthenticationCheck.init();
+
+        // Check user permissions and adjust UI
+        const currentUser = AuthManager.getCurrentUser();
+        const isAdmin = currentUser && currentUser.role === 'administrator';
+        const canEdit = isAdmin;
+
+        // Hide admin-only features for non-admin users
+        if (!canEdit) {
+          // Hide add course button
+          document.querySelector('.btn-add-course').style.display = 'none';
+
+          // Hide edit/delete buttons in course cards
+          document.addEventListener('click', function(e) {
+            if (e.target.closest('.action-btn')) {
+              e.preventDefault();
+              alert('You do not have permission to modify courses. Contact an administrator.');
+              return false;
+            }
+          });
+
+          // Hide teacher creation features
+          if (typeof saveTeacher === 'function') {
+            window.saveTeacher = function() {
+              alert('You do not have permission to add teachers. Contact an administrator.');
+            };
+          }
+
+          // Show read-only message
+          setTimeout(() => {
+            alert('You have read-only access to course information. Contact an administrator to make changes.');
+          }, 1000);
+        }
+
         loadData();
         setupEventListeners();
         updateStatistics();

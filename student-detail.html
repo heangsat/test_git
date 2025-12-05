@@ -367,6 +367,23 @@
         return;
       }
 
+      // Check user permissions and adjust UI
+      const currentUser = AuthManager.getCurrentUser();
+      const isAdmin = currentUser && currentUser.role === 'administrator';
+      const canEdit = isAdmin;
+
+      // Hide edit button for non-admin users
+      if (!canEdit) {
+        const editBtn = document.querySelector('.btn-action');
+        if (editBtn && editBtn.innerHTML.includes('Edit')) {
+          editBtn.style.display = 'none';
+
+          setTimeout(() => {
+            alert('You have read-only access to student details. Contact an administrator to make changes.');
+          }, 1000);
+        }
+      }
+
       const studentId = sessionStorage.getItem('selectedStudentId');
 
       if (!studentId) {
