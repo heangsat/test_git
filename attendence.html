@@ -861,11 +861,101 @@
           }, 1000);
         }
 
+        // Initialize demo students always (to ensure attendance page shows data)
+        initializeDemoStudents();
+
         loadStudents();
         loadAttendance();
         updateStatistics();
         setupEventListeners();
       });
+
+      function initializeDemoStudents() {
+        // Ensure we have demo students for attendance display
+        const demoStudents = [
+          {
+            id: 'STD-2024-001',
+            firstName: 'Emma',
+            middleName: '',
+            lastName: 'Wilson',
+            studentId: 'STD-2024-001',
+            dob: '2007-05-15',
+            gender: 'Female',
+            nationality: 'American',
+            ethnicity: '',
+            email: 'emma.wilson@school.edu',
+            personalEmail: 'emma.wilson@email.com',
+            phone: '+1 234 567 8901',
+            address: '123 Main St, City, State',
+            gradeLevel: 'Grade 10',
+            program: 'Science',
+            enrollmentDate: '2024-08-15',
+            status: 'Active',
+            emergencyContact: {
+              name: 'John Wilson',
+              relationship: 'Father',
+              phone: '+1 234 567 8901',
+              email: 'john.wilson@email.com'
+            },
+            photo: ''
+          },
+          {
+            id: 'STD-2024-002',
+            firstName: 'James',
+            middleName: '',
+            lastName: 'Davis',
+            studentId: 'STD-2024-002',
+            dob: '2007-03-22',
+            gender: 'Male',
+            nationality: 'American',
+            ethnicity: '',
+            email: 'james.davis@school.edu',
+            personalEmail: 'james.davis@email.com',
+            phone: '+1 234 567 8902',
+            address: '456 Oak Ave, City, State',
+            gradeLevel: 'Grade 11',
+            program: 'Mathematics',
+            enrollmentDate: '2024-08-15',
+            status: 'Active',
+            emergencyContact: {
+              name: 'Sarah Davis',
+              relationship: 'Mother',
+              phone: '+1 234 567 8902',
+              email: 'sarah.davis@email.com'
+            },
+            photo: ''
+          },
+          {
+            id: 'STD-2024-003',
+            firstName: 'Sophia',
+            middleName: '',
+            lastName: 'Martinez',
+            studentId: 'STD-2024-003',
+            dob: '2006-11-10',
+            gender: 'Female',
+            nationality: 'American',
+            ethnicity: 'Hispanic',
+            email: 'sophia.martinez@school.edu',
+            personalEmail: 'sophia.martinez@email.com',
+            phone: '+1 234 567 8903',
+            address: '789 Pine St, City, State',
+            gradeLevel: 'Grade 9',
+            program: 'General',
+            enrollmentDate: '2024-08-15',
+            status: 'Active',
+            emergencyContact: {
+              name: 'Maria Martinez',
+              relationship: 'Mother',
+              phone: '+1 234 567 8903',
+              email: 'maria.martinez@email.com'
+            },
+            photo: ''
+          }
+        ];
+
+        // Always set demo students
+        DataManager.set('students', demoStudents);
+      }
 
       function loadStudents() {
         currentStudents = DataManager.get('students', []);

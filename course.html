@@ -1256,110 +1256,109 @@
         }
       }
 
-      // Initialize some demo data if none exists
+      // Initialize demo data always (to ensure students are shown)
       initializeDemoData();
 
       function initializeDemoData() {
-        if (allCourses.length === 0) {
-          // Create some demo teachers
-          const demoTeachers = [
-            {
-              id: 'TEACH3Z2Q05XNK',
-              firstName: 'Michael',
-              lastName: 'Kumar',
-              email: 'michael.kumar@school.edu',
-              phone: '+1 234 567 8901',
-              subject: 'Mathematics',
-              experience: 8,
-              status: 'Active',
-              createdAt: new Date().toISOString()
-            },
-            {
-              id: 'TEACH4A7R91ZMD',
-              firstName: 'Dr. Linda',
-              lastName: 'Johnson',
-              email: 'linda.johnson@school.edu',
-              phone: '+1 234 567 8902',
-              subject: 'Biology',
-              experience: 12,
-              status: 'Active',
-              createdAt: new Date().toISOString()
-            },
-            {
-              id: 'TEACH8F4S67XRP',
-              firstName: 'Sarah',
-              lastName: 'Peterson',
-              email: 'sarah.peterson@school.edu',
-              phone: '+1 234 567 8903',
-              subject: 'English',
-              experience: 6,
-              status: 'Active',
-              createdAt: new Date().toISOString()
-            }
-          ];
+        // Create some demo teachers
+        const demoTeachers = [
+          {
+            id: 'TEACH3Z2Q05XNK',
+            firstName: 'Michael',
+            lastName: 'Kumar',
+            email: 'michael.kumar@school.edu',
+            phone: '+1 234 567 8901',
+            subject: 'Mathematics',
+            experience: 8,
+            status: 'Active',
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 'TEACH4A7R91ZMD',
+            firstName: 'Dr. Linda',
+            lastName: 'Johnson',
+            email: 'linda.johnson@school.edu',
+            phone: '+1 234 567 8902',
+            subject: 'Biology',
+            experience: 12,
+            status: 'Active',
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 'TEACH8F4S67XRP',
+            firstName: 'Sarah',
+            lastName: 'Peterson',
+            email: 'sarah.peterson@school.edu',
+            phone: '+1 234 567 8903',
+            subject: 'English',
+            experience: 6,
+            status: 'Active',
+            createdAt: new Date().toISOString()
+          }
+        ];
 
-          // Create some demo courses
-          const demoCourses = [
-            {
-              id: 'CRSE3Z2Q05XNK',
-              code: 'MATH-101',
-              title: 'Advanced Mathematics',
-              subject: 'Mathematics',
-              gradeLevel: 'Grade 11',
-              credits: 1,
-              duration: 48,
-              teacherId: 'TEACH3Z2Q05XNK',
-              semester: 'Fall',
-              schedule: 'Monday, Wednesday',
-              status: 'Active',
-              description: 'Comprehensive mathematics course covering algebra, calculus, and advanced problem-solving techniques for grade 11 students.',
-              prerequisites: 'Mathematics 101',
-              students: [],
-              createdAt: new Date().toISOString()
-            },
-            {
-              id: 'CRSE4A7R91ZMD',
-              code: 'BIOL-201',
-              title: 'Biology & Life Sciences',
-              subject: 'Biology',
-              gradeLevel: 'Grade 10',
-              credits: 1,
-              duration: 40,
-              teacherId: 'TEACH4A7R91ZMD',
-              semester: 'Spring',
-              schedule: 'Tuesday, Thursday',
-              status: 'Active',
-              description: 'Explore the fascinating world of biology including cell structure, genetics, evolution, and ecosystems.',
-              prerequisites: 'Basic Biology',
-              students: [],
-              createdAt: new Date().toISOString()
-            },
-            {
-              id: 'CRSE8F4S67XRP',
-              code: 'CHEM-102',
-              title: 'Chemistry Fundamentals',
-              subject: 'Chemistry',
-              gradeLevel: 'Grade 10',
-              credits: 1,
-              duration: 44,
-              teacherId: 'TEACH4A7R91ZMD',
-              semester: 'Fall',
-              schedule: 'Monday, Wednesday, Friday',
-              status: 'Upcoming',
-              description: 'Introduction to chemical principles including atomic structure, bonding, reactions, and laboratory techniques.',
-              prerequisites: 'Basic Chemistry',
-              students: [],
-              createdAt: new Date().toISOString()
-            }
-          ];
+        // Create some demo courses
+        const demoCourses = [
+          {
+            id: 'CRSE3Z2Q05XNK',
+            code: 'MATH-101',
+            title: 'Advanced Mathematics',
+            subject: 'Mathematics',
+            gradeLevel: 'Grade 11',
+            credits: 1,
+            duration: 48,
+            teacherId: 'TEACH3Z2Q05XNK',
+            semester: 'Fall',
+            schedule: 'Monday, Wednesday',
+            status: 'Active',
+            description: 'Comprehensive mathematics course covering algebra, calculus, and advanced problem-solving techniques for grade 11 students.',
+            prerequisites: 'Mathematics 101',
+            students: [],
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 'CRSE4A7R91ZMD',
+            code: 'BIOL-201',
+            title: 'Biology & Life Sciences',
+            subject: 'Biology',
+            gradeLevel: 'Grade 10',
+            credits: 1,
+            duration: 40,
+            teacherId: 'TEACH4A7R91ZMD',
+            semester: 'Spring',
+            schedule: 'Tuesday, Thursday',
+            status: 'Active',
+            description: 'Explore the fascinating world of biology including cell structure, genetics, evolution, and ecosystems.',
+            prerequisites: 'Basic Biology',
+            students: [],
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 'CRSE8F4S67XRP',
+            code: 'CHEM-102',
+            title: 'Chemistry Fundamentals',
+            subject: 'Chemistry',
+            gradeLevel: 'Grade 10',
+            credits: 1,
+            duration: 44,
+            teacherId: 'TEACH4A7R91ZMD',
+            semester: 'Fall',
+            schedule: 'Monday, Wednesday, Friday',
+            status: 'Upcoming',
+            description: 'Introduction to chemical principles including atomic structure, bonding, reactions, and laboratory techniques.',
+            prerequisites: 'Basic Chemistry',
+            students: [],
+            createdAt: new Date().toISOString()
+          }
+        ];
 
-          DataManager.set('teachers', demoTeachers);
-          DataManager.set('courses', demoCourses);
+        // Always set demo data for courses and teachers
+        DataManager.set('teachers', demoTeachers);
+        DataManager.set('courses', demoCourses);
 
-          // Reload data
-          loadData();
-          updateStatistics();
-        }
+        // Reload data
+        loadData();
+        updateStatistics();
       }
 
       // Make functions global
