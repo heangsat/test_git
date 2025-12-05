@@ -338,16 +338,7 @@
             color: white;
         }
 
-        .btn-excused {
-            background: rgba(108, 139, 255, 0.1);
-            color: var(--secondary-blue);
-        }
 
-        .btn-excused:hover,
-        .btn-excused.active {
-            background: var(--secondary-blue);
-            color: white;
-        }
 
         /* Calendar View */
         .calendar-card {
@@ -853,13 +844,12 @@
         const avatarColor = colors[Math.floor(Math.random() * colors.length)];
         const initials = (student.firstName.charAt(0) + student.lastName.charAt(0)).toUpperCase();
 
-        // Determine active button
+        // Determine active button (removed Excused option)
         let statusButtons = '';
         const buttons = [
           { class: 'btn-present', icon: 'bi-check', status: 'Present' },
           { class: 'btn-absent', icon: 'bi-x', status: 'Absent' },
-          { class: 'btn-late', icon: 'bi-clock', status: 'Late' },
-          { class: 'btn-excused', icon: 'bi-shield-check', status: 'Excused' }
+          { class: 'btn-late', icon: 'bi-clock', status: 'Late' }
         ];
 
         buttons.forEach(btn => {
