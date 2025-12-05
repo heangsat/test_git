@@ -1188,9 +1188,38 @@
 
     // Initialize Dashboard
     document.addEventListener('DOMContentLoaded', function() {
-      // Check authentication first
-      AuthenticationCheck.init();
+      // Check authentication first - if not logged in, redirect to login
+      const currentSession = localStorage.getItem('currentSession');
+      if (!currentSession) {
+        window.location.href = 'login.html';
+        return;
+      }
 
+      try {
+        const session = JSON.parse(currentSession);
+        const now = new Date();
+        const expiresAt = new Date(session.expiresAt);
+
+        if (now > expiresAt) {
+          // Session expired - clear and redirect
+          localStorage.removeItem('currentSession');
+          localStorage.removeItem('rememberMe');
+          localStorage.removeItem('rememberedUser');
+          localStorage.removeItem('currentUser');
+          window.location.href = 'login.html';
+          return;
+        }
+      } catch (e) {
+        // Invalid session - clear and redirect
+        localStorage.removeItem('currentSession');
+        localStorage.removeItem('rememberMe');
+        localStorage.removeItem('rememberedUser');
+        localStorage.removeItem('currentUser');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // User is authenticated, proceed with dashboard
       // Check user permissions and adjust UI
       const currentUser = AuthManager.getCurrentUser();
       const isAdmin = currentUser && currentUser.role === 'administrator';
