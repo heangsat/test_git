@@ -374,5 +374,298 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Data Management Functions
+    class DataManager {
+      static get(key, defaultValue = []) {
+        try {
+          const data = localStorage.getItem(key);
+          return data ? JSON.parse(data) : defaultValue;
+        } catch (e) {
+          console.error('Error reading from localStorage:', e);
+          return defaultValue;
+        }
+      }
+
+      static set(key, value) {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+        } catch (e) {
+          console.error('Error writing to localStorage:', e);
+        }
+      }
+
+      static add(key, item) {
+        const data = this.get(key);
+        data.push(item);
+        this.set(key, data);
+      }
+
+      static update(key, id, updatedItem) {
+        const data = this.get(key);
+        const index = data.findIndex(item => item.id === id);
+        if (index !== -1) {
+          data[index] = { ...data[index], ...updatedItem };
+          this.set(key, data);
+          return true;
+        }
+        return false;
+      }
+
+      static delete(key, id) {
+        const data = this.get(key);
+        const filtered = data.filter(item => item.id !== id);
+        this.set(key, filtered);
+        return filtered.length !== data.length;
+      }
+
+      static find(key, id) {
+        const data = this.get(key);
+        return data.find(item => item.id === id);
+      }
+
+      static generateId(prefix) {
+        return prefix + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+      }
+
+      static generateStudentId() {
+        const year = new Date().getFullYear();
+        const existing = this.get('students');
+        const studentNumbers = existing
+          .filter(s => s.studentId && s.studentId.startsWith('STD-' + year))
+          .map(s => parseInt(s.studentId.split('-')[2] || '0'))
+          .sort((a, b) => b - a);
+        const next = studentNumbers.length ? studentNumbers[0] + 1 : 1;
+        return `STD-${year}-${next.toString().padStart(3, '0')}`;
+      }
+    }
+
+    // Initialize data if not exists
+    if (!localStorage.getItem('students')) {
+      const initialStudents = [
+        {
+          id: 'STD-2024-001',
+          firstName: 'Emma',
+          middleName: '',
+          lastName: 'Wilson',
+          studentId: 'STD-2024-001',
+          dob: '2007-05-15',
+          gender: 'Female',
+          nationality: 'American',
+          ethnicity: '',
+          email: 'emma.wilson@school.edu',
+          personalEmail: '',
+          phone: '+1 234 567 8901',
+          address: '123 Main St, City, State',
+          emergencyContact: {
+            name: 'John Wilson',
+            relationship: 'Father',
+            phone: '+1 234 567 8901',
+            email: 'john.wilson@email.com'
+          },
+          gradeLevel: 'Grade 10',
+          program: 'Science',
+          enrollmentDate: '2024-08-15',
+          previousSchool: '',
+          parentGuardianName: '',
+          languagePreference: 'English',
+          accessibilityNeeds: '',
+          scholarship: 'None',
+          status: 'Active',
+          photo: ''
+        },
+        {
+          id: 'STD-2024-002',
+          firstName: 'James',
+          middleName: '',
+          lastName: 'Davis',
+          studentId: 'STD-2024-002',
+          dob: '2007-03-22',
+          gender: 'Male',
+          nationality: 'American',
+          ethnicity: '',
+          email: 'james.davis@school.edu',
+          personalEmail: '',
+          phone: '+1 234 567 8902',
+          address: '456 Oak Ave, City, State',
+          emergencyContact: {
+            name: 'Sarah Davis',
+            relationship: 'Mother',
+            phone: '+1 234 567 8902',
+            email: 'sarah.davis@email.com'
+          },
+          gradeLevel: 'Grade 11',
+          program: 'General',
+          enrollmentDate: '2024-08-15',
+          previousSchool: '',
+          parentGuardianName: '',
+          languagePreference: 'English',
+          accessibilityNeeds: '',
+          scholarship: 'None',
+          status: 'Active',
+          photo: ''
+        },
+        {
+          id: 'STD-2024-003',
+          firstName: 'Sophia',
+          middleName: '',
+          lastName: 'Martinez',
+          studentId: 'STD-2024-003',
+          dob: '2006-11-10',
+          gender: 'Female',
+          nationality: 'American',
+          ethnicity: 'Hispanic',
+          email: 'sophia.martinez@school.edu',
+          personalEmail: '',
+          phone: '+1 234 567 8903',
+          address: '789 Pine St, City, State',
+          emergencyContact: {
+            name: 'Maria Martinez',
+            relationship: 'Mother',
+            phone: '+1 234 567 8903',
+            email: 'maria.martinez@email.com'
+          },
+          gradeLevel: 'Grade 9',
+          program: 'General',
+          enrollmentDate: '2024-08-15',
+          previousSchool: '',
+          parentGuardianName: '',
+          languagePreference: 'English',
+          accessibilityNeeds: '',
+          scholarship: 'Full Scholarship',
+          status: 'Active',
+          photo: ''
+        },
+        {
+          id: 'STD-2024-004',
+          firstName: 'Liam',
+          middleName: '',
+          lastName: 'Brown',
+          studentId: 'STD-2024-004',
+          dob: '2007-01-08',
+          gender: 'Male',
+          nationality: 'American',
+          ethnicity: '',
+          email: 'liam.brown@school.edu',
+          personalEmail: '',
+          phone: '+1 234 567 8904',
+          address: '321 Elm St, City, State',
+          emergencyContact: {
+            name: 'David Brown',
+            relationship: 'Father',
+            phone: '+1 234 567 8904',
+            email: 'david.brown@email.com'
+          },
+          gradeLevel: 'Grade 10',
+          program: 'Science',
+          enrollmentDate: '2024-08-15',
+          previousSchool: '',
+          parentGuardianName: '',
+          languagePreference: 'English',
+          accessibilityNeeds: '',
+          scholarship: 'None',
+          status: 'Active',
+          photo: ''
+        }
+      ];
+      localStorage.setItem('students', JSON.stringify(initialStudents));
+    }
+
+    // Form handling
+    document.getElementById('enrollmentForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Gather form data
+      const formData = new FormData(e.target);
+
+      // Create student object
+      const student = {
+        id: DataManager.generateStudentId(),
+        firstName: formData.get('firstName'),
+        middleName: formData.get('middleName') || '',
+        lastName: formData.get('lastName'),
+        studentId: formData.get('studentId') || DataManager.generateStudentId(),
+        dob: formData.get('dob'),
+        gender: formData.get('gender'),
+        nationality: formData.get('nationality') || 'Cambodian',
+        ethnicity: formData.get('ethnicity') || '',
+        email: '', // Will generate school email
+        personalEmail: formData.get('personalEmail') || '',
+        phone: formData.get('phone'),
+        address: [
+          formData.get('address'),
+          formData.get('addressCity'),
+          formData.get('province'),
+          formData.get('postalCode')
+        ].filter(Boolean).join(', '),
+        emergencyContact: {
+          name: formData.get('emergencyName'),
+          relationship: formData.get('emergencyRelationship'),
+          phone: formData.get('emergencyPhone'),
+          email: formData.get('emergencyEmail') || ''
+        },
+        gradeLevel: formData.get('gradeLevel'),
+        program: formData.get('program') || 'General Education',
+        enrollmentDate: formData.get('enrollmentDate') || new Date().toISOString().split('T')[0],
+        previousSchool: formData.get('previousSchool') || '',
+        parentGuardianName: formData.get('parentGuardianName') || '',
+        languagePreference: formData.get('languagePreference') || 'ភាសាខ្មែរ',
+        accessibilityNeeds: formData.get('accessibilityNeeds') || '',
+        scholarship: formData.get('scholarship') || 'None',
+        status: 'Active',
+        photo: ''
+      };
+
+      // Generate school email
+      student.email = `${student.firstName.toLowerCase()}.${student.lastName.toLowerCase()}@school.edu`;
+
+      // Validate required fields
+      const required = ['firstName', 'lastName', 'dob', 'phone', 'gradeLevel', 'enrollmentDate'];
+      const missing = required.filter(field => !student[field]);
+
+      if (missing.length > 0) {
+        alert('Please fill in all required fields: ' + missing.join(', '));
+        return;
+      }
+
+      // Save student
+      DataManager.add('students', student);
+
+      // Show success message
+      alert(`Student ${student.firstName} ${student.lastName} enrolled successfully!\nStudent ID: ${student.studentId}`);
+
+      // Reset form
+      e.target.reset();
+
+      // Update progress bar
+      document.getElementById('progressBar').style.width = '100%';
+
+      // Optionally redirect to student list
+      // setTimeout(() => window.location.href = 'student-list.html', 2000);
+    });
+
+    // Photo upload handling
+    document.getElementById('photoUpload')?.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('photoPreview').src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Progress tracking for multi-step form (if needed later)
+    function updateProgress(section) {
+      const progress = {
+        'personal-info': 25,
+        'contact-info': 50,
+        'academic-info': 75,
+        'additional-info': 100
+      };
+      document.getElementById('progressBar').style.width = progress[section] + '%';
+    }
+  </script>
 </body>
 </html>

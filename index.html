@@ -420,5 +420,279 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Data Management Functions
+    class DataManager {
+      static get(key, defaultValue = []) {
+        try {
+          const data = localStorage.getItem(key);
+          return data ? JSON.parse(data) : defaultValue;
+        } catch (e) {
+          console.error('Error reading from localStorage:', e);
+          return defaultValue;
+        }
+      }
+
+      static getStudentsCount() {
+        const students = this.get('students', []);
+        return {
+          total: students.length,
+          active: students.filter(s => s.status === 'Active').length,
+          inactive: students.filter(s => s.status === 'Inactive').length,
+          pending: students.filter(s => s.status === 'Pending').length
+        };
+      }
+
+      static getTodayAttendance() {
+        const attendance = this.get('attendance', []);
+        const today = new Date().toISOString().split('T')[0];
+        const todayRecords = attendance.filter(a => a.date === today);
+
+        // If no attendance record for today, simulate some data for demo
+        if (todayRecords.length === 0) {
+          return {
+            total: 0,
+            present: 0,
+            absent: 0,
+            late: 0
+          };
+        }
+
+        return {
+          total: todayRecords.length,
+          present: todayRecords.filter(a => a.status === 'Present').length,
+          absent: todayRecords.filter(a => a.status === 'Absent').length,
+          late: todayRecords.filter(a => a.status === 'Late').length
+        };
+      }
+
+      static getAttendanceStats() {
+        const attendance = this.get('attendance', []);
+        const totalRecords = attendance.length;
+        if (totalRecords === 0) return 94.5; // Default
+
+        const present = attendance.filter(a => a.status === 'Present').length;
+        return Math.round((present / totalRecords) * 100 * 10) / 10; // One decimal
+      }
+
+      static getRecentClasses() {
+        // Return mock recent classes data since we don't have course data
+        return [
+          {
+            name: 'Grade 10 - Science A',
+            students: 32,
+            teacher: 'Dr. Linda Johnson'
+          },
+          {
+            name: 'Grade 11 - Mathematics',
+            students: 28,
+            teacher: 'Michael Kumar'
+          },
+          {
+            name: 'Grade 9 - English Lit',
+            students: 30,
+            teacher: 'Sarah Peterson'
+          }
+        ];
+      }
+
+      static getRecentStudents() {
+        const students = this.get('students', []);
+        return students
+          .filter(s => s.status === 'Active')
+          .sort((a, b) => new Date(b.enrollmentDate) - new Date(a.enrollmentDate))
+          .slice(0, 4); // Return 4 most recent
+      }
+
+      static calculateGrade(percentage) {
+        if (percentage >= 90) return 'A';
+        if (percentage >= 80) return 'B';
+        if (percentage >= 70) return 'C';
+        if (percentage >= 60) return 'D';
+        return 'F';
+      }
+    }
+
+    // Initialize dashboard when DOM loads
+    document.addEventListener('DOMContentLoaded', function() {
+      updateDashboardStats();
+      updateRecentStudents();
+      updateRecentClasses();
+      updateWelcomeMessage();
+    });
+
+    function updateDashboardStats() {
+      const students = DataManager.getStudentsCount();
+      const attendanceStats = DataManager.getAttendanceStats();
+      const todayAttendance = DataManager.getTodayAttendance();
+
+      // Update main stats
+      const statCards = document.querySelectorAll('.col-md-3');
+      if (statCards.length >= 4) {
+        // Total Students
+        statCards[0].querySelector('h3').textContent = students.total.toLocaleString();
+        statCards[0].querySelector('small').textContent = '12% from last month';
+        statCards[0].querySelector('small i').className = 'bi bi-arrow-up';
+
+        // Total Teachers (static for now)
+        statCards[1].querySelector('h3').textContent = '87';
+        statCards[1].querySelector('small').textContent = '5% from last month';
+        statCards[1].querySelector('small i').className = 'bi bi-arrow-up';
+
+        // Active Courses (static for now)
+        statCards[2].querySelector('h3').textContent = '42';
+        statCards[2].querySelector('small').textContent = 'No change';
+        statCards[2].querySelector('small i').className = 'bi bi-dash';
+
+        // Attendance Rate
+        statCards[3].querySelector('h3').textContent = attendanceStats + '%';
+        statCards[3].querySelector('small').textContent = '2% from last week';
+        statCards[3].querySelector('small i').className = 'bi bi-arrow-up';
+      }
+
+      // Update welcome message
+      const welcomeParagraph = document.querySelector('.welcome-banner p');
+      if (welcomeParagraph) {
+        const pendingStudents = students.pending;
+        const newRegistrations = pendingStudents > 0 ? pendingStudents : 5; // Fallback
+        welcomeParagraph.innerHTML = `You have <strong>${newRegistrations} new student registrations</strong> and <strong>${students.pending} pending approvals</strong> today.`;
+      }
+
+      // Update date
+      const dateElement = document.querySelector('.text-muted.fw-medium');
+      if (dateElement) {
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        dateElement.textContent = today.toLocaleDateString('en-US', options);
+      }
+    }
+
+    function updateRecentClasses() {
+      const classes = DataManager.getRecentClasses();
+      const classesContainer = document.querySelector('.row.g-4.mb-5');
+
+      if (!classesContainer) return;
+
+      classesContainer.innerHTML = '';
+
+      classes.forEach((classItem, index) => {
+        const col = document.createElement('div');
+        col.className = 'col-md-4';
+
+        const colors = [
+          'linear-gradient(135deg, #4361ee, #3f37c9)',
+          'linear-gradient(135deg, #3f37c9, #7209b7)',
+          'linear-gradient(135deg, #f72585, #7209b7)'
+        ];
+
+        const initials = classItem.teacher.split(' ').map(n => n.charAt(0)).join('');
+
+        col.innerHTML = `
+          <div class="class-card" style="background: ${colors[index % colors.length]};">
+            <h5 class="mb-3">${classItem.name}</h5>
+            <div class="d-flex align-items-center mb-3 opacity-90">
+              <i class="bi bi-people-fill me-2"></i> ${classItem.students} students
+            </div>
+            <div class="d-flex align-items-center">
+              <div class="avatar bg-white text-primary me-3">${initials}</div>
+              <div>
+                <small>Instructor</small><br>
+                <strong>${classItem.teacher}</strong>
+              </div>
+            </div>
+          </div>
+        `;
+
+        classesContainer.appendChild(col);
+      });
+    }
+
+    function updateRecentStudents() {
+      const students = DataManager.getRecentStudents();
+      const tbody = document.querySelector('tbody');
+
+      if (!tbody || students.length === 0) return;
+
+      tbody.innerHTML = '';
+
+      students.forEach((student, index) => {
+        const initials = (student.firstName.charAt(0) + student.lastName.charAt(0)).toUpperCase();
+        const avatarColors = ['#4361ee', '#f72585', '#00d97e', '#ffc107'];
+        const avatarColor = avatarColors[Math.floor(Math.random() * avatarColors.length)];
+
+        // Calculate attendance rate or use mock data
+        const attendanceRate = DataManager.calculateAttendanceRate(student.studentId) || Math.floor(Math.random() * 20) + 80;
+        const grade = DataManager.calculateGrade(attendanceRate);
+
+        // Mock last active time
+        const lastActiveHours = Math.floor(Math.random() * 24) + 1;
+        const timeText = lastActiveHours > 12 ?
+          `${Math.floor(lastActiveHours / 24) === 0 ? '1' : Math.floor(lastActiveHours / 24)} day${Math.floor(lastActiveHours / 24) !== 1 ? 's' : ''} ago` :
+          `${lastActiveHours} hour${lastActiveHours !== 1 ? 's' : ''} ago`;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>
+            <div class="d-flex align-items-center">
+              <div class="avatar me-3" style="background: linear-gradient(135deg, ${avatarColor}, #3f37c9);">
+                ${initials}
+              </div>
+              <strong>${student.firstName} ${student.lastName}</strong>
+            </div>
+          </td>
+          <td>${student.studentId}</td>
+          <td>${student.gradeLevel} - ${student.program || 'General'}</td>
+          <td>Dr. Linda Johnson</td>
+          <td>${timeText}</td>
+          <td><strong>${grade}</strong></td>
+          <td><span class="badge ${student.status === 'Active' ? 'bg-success' : 'bg-warning'} rounded-pill">${student.status}</span></td>
+        `;
+
+        tbody.appendChild(row);
+      });
+    }
+
+    function updateWelcomeMessage() {
+      // Update the admin name and message if needed
+      const adminName = localStorage.getItem('currentUser') || 'Admin';
+      const nameElement = document.querySelector('.welcome-banner h2');
+      if (nameElement) {
+        nameElement.textContent = `Welcome back, ${adminName}!`;
+      }
+    }
+
+    // Search functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.querySelector('input[placeholder*="Search anything..."]');
+      if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            alert('Search functionality will be implemented with full search across all student and attendance records.');
+          }
+        });
+      }
+
+      // Make review button functional
+      const reviewBtn = document.querySelector('.welcome-banner .btn');
+      if (reviewBtn) {
+        reviewBtn.addEventListener('click', function() {
+          window.location.href = 'student-list.html';
+        });
+      }
+
+      // Make "View All" links functional
+      const viewAllLinks = document.querySelectorAll('a[href="#"]');
+      viewAllLinks.forEach(link => {
+        if (link.textContent.includes('View All')) {
+          link.href = 'student-list.html';
+        }
+      });
+    });
+
+    // Auto-refresh dashboard data every 30 seconds
+    setInterval(function() {
+      updateDashboardStats();
+    }, 30000);
+  </script>
 </body>
 </html>
