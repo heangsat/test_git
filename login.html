@@ -1,222 +1,506 @@
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/test_git/">
+  <title>Login - EduManage</title>
 
-    <!-- Authentication Script -->
-    <script>
-        // Authentication Manager
-        class AuthManager {
-            static DEFAULT_USERS = [
-                {
-                    id: 'admin-001',
-                    username: 'admin',
-                    email: 'admin@school.edu',
-                    password: 'admin123',
-                    role: 'administrator',
-                    name: 'Admin User',
-                    permissions: ['read', 'write', 'delete', 'manage_users']
-                },
-                {
-                    id: 'teacher-001',
-                    username: 'teacher',
-                    email: 'teacher@school.edu',
-                    password: 'teacher123',
-                    role: 'teacher',
-                    name: 'John Smith',
-                    permissions: ['read', 'write']
-                },
-                {
-                    id: 'staff-001',
-                    username: 'staff',
-                    email: 'staff@school.edu',
-                    password: 'staff123',
-                    role: 'staff',
-                    name: 'Jane Doe',
-                    permissions: ['read']
-                }
-            ];
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
-            static initializeUsers() {
-                if (!localStorage.getItem('users')) {
-                    localStorage.setItem('users', JSON.stringify(this.DEFAULT_USERS));
-                }
-            }
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3f37c9;
+      --gradient: linear-gradient(135deg, #4361ee, #3f37c9);
+      --success: #4cc9f0;
+      --warning: #f72585;
+    }
 
-            static generateSessionId() {
-                return 'session-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-            }
+    body {
+      background: linear-gradient(135deg,
+        #667eea 0%,
+        #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
 
-            static login(email, password, rememberMe = false) {
-                this.initializeUsers();
+    .login-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      overflow: hidden;
+    }
 
-                const users = JSON.parse(localStorage.getItem('users') || '[]');
-                const user = users.find(u => u.email === email && u.password === password);
+    .login-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(67, 97, 238, 0.05), transparent);
+      animation: shimmer 3s infinite;
+      pointer-events: none;
+    }
 
-                if (user) {
-                    const expiresAt = rememberMe ?
-                        new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() : // 30 days
-                        new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(); // 8 hours
+    @keyframes shimmer {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
-                    const sessionData = {
-                        id: user.id,
-                        email: user.email,
-                        name: user.name,
-                        role: user.role,
-                        permissions: user.permissions,
-                        loggedInAt: new Date().toISOString(),
-                        sessionId: this.generateSessionId(),
-                        expiresAt: expiresAt
-                    };
+    .logo-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-                    // Store session
-                    localStorage.setItem('currentSession', JSON.stringify(sessionData));
+    .logo {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
 
-                    // Handle remember me
-                    if (rememberMe) {
-                        localStorage.setItem('rememberMe', 'true');
-                        localStorage.setItem('rememberedUser', JSON.stringify({email: user.email}));
-                    } else {
-                        localStorage.removeItem('rememberMe');
-                        localStorage.removeItem('rememberedUser');
-                    }
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+    }
 
-                    return { success: true, user: user };
-                }
+    .form-control {
+      border-radius: 12px;
+      padding: 12px 16px;
+      border: 1.5px solid #e0e0e0;
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+    }
 
-                return { success: false, error: 'Invalid email or password' };
-            }
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.2);
+    }
 
-            static logout() {
-                localStorage.removeItem('currentSession');
-                localStorage.removeItem('rememberMe');
-                localStorage.removeItem('rememberedUser');
-                window.location.href = 'login.html';
-            }
+    .form-check {
+      margin-bottom: 20px;
+    }
 
-            static isLoggedIn() {
-                const session = localStorage.getItem('currentSession');
-                if (!session) return false;
+    .btn-login {
+      background: var(--gradient);
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      color: white;
+      font-weight: 600;
+      width: 100%;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+    }
 
-                const sessionData = JSON.parse(session);
-                const now = new Date();
-                const expiresAt = new Date(sessionData.expiresAt);
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+      color: white;
+    }
 
-                if (now > expiresAt) {
-                    // Session expired
-                    this.logout();
-                    return false;
-                }
+    .btn-login:disabled {
+      opacity: 0.7;
+      transform: none;
+    }
 
-                return true;
-            }
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 25px 0;
+      color: #666;
+    }
 
-            static getCurrentUser() {
-                if (!this.isLoggedIn()) return null;
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #ddd;
+    }
 
-                const session = JSON.parse(localStorage.getItem('currentSession'));
-                return session;
-            }
+    .divider::before { margin-right: 15px; }
+    .divider::after { margin-left: 15px; }
 
-            static checkSessionOnPageLoad() {
-                // Redirect to login if not authenticated
-                const publicPages = ['login.html'];
-                const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    .btn-social {
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 12px;
+      padding: 10px 20px;
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      color: #666;
+      transition: all 0.3s ease;
+      margin: 0 5px;
+    }
 
-                if (!publicPages.includes(currentPage) && !this.isLoggedIn()) {
-                    window.location.href = 'login.html';
-                }
-            }
+    .btn-social:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.1);
+    }
+
+    .error-message {
+      background: rgba(247, 37, 133, 0.1);
+      color: var(--warning);
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(247, 37, 133, 0.2);
+      display: none;
+      font-size: 14px;
+    }
+
+    .forgot-password {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 14px;
+      float: right;
+      margin-top: -5px;
+    }
+
+    .forgot-password:hover {
+      text-decoration: underline;
+    }
+
+    .social-login {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 576px) {
+      .login-container {
+        padding: 30px 20px;
+        margin: 20px;
+      }
+
+      .social-login {
+        flex-direction: column;
+      }
+
+      .btn-social {
+        margin: 5px 0;
+      }
+    }
+
+    .demo-credentials {
+      background: rgba(76, 201, 240, 0.1);
+      border: 1px solid rgba(76, 201, 240, 0.3);
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+
+    .demo-credentials h6 {
+      color: var(--success);
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .demo-credentials small {
+      color: #666;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="logo-section">
+      <h1 class="logo">EduManage</h1>
+      <p class="subtitle">Student Management System</p>
+    </div>
+
+    <div id="errorMessage" class="error-message"></div>
+
+    <form id="loginForm">
+      <div class="mb-3">
+        <input type="email" class="form-control" placeholder="Email address" required>
+      </div>
+
+      <div class="mb-3">
+        <input type="password" class="form-control" placeholder="Password" required>
+      </div>
+
+      <div class="form-check d-flex justify-content-between align-items-center">
+        <div>
+          <input type="checkbox" class="form-check-input" id="rememberMe">
+          <label class="form-check-label" for="rememberMe" style="font-size: 14px;">
+            Remember me
+          </label>
+        </div>
+        <a href="#" class="forgot-password">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="btn btn-login" id="loginBtn">
+        <i class="bi bi-box-arrow-in-right me-2"></i>Login
+      </button>
+    </form>
+
+    <div class="divider">or continue with</div>
+
+    <div class="social-login">
+      <a href="#" class="btn-social">
+        <i class="bi bi-google me-2"></i>Google
+      </a>
+      <a href="#" class="btn-social">
+        <i class="bi bi-facebook me-2"></i>Facebook
+      </a>
+    </div>
+
+    <div class="demo-credentials">
+      <h6><i class="bi bi-info-circle me-1"></i>Demo Credentials</h6>
+      <small>
+        <strong>Admin:</strong> admin@school.edu / admin123<br>
+        <strong>Teacher:</strong> teacher@school.edu / teacher123<br>
+        <strong>Staff:</strong> staff@school.edu / staff123
+      </small>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Authentication Script -->
+  <script>
+    // Authentication Manager
+    class AuthManager {
+      static DEFAULT_USERS = [
+        {
+          id: 'admin-001',
+          username: 'admin',
+          email: 'admin@school.edu',
+          password: 'admin123',
+          role: 'administrator',
+          name: 'Admin User',
+          permissions: ['read', 'write', 'delete', 'manage_users']
+        },
+        {
+          id: 'teacher-001',
+          username: 'teacher',
+          email: 'teacher@school.edu',
+          password: 'teacher123',
+          role: 'teacher',
+          name: 'John Smith',
+          permissions: ['read', 'write']
+        },
+        {
+          id: 'staff-001',
+          username: 'staff',
+          email: 'staff@school.edu',
+          password: 'staff123',
+          role: 'staff',
+          name: 'Jane Doe',
+          permissions: ['read']
+        }
+      ];
+
+      static initializeUsers() {
+        if (!localStorage.getItem('users')) {
+          localStorage.setItem('users', JSON.stringify(this.DEFAULT_USERS));
+        }
+      }
+
+      static generateSessionId() {
+        return 'session-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+      }
+
+      static login(email, password, rememberMe = false) {
+        this.initializeUsers();
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.email === email && u.password === password);
+
+        if (user) {
+          const expiresAt = rememberMe ?
+            new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() : // 30 days
+            new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(); // 8 hours
+
+          const sessionData = {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            permissions: user.permissions,
+            loggedInAt: new Date().toISOString(),
+            sessionId: this.generateSessionId(),
+            expiresAt: expiresAt
+          };
+
+          // Store session
+          localStorage.setItem('currentSession', JSON.stringify(sessionData));
+
+          // Handle remember me
+          if (rememberMe) {
+            localStorage.setItem('rememberMe', 'true');
+            localStorage.setItem('rememberedUser', JSON.stringify({email: user.email}));
+          } else {
+            localStorage.removeItem('rememberMe');
+            localStorage.removeItem('rememberedUser');
+          }
+
+          return { success: true, user: user };
         }
 
-        // Login Form Handler
-        document.addEventListener('DOMContentLoaded', function() {
-            const loginForm = document.querySelector('form');
-            const loginBtn = document.getElementById('loginBtn');
-            const rememberMeCheckbox = document.getElementById('rememberMe');
-            const errorMessage = document.getElementById('errorMessage');
-            const emailInput = document.querySelector('input[type="email"]');
-            const passwordInput = document.querySelector('input[type="password"]');
+        return { success: false, error: 'Invalid email or password' };
+      }
 
-            // Check if already logged in
-            if (AuthManager.isLoggedIn()) {
-                AuthManager.checkSessionOnPageLoad();
-                return; // Already logged in, could redirect
-            }
+      static logout() {
+        localStorage.removeItem('currentSession');
+        localStorage.removeItem('rememberMe');
+        localStorage.removeItem('rememberedUser');
+        window.location.href = 'login.html';
+      }
 
-            // Load remembered user
-            const remembered = localStorage.getItem('rememberedUser');
-            if (remembered) {
-                try {
-                    const userData = JSON.parse(remembered);
-                    emailInput.value = userData.email;
-                    rememberMeCheckbox.checked = true;
-                } catch (e) {
-                    console.log('Error loading remembered user:', e);
-                }
-            }
+      static isLoggedIn() {
+        const session = localStorage.getItem('currentSession');
+        if (!session) return false;
 
-            // Handle form submission
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+        const sessionData = JSON.parse(session);
+        const now = new Date();
+        const expiresAt = new Date(sessionData.expiresAt);
 
-                const email = emailInput.value.trim();
-                const password = passwordInput.value.trim();
-                const rememberMe = rememberMeCheckbox.checked;
+        if (now > expiresAt) {
+          // Session expired
+          this.logout();
+          return false;
+        }
 
-                // Basic validation
-                if (!email || !password) {
-                    showError('Please enter both email and password.');
-                    return;
-                }
+        return true;
+      }
 
-                // Attempt login
-                const result = AuthManager.login(email, password, rememberMe);
+      static getCurrentUser() {
+        if (!this.isLoggedIn()) return null;
 
-                if (result.success) {
-                    // Success - redirect to dashboard
-                    loginBtn.disabled = true;
-                    loginBtn.textContent = 'Logging in...';
+        const session = JSON.parse(localStorage.getItem('currentSession'));
+        return session;
+      }
 
-                    // Store current user name in localStorage for dashboard
-                    localStorage.setItem('currentUser', result.user.name);
+      static checkSessionOnPageLoad() {
+        // Redirect to login if not authenticated
+        const publicPages = ['login.html'];
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1000);
-                } else {
-                    // Show error
-                    showError(result.error || 'Login failed. Please try again.');
-                }
-            });
+        if (!publicPages.includes(currentPage) && !this.isLoggedIn()) {
+          window.location.href = 'login.html';
+        }
+      }
+    }
 
-            // Handle social login (placeholders)
-            document.querySelectorAll('.btn-social').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const provider = this.textContent.trim().toLowerCase();
-                    showError(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login is not implemented yet.`);
-                });
-            });
+    // Login Form Handler
+    document.addEventListener('DOMContentLoaded', function() {
+      const loginForm = document.querySelector('form');
+      const loginBtn = document.getElementById('loginBtn');
+      const rememberMeCheckbox = document.getElementById('rememberMe');
+      const errorMessage = document.getElementById('errorMessage');
+      const emailInput = document.querySelector('input[type="email"]');
+      const passwordInput = document.querySelector('input[type="password"]');
 
-            // Handle forgot password
-            document.querySelector('.forgot-password').addEventListener('click', function(e) {
-                e.preventDefault();
-                showError('Password reset functionality will be available soon. Contact your administrator.');
-            });
+      // Check if already logged in
+      if (AuthManager.isLoggedIn()) {
+        AuthManager.checkSessionOnPageLoad();
+        return; // Already logged in, could redirect
+      }
 
-            function showError(message) {
-                errorMessage.textContent = message;
-                errorMessage.style.display = 'block';
+      // Load remembered user
+      const remembered = localStorage.getItem('rememberedUser');
+      if (remembered) {
+        try {
+          const userData = JSON.parse(remembered);
+          emailInput.value = userData.email;
+          rememberMeCheckbox.checked = true;
+        } catch (e) {
+          console.log('Error loading remembered user:', e);
+        }
+      }
 
-                // Auto-hide after 5 seconds
-                setTimeout(() => {
-                    errorMessage.style.display = 'none';
-                }, 5000);
-            }
+      // Handle form submission
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value.trim();
+        const rememberMe = rememberMeCheckbox.checked;
+
+        // Basic validation
+        if (!email || !password) {
+          showError('Please enter both email and password.');
+          return;
+        }
+
+        // Attempt login
+        const result = AuthManager.login(email, password, rememberMe);
+
+        if (result.success) {
+          // Success - redirect to dashboard
+          loginBtn.disabled = true;
+          loginBtn.textContent = 'Logging in...';
+
+          // Store current user name in localStorage for dashboard
+          localStorage.setItem('currentUser', result.user.name);
+
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1000);
+        } else {
+          // Show error
+          showError(result.error || 'Login failed. Please try again.');
+        }
+      });
+
+      // Handle social login (placeholders)
+      document.querySelectorAll('.btn-social').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const provider = this.textContent.trim().toLowerCase();
+          showError(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login is not implemented yet.`);
         });
+      });
 
-        // Show default login credentials in console for testing
-        console.log('Available login credentials:');
-        console.log('Admin: admin@school.edu / admin123');
-        console.log('Teacher: teacher@school.edu / teacher123');
-        console.log('Staff: staff@school.edu / staff123');
-    </script>
+      // Handle forgot password
+      document.querySelector('.forgot-password').addEventListener('click', function(e) {
+        e.preventDefault();
+        showError('Password reset functionality will be available soon. Contact your administrator.');
+      });
+
+      function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+          errorMessage.style.display = 'none';
+        }, 5000);
+      }
+    });
+
+    // Show default login credentials in console for testing
+    console.log('Available login credentials:');
+    console.log('Admin: admin@school.edu / admin123');
+    console.log('Teacher: teacher@school.edu / teacher123');
+    console.log('Staff: staff@school.edu / staff123');
+  </script>
 </body>
 </html>
