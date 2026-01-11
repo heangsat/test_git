@@ -5,6 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('EduManage JS Loaded');
     initData();
     routePage();
 });
@@ -122,16 +123,14 @@ function highlightNav(page) {
         if (link.getAttribute('href') === page) {
             link.classList.add('active');
             link.classList.remove('text-muted');
-            link.classList.add('text-white');
         }
     });
 }
 
 function initLogout() {
-    const loginBtn = document.querySelector('.right-sidebar a[href="login.html"]');
-    if (loginBtn) {
-        loginBtn.textContent = 'Logout';
-        loginBtn.addEventListener('click', (e) => {
+    const logoutBtn = document.querySelector('a[href="login.html"]'); 
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('eduManage_user');
             window.location.href = 'login.html';
@@ -140,7 +139,7 @@ function initLogout() {
 }
 
 function initGlobalSearch() {
-    const searchInput = document.querySelector('.main-content > .d-flex input[placeholder="Search anything..."]');
+    const searchInput = document.querySelector('.search-input');
     if(searchInput) {
         searchInput.addEventListener('keypress', (e) => {
             if(e.key === 'Enter') {
@@ -164,7 +163,7 @@ function initLogin() {
             const rememberMe = document.getElementById('rememberMe').checked;
 
             if ((email === 'admin@school.edu' && password === 'admin123') || 
-                (email === 'teacher@school.edu' && password === 'teacher123')) { 
+                (email === 'teacher@school.edu' && password === 'teacher123')) {
                 
                 const user = { email, role: 'Admin' };
                 localStorage.setItem('eduManage_user', JSON.stringify(user));
@@ -190,6 +189,7 @@ function initLogin() {
 function initDashboard() {
     const students = JSON.parse(localStorage.getItem('eduManage_students') || '[]');
     const courses = JSON.parse(localStorage.getItem('eduManage_courses') || '[]');
+    const attendanceData = JSON.parse(localStorage.getItem('eduManage_attendance') || '{}');
     
     document.getElementById('totalStudents').textContent = students.length;
     document.getElementById('activeCourses').textContent = courses.filter(c => c.status === 'Active').length;
@@ -197,26 +197,72 @@ function initDashboard() {
     const pendingCount = students.filter(s => s.status === 'Pending').length;
     document.getElementById('pendingStudents').textContent = pendingCount;
     
-    document.getElementById('todayAttendance').textContent = '94%';
+    // Calculate simple attendance % from stored data
+    const totalRecords = Object.keys(attendanceData).length;
+    let presentCount = 0;
+    Object.values(attendanceData).forEach(status => {
+        if(status === 'present') presentCount++;
+    });
+    
+    const avgAttendance = totalRecords > 0 ? Math.round((presentCount / totalRecords) * 100) : 0;
+    document.getElementById('todayAttendance').textContent = avgAttendance + '%';
 
     const user = JSON.parse(localStorage.getItem('eduManage_user'));
     if (user && user.email) {
         document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.role}!`;
     }
 
-    const cards = document.querySelectorAll('.stat-card');
-    cards.forEach(card => card.removeAttribute('disabled'));
-    
-    const quickActions = document.querySelectorAll('.stat-card .fw-bold');
-    if(quickActions.length > 0) {
-        quickActions[0].closest('.card').style.cursor = 'pointer';
-        quickActions[0].closest('.card').onclick = () => window.location.href = 'student-enroll.html';
-        
-        quickActions[1].closest('.card').style.cursor = 'pointer';
-        quickActions[1].closest('.card').onclick = () => window.location.href = 'attendence.html';
-        
-        quickActions[2].closest('.card').style.cursor = 'pointer';
-        quickActions[2].closest('.card').onclick = () => window.location.href = 'course.html';
+    // Populate Active Classes Grid
+    const classesGrid = document.getElementById('dashboardClassesGrid');
+    if(classesGrid) {
+        classesGrid.innerHTML = '';
+        courses.slice(0, 2).forEach(course => {
+            const div = document.createElement('div');
+            div.className = 'col-md-6';
+            const initials = getInitials(course.instructor);
+            const borderStyle = course.theme === 'orange' ? 'style="border-left-color: var(--warning);"' : '';
+            const badgeClass = course.theme === 'orange' ? 'bg-warning text-warning' : 'bg-primary text-primary';
+            const avatarClass = course.theme === 'orange' ? 'bg-warning bg-opacity-20 text-warning' : '';
+            
+            div.innerHTML = `
+            <div class="class-card" ${borderStyle}>
+              <div class="d-flex justify-content-between mb-3">
+                <span class="badge ${badgeClass} bg-opacity-10">${course.code.split('-')[0]}</span>
+                <i class="bi bi-three-dots text-secondary"></i>
+              </div>
+              <h5 class="fw-bold mb-1">${course.title}</h5>
+              <p class="text-secondary small mb-4">Class Room 302 • 10:00 AM</p>
+              <div class="d-flex align-items-center gap-2">
+                <div class="avatar ${avatarClass}">${initials}</div>
+                <div class="small fw-medium">${course.instructor}</div>
+              </div>
+            </div>`;
+            classesGrid.appendChild(div);
+        });
+    }
+
+    // Populate Recent Admissions Table
+    const recentTable = document.getElementById('dashboardRecentStudents');
+    if(recentTable) {
+        recentTable.innerHTML = '';
+        students.slice(-3).reverse().forEach(student => {
+            const tr = document.createElement('tr');
+            const initials = getInitials(student.firstName + ' ' + student.lastName);
+            const statusClass = student.status === 'Active' ? 'status-active' : 'status-warning';
+            
+            tr.innerHTML = `
+            <td>
+              <div class="d-flex align-items-center gap-3">
+                <div class="avatar bg-primary text-white">${initials}</div>
+                <div class="fw-medium">${student.firstName} ${student.lastName}</div>
+              </div>
+            </td>
+            <td class="text-secondary">${student.id}</td>
+            <td>${student.class}</td>
+            <td class="text-secondary">${student.enrollDate}</td>
+            <td><span class="status-badge ${statusClass}">${student.status}</span></td>`;
+            recentTable.appendChild(tr);
+        });
     }
 }
 
@@ -256,7 +302,7 @@ function initStudentList() {
             else if (student.status === 'Absent') statusBadge = '<span class="badge badge-inactive">Absent</span>';
             else statusBadge = '<span class="badge badge-pending">Pending</span>';
 
-            const initials = (student.firstName[0] + student.lastName[0]).toUpperCase();
+            const initials = getInitials(student.firstName + ' ' + student.lastName);
 
             tr.innerHTML = `
                 <td><input type="checkbox" class="form-check-input"></td>
@@ -269,14 +315,14 @@ function initStudentList() {
                         </div>
                     </div>
                 </td>
-                <td><strong>${student.id}</strong></td>
+                <td class="text-secondary fw-medium">${student.id}</td>
                 <td>${student.class || 'N/A'}</td>
                 <td>Dr. Linda Johnson</td> 
-                <td>${student.phone}</td>
-                <td>${student.enrollDate}</td>
+                <td class="text-secondary">${student.phone}</td>
+                <td class="text-secondary">${student.enrollDate}</td>
                 <td>${statusBadge}</td>
-                <td>
-                    <button class="action-btn view" title="View" data-id="${student.id}"><i class="bi bi-eye-fill"></i></button>
+                <td class="text-end">
+                    <button class="action-btn view" title="View" data-id="${student.id}"><i class="bi bi-eye"></i></button>
                     <button class="action-btn edit" title="Edit"><i class="bi bi-pencil-fill"></i></button>
                     <button class="action-btn delete" title="Delete" data-id="${student.id}"><i class="bi bi-trash-fill"></i></button>
                 </td>
@@ -301,8 +347,6 @@ function initStudentList() {
                 window.location.href = `student-detail.html?id=${id}`;
             });
         });
-        
-        document.querySelectorAll('.action-btn').forEach(btn => btn.removeAttribute('disabled'));
     }
 
     function deleteStudent(id) {
@@ -351,28 +395,6 @@ function initStudentList() {
     selects.forEach(s => s.addEventListener('change', filterAndRender));
 
     filterAndRender();
-
-    const toggleBtns = document.querySelectorAll('.view-toggle-btn');
-    const tableView = document.querySelector('.card.mb-4'); 
-    const cardView = document.querySelector('.row.g-4[style*="display: none"]'); 
-
-    if(toggleBtns.length > 0 && cardView) {
-        toggleBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                toggleBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                if(btn.querySelector('.bi-list-ul')) {
-                    tableView.style.display = 'block';
-                    cardView.style.display = 'none';
-                } else {
-                    tableView.style.display = 'none';
-                    cardView.style.display = 'flex'; 
-                    alert('Card view is static in this demo. Switch back to list view for dynamic data.');
-                }
-            });
-        });
-    }
 }
 
 // --- Enrollment Logic ---
@@ -539,13 +561,31 @@ function initCourses() {
 // --- Attendance Logic ---
 function initAttendance() {
     const students = JSON.parse(localStorage.getItem('eduManage_students') || '[]');
+    const attendanceData = JSON.parse(localStorage.getItem('eduManage_attendance') || '{}');
     const tbody = document.getElementById('attendanceTbody');
     
     if(tbody) {
         tbody.innerHTML = '';
         students.forEach(student => {
              const tr = document.createElement('tr');
-             const initials = (student.firstName[0] + student.lastName[0]).toUpperCase();
+             tr.dataset.id = student.id; // Store ID for delegation
+             
+             const initials = getInitials(student.firstName + ' ' + student.lastName);
+             
+             // Get current status for student
+             const status = attendanceData[student.id];
+             const presentActive = status === 'present' ? 'active' : '';
+             const absentActive = status === 'absent' ? 'active' : '';
+             const lateActive = status === 'late' ? 'active' : '';
+             
+             let badgeClass = 'bg-secondary';
+             let badgeText = 'Pending';
+             let timeText = '-';
+             
+             if(status === 'present') { badgeClass = 'bg-success'; badgeText = 'Present'; timeText = '08:00 AM'; }
+             else if(status === 'absent') { badgeClass = 'bg-danger'; badgeText = 'Absent'; }
+             else if(status === 'late') { badgeClass = 'bg-warning'; badgeText = 'Late'; timeText = '08:15 AM'; }
+
              tr.innerHTML = `
                 <td>
                     <div class="student-info">
@@ -556,24 +596,60 @@ function initAttendance() {
                         </div>
                     </div>
                 </td>
-                <td><strong>${student.id}</strong></td>
+                <td class="text-secondary fw-medium">${student.id}</td>
                 <td>${student.class || 'N/A'}</td>
                 <td class="attendance-status">
-                    <button class="btn-status btn-present" onclick="markStatus(this, 'present')"><i class="bi bi-check-circle-fill"></i></button>
-                    <button class="btn-status btn-absent" onclick="markStatus(this, 'absent')"><i class="bi bi-x-circle-fill"></i></button>
-                    <button class="btn-status btn-late" onclick="markStatus(this, 'late')"><i class="bi bi-clock-fill"></i></button>
+                    <button class="btn-status btn-present ${presentActive}" data-action="present"><i class="bi bi-check-circle-fill"></i></button>
+                    <button class="btn-status btn-absent ${absentActive}" data-action="absent"><i class="bi bi-x-circle-fill"></i></button>
+                    <button class="btn-status btn-late ${lateActive}" data-action="late"><i class="bi bi-clock-fill"></i></button>
                 </td>
-                <td class="time-log">-</td>
-                <td><span class="badge bg-secondary">Pending</span></td>
+                <td class="time-log text-secondary">${timeText}</td>
+                <td><span class="badge ${badgeClass}">${badgeText}</span></td>
              `;
              tbody.appendChild(tr);
         });
-    }
-    
-    const filterBtn = document.querySelector('.btn-filter');
-    if(filterBtn) {
-        filterBtn.removeAttribute('disabled');
-        filterBtn.addEventListener('click', () => alert('Attendance marked for selected students!'));
+        
+        // Event Delegation for Buttons
+        tbody.addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-status');
+            if(!btn) return;
+            
+            // UI Toggle
+            const parent = btn.closest('.attendance-status');
+            parent.querySelectorAll('.btn-status').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Logic
+            const action = btn.dataset.action;
+            const row = btn.closest('tr');
+            const studentId = row.dataset.id;
+            
+            // Update UI elements in row
+            const badge = row.querySelector('.badge');
+            const timeLog = row.querySelector('.time-log');
+            
+            if(action === 'present') {
+                badge.className = 'badge bg-success';
+                badge.textContent = 'Present';
+                timeLog.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            } else if(action === 'absent') {
+                badge.className = 'badge bg-danger';
+                badge.textContent = 'Absent';
+                timeLog.textContent = '-';
+            } else if(action === 'late') {
+                badge.className = 'badge bg-warning';
+                badge.textContent = 'Late';
+                timeLog.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            }
+            
+            // Persist
+            const currentData = JSON.parse(localStorage.getItem('eduManage_attendance') || '{}');
+            currentData[studentId] = action;
+            localStorage.setItem('eduManage_attendance', JSON.stringify(currentData));
+            
+            // Update Stats
+            updateAttendanceStats();
+        });
     }
     
     updateAttendanceStats(); // Initial check
@@ -602,38 +678,10 @@ function updateAttendanceStats() {
         document.getElementById('attendanceAbsent').textContent = absent;
         document.getElementById('attendanceLate').textContent = late;
         
-        // Calculate average (simple Present / Total for today)
         const avg = total > 0 ? Math.round(((present + (late * 0.5)) / total) * 100) : 0;
         document.getElementById('attendanceAverage').textContent = avg + '%';
     }
 }
-
-// Helper: attached to window for inline onclicks
-window.markStatus = function(btn, status) {
-    const parent = btn.closest('.attendance-status');
-    parent.querySelectorAll('.btn-status').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    
-    const row = btn.closest('tr');
-    const badge = row.querySelector('.badge');
-    const timeLog = row.querySelector('.time-log');
-    
-    if(status === 'present') {
-        badge.className = 'badge bg-success';
-        badge.textContent = 'Present';
-        timeLog.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    } else if(status === 'absent') {
-        badge.className = 'badge bg-danger';
-        badge.textContent = 'Absent';
-        timeLog.textContent = '-';
-    } else {
-        badge.className = 'badge bg-warning';
-        badge.textContent = 'Late';
-        timeLog.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    }
-    
-    updateAttendanceStats(); // Recalculate on every click
-};
 
 // --- Student Detail Logic ---
 function initStudentDetail() {
@@ -653,8 +701,8 @@ function initStudentDetail() {
         const nameEl = document.querySelector('.profile-header h2');
         if(nameEl) nameEl.textContent = `${student.firstName} ${student.lastName}`;
         
-        const idContainer = document.querySelector('.profile-header p.opacity-90');
-        if(idContainer) idContainer.innerHTML = `<strong>Student ID:</strong> ${student.id}`;
+        const idContainer = document.querySelector('.profile-header .text-secondary span'); // Updated selector
+        if(idContainer) idContainer.textContent = student.id;
         
         const statusBadge = document.querySelector('.status-badge');
         if(statusBadge) statusBadge.textContent = student.status;
@@ -673,5 +721,6 @@ function getRandomTheme() {
 }
 
 function getInitials(name) {
+    if(!name) return '??';
     return name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
 }
