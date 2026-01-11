@@ -228,6 +228,19 @@ function initStudentList() {
     
     const selects = document.querySelectorAll('.filter-select');
     
+    // Update Stats on List Page
+    function updateListStats() {
+        const currentStudents = JSON.parse(localStorage.getItem('eduManage_students') || '[]');
+        if(document.getElementById('totalStudentsList')) {
+            document.getElementById('totalStudentsList').textContent = currentStudents.length;
+            document.getElementById('activeStudentsList').textContent = currentStudents.filter(s => s.status === 'Active').length;
+            document.getElementById('pendingStudentsList').textContent = currentStudents.filter(s => s.status === 'Pending').length;
+            document.getElementById('inactiveStudentsList').textContent = currentStudents.filter(s => s.status === 'Absent' || s.status === 'Inactive').length;
+        }
+    }
+    
+    updateListStats();
+    
     function renderTable(data) {
         tbody.innerHTML = '';
         if (data.length === 0) {
@@ -295,6 +308,7 @@ function initStudentList() {
     function deleteStudent(id) {
         const updatedStudents = JSON.parse(localStorage.getItem('eduManage_students') || '[]').filter(s => s.id !== id);
         localStorage.setItem('eduManage_students', JSON.stringify(updatedStudents));
+        updateListStats();
         filterAndRender(); 
     }
     
