@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('EduManage JS v2.2 Loaded');
+    console.log('EduManage JS v2.3 Loaded');
     initData();
     routePage();
 });
@@ -144,7 +144,8 @@ function initGlobalSearch() {
         searchInput.addEventListener('keypress', (e) => {
             if(e.key === 'Enter') {
                 e.preventDefault();
-                alert(`Searching for: ${searchInput.value} \n(Global search implementation requires backend or complex client-side indexing)`);
+                alert(`Searching for: ${searchInput.value} 
+(Global search implementation requires backend or complex client-side indexing)`);
             }
         });
     }
@@ -198,13 +199,9 @@ function initDashboard() {
     const pendingCount = students.filter(s => s.status === 'Pending').length;
     document.getElementById('pendingStudents').textContent = pendingCount;
     
-    const totalRecords = Object.keys(attendanceData).length;
-    let presentCount = 0;
-    Object.values(attendanceData).forEach(status => {
-        if(status === 'present') presentCount++;
-    });
-    
-    const avgAttendance = totalRecords > 0 ? Math.round((presentCount / totalRecords) * 100) : 0;
+    const presentCount = Object.values(attendanceData).filter(status => status === 'present').length;
+    const totalStudents = students.length > 0 ? students.length : 1;
+    const avgAttendance = Math.round((presentCount / totalStudents) * 100);
     document.getElementById('todayAttendance').textContent = avgAttendance + '%';
 
     const user = JSON.parse(localStorage.getItem('eduManage_user'));
@@ -215,6 +212,7 @@ function initDashboard() {
     const classesGrid = document.getElementById('dashboardClassesGrid');
     if(classesGrid) {
         const activeCourses = courses.filter(c => c.status === 'Active').slice(0, 2);
+        
         if(activeCourses.length > 0) classesGrid.innerHTML = ''; 
         
         activeCourses.forEach(course => {
@@ -334,7 +332,7 @@ function initStudentList() {
                 <td>${statusBadge}</td>
                 <td class="text-end">
                     <button class="action-btn view" title="View" data-id="${student.id}"><i class="bi bi-eye"></i></button>
-                    <button class="action-btn edit" title="Edit" data-id="${student.id}"><i class="bi bi-pencil-fill"></i></button>
+                    <button class="action-btn edit" title="Edit" data-id="${student.id}"><i class="bi bi-pencil"></i></button>
                     <button class="action-btn delete" title="Delete" data-id="${student.id}"><i class="bi bi-trash-fill"></i></button>
                 </td>
             `;
@@ -363,7 +361,7 @@ function initStudentList() {
             btn.removeAttribute('disabled');
             btn.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
-                window.location.href = `student-enroll.html?id=${id}`; 
+                window.location.href = `student-enroll.html?id=${id}`;
             });
         });
     }
@@ -434,13 +432,15 @@ function initEnrollment() {
         const student = students.find(s => s.id === editId);
         
         if(student) {
-            form.querySelector('[name="firstName"]').value = student.firstName;
-            form.querySelector('[name="lastName"]').value = student.lastName;
-            form.querySelector('[name="studentId"]').value = student.id;
+            form.querySelector('[name="firstName"]').value = student.firstName || '';
+            form.querySelector('[name="lastName"]').value = student.lastName || '';
+            form.querySelector('[name="studentId"]').value = student.id || '';
             form.querySelector('[name="studentId"]').setAttribute('readonly', true);
-            form.querySelector('[name="personalEmail"]').value = student.email;
-            form.querySelector('[name="phone"]').value = student.phone;
-            form.querySelector('[name="enrollmentDate"]').value = student.enrollDate;
+            form.querySelector('[name="personalEmail"]').value = student.email || '';
+            form.querySelector('[name="phone"]').value = student.phone || '';
+            form.querySelector('[name="enrollmentDate"]').value = student.enrollDate || '';
+            form.querySelector('[name="dob"]').value = student.dob || '';
+            form.querySelector('[name="gender"]').value = student.gender || '';
             
             if(student.class) {
                 const parts = student.class.split(' - ');
@@ -475,6 +475,8 @@ function initEnrollment() {
                 lastName: formData.get('lastName'),
                 email: formData.get('personalEmail'),
                 phone: formData.get('phone'),
+                dob: formData.get('dob'),
+                gender: formData.get('gender'),
                 class: formData.get('gradeLevel') + (formData.get('program') ? ' - ' + formData.get('program') : ''),
                 enrollDate: formData.get('enrollmentDate'),
                 status: 'Active',
@@ -580,8 +582,8 @@ function initCourses() {
                     document.getElementById('courseModalTitle').textContent = 'Edit Course';
                     document.getElementById('courseCode').value = course.code;
                     document.getElementById('courseTitle').value = course.title;
-                    document.getElementById('courseHours').value = course.hours;
                     document.getElementById('courseTeacher').value = course.instructor;
+                    document.getElementById('courseDescription').value = course.description || '';
                     modal.show();
                 }
             });
@@ -602,22 +604,23 @@ function initCourses() {
              }
              
              const courseData = {
-                 id: editId ? editId : 'CRSE-' + Date.now(),
-                 code,
-                 title,
+                 id: editId || 'CRSE-' + Date.now(),
+                 code: code,
+                 title: title,
                  students: 0,
-                 hours: document.getElementById('courseHours').value || 40,
-                 instructor: 'Assigned Teacher', 
+                 hours: 40,
+                 instructor: document.getElementById('courseTeacher').value,
                  status: 'Active',
-                 theme: getRandomTheme()
+                 theme: getRandomTheme(),
+                 description: document.getElementById('courseDescription').value
              };
              
              if(editId) {
                  const index = courses.findIndex(c => c.id === editId);
                  if(index !== -1) {
-                     courseData.theme = courses[index].theme;
-                     courseData.students = courses[index].students;
-                     courses[index] = courseData;
+                    courseData.theme = courses[index].theme; 
+                    courseData.students = courses[index].students;
+                    courses[index] = courseData;
                  }
              } else {
                  courses.push(courseData);
@@ -625,7 +628,7 @@ function initCourses() {
              
              localStorage.setItem('eduManage_courses', JSON.stringify(courses));
              modal.hide();
-             editId = null;
+             editId = null; 
              window.location.reload();
         });
     }
@@ -654,7 +657,7 @@ function initAttendance() {
         tbody.innerHTML = '';
         students.forEach(student => {
              const tr = document.createElement('tr');
-             tr.dataset.id = student.id;
+             tr.dataset.id = student.id; 
              
              const initials = getInitials(student.firstName + ' ' + student.lastName);
              
