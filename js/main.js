@@ -164,7 +164,7 @@ function initLogin() {
             const rememberMe = document.getElementById('rememberMe').checked;
 
             if ((email === 'admin@school.edu' && password === 'admin123') || 
-                (email === 'teacher@school.edu' && password === 'teacher123')) {
+                (email === 'teacher@school.edu' && password === 'teacher123')) { 
                 
                 const user = { email, role: 'Admin' };
                 localStorage.setItem('eduManage_user', JSON.stringify(user));
@@ -575,8 +575,40 @@ function initAttendance() {
         filterBtn.removeAttribute('disabled');
         filterBtn.addEventListener('click', () => alert('Attendance marked for selected students!'));
     }
+    
+    updateAttendanceStats(); // Initial check
 }
 
+// Calculate and Update Attendance Stats
+function updateAttendanceStats() {
+    const tbody = document.getElementById('attendanceTbody');
+    if(!tbody) return;
+    
+    const rows = tbody.querySelectorAll('tr');
+    const total = rows.length;
+    let present = 0;
+    let absent = 0;
+    let late = 0;
+    
+    rows.forEach(row => {
+        if(row.querySelector('.btn-present.active')) present++;
+        else if(row.querySelector('.btn-absent.active')) absent++;
+        else if(row.querySelector('.btn-late.active')) late++;
+    });
+    
+    // Update DOM
+    if(document.getElementById('attendancePresent')) {
+        document.getElementById('attendancePresent').textContent = present;
+        document.getElementById('attendanceAbsent').textContent = absent;
+        document.getElementById('attendanceLate').textContent = late;
+        
+        // Calculate average (simple Present / Total for today)
+        const avg = total > 0 ? Math.round(((present + (late * 0.5)) / total) * 100) : 0;
+        document.getElementById('attendanceAverage').textContent = avg + '%';
+    }
+}
+
+// Helper: attached to window for inline onclicks
 window.markStatus = function(btn, status) {
     const parent = btn.closest('.attendance-status');
     parent.querySelectorAll('.btn-status').forEach(b => b.classList.remove('active'));
@@ -599,6 +631,8 @@ window.markStatus = function(btn, status) {
         badge.textContent = 'Late';
         timeLog.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
     }
+    
+    updateAttendanceStats(); // Recalculate on every click
 };
 
 // --- Student Detail Logic ---
