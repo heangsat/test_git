@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('EduManage JS Loaded');
+    console.log('EduManage JS v2.1 Loaded');
     initData();
     routePage();
 });
@@ -163,7 +163,7 @@ function initLogin() {
             const rememberMe = document.getElementById('rememberMe').checked;
 
             if ((email === 'admin@school.edu' && password === 'admin123') || 
-                (email === 'teacher@school.edu' && password === 'teacher123')) {
+                (email === 'teacher@school.edu' && password === 'teacher123')) { 
                 
                 const user = { email, role: 'Admin' };
                 localStorage.setItem('eduManage_user', JSON.stringify(user));
@@ -187,6 +187,7 @@ function initLogin() {
 
 // --- Dashboard Logic ---
 function initDashboard() {
+    console.log('Initializing Dashboard components...');
     const students = JSON.parse(localStorage.getItem('eduManage_students') || '[]');
     const courses = JSON.parse(localStorage.getItem('eduManage_courses') || '[]');
     const attendanceData = JSON.parse(localStorage.getItem('eduManage_attendance') || '{}');
@@ -215,14 +216,24 @@ function initDashboard() {
     // Populate Active Classes Grid
     const classesGrid = document.getElementById('dashboardClassesGrid');
     if(classesGrid) {
-        classesGrid.innerHTML = '';
-        courses.slice(0, 2).forEach(course => {
+        const activeCourses = courses.filter(c => c.status === 'Active').slice(0, 2);
+        
+        if(activeCourses.length > 0) classesGrid.innerHTML = ''; // Clear only if we have data to show
+        
+        activeCourses.forEach(course => {
             const div = document.createElement('div');
             div.className = 'col-md-6';
             const initials = getInitials(course.instructor);
-            const borderStyle = course.theme === 'orange' ? 'style="border-left-color: var(--warning);"' : '';
-            const badgeClass = course.theme === 'orange' ? 'bg-warning text-warning' : 'bg-primary text-primary';
-            const avatarClass = course.theme === 'orange' ? 'bg-warning bg-opacity-20 text-warning' : '';
+            
+            let themeColor = 'primary';
+            if(course.theme === 'orange') themeColor = 'warning';
+            if(course.theme === 'green') themeColor = 'success';
+            if(course.theme === 'pink') themeColor = 'danger';
+            if(course.theme === 'purple') themeColor = 'info';
+            
+            const borderStyle = `style="border-left-color: var(--${themeColor});"`;
+            const badgeClass = `bg-${themeColor} text-${themeColor}`;
+            const avatarClass = `bg-${themeColor} bg-opacity-20 text-${themeColor}`;
             
             div.innerHTML = `
             <div class="class-card" ${borderStyle}>
@@ -245,7 +256,13 @@ function initDashboard() {
     const recentTable = document.getElementById('dashboardRecentStudents');
     if(recentTable) {
         recentTable.innerHTML = '';
-        students.slice(-3).reverse().forEach(student => {
+        const recentStudents = students.slice().reverse().slice(0, 5); 
+        
+        if(recentStudents.length === 0) {
+             recentTable.innerHTML = '<tr><td colspan="5" class="text-center text-secondary py-4">No recent admissions</td></tr>';
+        }
+
+        recentStudents.forEach(student => {
             const tr = document.createElement('tr');
             const initials = getInitials(student.firstName + ' ' + student.lastName);
             const statusClass = student.status === 'Active' ? 'status-active' : 'status-warning';
