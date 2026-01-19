@@ -143,27 +143,37 @@
                             type="text"
                             class="form-control ps-5"
                             placeholder="Search courses..."
+                            id="filterCourseSearch"
                         />
                     </div>
                     <div class="col-md-2">
-                        <select class="form-select filter-select">
-                            <option selected>All Status</option>
+                        <select
+                            class="form-select filter-select"
+                            id="filterCourseStatus"
+                        >
+                            <option selected value="All">All Status</option>
                             <option>Active</option>
                             <option>Inactive</option>
                             <option>Upcoming</option>
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <select class="form-select filter-select">
-                            <option selected>All Grades</option>
+                        <select
+                            class="form-select filter-select"
+                            id="filterCourseGrade"
+                        >
+                            <option selected value="All">All Grades</option>
                             <option>Grade 9</option>
                             <option>Grade 10</option>
                             <option>Grade 11</option>
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <select class="form-select filter-select">
-                            <option selected>All Subjects</option>
+                        <select
+                            class="form-select filter-select"
+                            id="filterCourseSubject"
+                        >
+                            <option selected value="All">All Subjects</option>
                             <option>Mathematics</option>
                             <option>Science</option>
                             <option>English</option>
@@ -176,6 +186,7 @@
                                 border: 1px solid var(--border);
                                 color: var(--secondary);
                             "
+                            id="btnCourseFilter"
                         >
                             <i class="bi bi-funnel me-2"></i> Filter
                         </button>

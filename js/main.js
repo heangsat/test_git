@@ -362,8 +362,12 @@ function initStudentList() {
     localStorage.getItem("eduManage_students") || "[]",
   );
   const tbody = document.querySelector("table tbody");
-  const searchInput = document.querySelector(".search-filter-bar input");
-  const selects = document.querySelectorAll(".filter-select");
+
+  // Filter Elements
+  const searchInput = document.getElementById("studentSearch");
+  const filterClass = document.getElementById("studentFilterClass");
+  const filterStatus = document.getElementById("studentFilterStatus");
+  const filterSort = document.getElementById("studentFilterSort");
 
   function updateListStats() {
     const currentStudents = JSON.parse(
@@ -431,6 +435,10 @@ function initStudentList() {
       tbody.appendChild(tr);
     });
 
+    attachActionEvents();
+  }
+
+  function attachActionEvents() {
     document.querySelectorAll(".table-action-btn.delete").forEach((btn) => {
       btn.removeAttribute("disabled");
       btn.addEventListener("click", function () {
@@ -483,18 +491,18 @@ function initStudentList() {
       );
     }
 
-    if (selects[0] && selects[0].value !== "All Classes") {
+    if (filterClass && filterClass.value !== "All Classes") {
       filtered = filtered.filter(
-        (s) => s.class && s.class.includes(selects[0].value),
+        (s) => s.class && s.class.includes(filterClass.value),
       );
     }
 
-    if (selects[1] && selects[1].value !== "All Status") {
-      filtered = filtered.filter((s) => s.status === selects[1].value);
+    if (filterStatus && filterStatus.value !== "All Status") {
+      filtered = filtered.filter((s) => s.status === filterStatus.value);
     }
 
-    if (selects[2]) {
-      const sortVal = selects[2].value;
+    if (filterSort) {
+      const sortVal = filterSort.value;
       if (sortVal.includes("Name (A-Z)")) {
         filtered.sort((a, b) => a.firstName.localeCompare(b.firstName));
       } else if (sortVal.includes("Name (Z-A)")) {
@@ -510,7 +518,9 @@ function initStudentList() {
   }
 
   if (searchInput) searchInput.addEventListener("input", filterAndRender);
-  selects.forEach((s) => s.addEventListener("change", filterAndRender));
+  if (filterClass) filterClass.addEventListener("change", filterAndRender);
+  if (filterStatus) filterStatus.addEventListener("change", filterAndRender);
+  if (filterSort) filterSort.addEventListener("change", filterAndRender);
 
   filterAndRender();
 }
@@ -626,6 +636,13 @@ function initCourses() {
   const modal = new bootstrap.Modal(modalEl);
   let editId = null;
 
+  // Filters
+  const searchInput = document.getElementById("filterCourseSearch");
+  const statusSelect = document.getElementById("filterCourseStatus");
+  const gradeSelect = document.getElementById("filterCourseGrade"); // Note: Current data lacks explicit grade
+  const subjectSelect = document.getElementById("filterCourseSubject");
+  const btnFilter = document.getElementById("btnCourseFilter");
+
   function renderCourses(data) {
     grid.innerHTML = "";
     if (data.length === 0) {
@@ -654,7 +671,7 @@ function initCourses() {
                             <div class="meta-item"><i class="bi bi-people-fill"></i> <span>${course.students} Students</span></div>
                             <div class="meta-item"><i class="bi bi-clock-fill"></i> <span>${course.hours} Hours</span></div>
                         </div>
-                        <p class="course-description">Course description placeholder...</p>
+                        <p class="course-description">${course.description || "No description available."}</p>
                         <div class="course-teacher">
                             <div class="teacher-avatar">${getInitials(course.instructor)}</div>
                             <div class="teacher-info">
@@ -662,7 +679,7 @@ function initCourses() {
                                 <div><strong>${course.instructor}</strong></div>
                             </div>
                         </div>
-                        <div class="course-footer">
+                        <div class="course-footer d-flex justify-content-between align-items-center mt-3">
                             <span class="badge-status badge-${course.status.toLowerCase()}">${course.status}</span>
                             <button class="btn-view">View Details</button>
                         </div>
@@ -672,12 +689,17 @@ function initCourses() {
       grid.appendChild(col);
     });
 
+    attachCourseEvents();
+  }
+
+  function attachCourseEvents() {
     document.querySelectorAll(".delete-course").forEach((btn) => {
-      btn.removeAttribute("disabled");
       btn.addEventListener("click", function () {
         if (confirm("Delete this course?")) {
           const id = this.getAttribute("data-id");
-          const newCourses = courses.filter((c) => c.id !== id);
+          const newCourses = JSON.parse(
+            localStorage.getItem("eduManage_courses") || "[]",
+          ).filter((c) => c.id !== id);
           localStorage.setItem("eduManage_courses", JSON.stringify(newCourses));
           window.location.reload();
         }
@@ -685,10 +707,12 @@ function initCourses() {
     });
 
     document.querySelectorAll(".edit-course").forEach((btn) => {
-      btn.removeAttribute("disabled");
       btn.addEventListener("click", function () {
         const id = this.getAttribute("data-id");
-        const course = courses.find((c) => c.id === id);
+        const currentCourses = JSON.parse(
+          localStorage.getItem("eduManage_courses") || "[]",
+        );
+        const course = currentCourses.find((c) => c.id === id);
         if (course) {
           editId = id;
           document.getElementById("courseModalTitle").textContent =
@@ -704,7 +728,52 @@ function initCourses() {
     });
   }
 
+  function filterCourses() {
+    let filtered = JSON.parse(
+      localStorage.getItem("eduManage_courses") || "[]",
+    );
+
+    const term = searchInput ? searchInput.value.toLowerCase() : "";
+    const status = statusSelect ? statusSelect.value : "All";
+    const grade = gradeSelect ? gradeSelect.value : "All";
+    const subject = subjectSelect ? subjectSelect.value : "All";
+
+    if (term) {
+      filtered = filtered.filter(
+        (c) =>
+          c.title.toLowerCase().includes(term) ||
+          c.code.toLowerCase().includes(term) ||
+          c.instructor.toLowerCase().includes(term),
+      );
+    }
+
+    if (status !== "All" && status !== "All Status") {
+      filtered = filtered.filter((c) => c.status === status);
+    }
+
+    if (subject !== "All" && subject !== "All Subjects") {
+      filtered = filtered.filter(
+        (c) =>
+          c.title.includes(subject) ||
+          (c.description && c.description.includes(subject)),
+      );
+    }
+
+    // Grade filter is ignored for now as course data doesn't strictly have grade fields
+    // In a real app, we'd add a grade field to the course object.
+
+    renderCourses(filtered);
+  }
+
+  // Initial Render
   renderCourses(courses);
+
+  // Event Listeners for Filters
+  if (searchInput) searchInput.addEventListener("input", filterCourses);
+  if (statusSelect) statusSelect.addEventListener("change", filterCourses);
+  if (gradeSelect) gradeSelect.addEventListener("change", filterCourses);
+  if (subjectSelect) subjectSelect.addEventListener("change", filterCourses);
+  if (btnFilter) btnFilter.addEventListener("click", filterCourses);
 
   const saveBtn = document.getElementById("saveCourseBtn");
   if (saveBtn) {
