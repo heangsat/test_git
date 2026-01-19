@@ -150,7 +150,6 @@ function routePage() {
     if (!checkAuth()) return;
     initCourses();
   } else if (page === "attendance.html") {
-    // Updated to attendance.html
     if (!checkAuth()) return;
     initAttendance();
   } else if (page === "student-detail.html") {
@@ -165,7 +164,6 @@ function routePage() {
 function checkAuth() {
   const user = localStorage.getItem("eduManage_user");
   if (!user) {
-    // Check if we are in 'pages' directory based on URL structure
     const isPages = window.location.pathname.includes("/pages/");
     window.location.href = isPages ? "login.html" : "pages/login.html";
     return false;
@@ -177,7 +175,6 @@ function highlightNav(page) {
   const links = document.querySelectorAll(".nav-link");
   links.forEach((link) => {
     link.classList.remove("active");
-    // Handle path differences (e.g. ../index.html vs index.html)
     const href = link.getAttribute("href");
     if (
       href === page ||
@@ -235,8 +232,7 @@ function initLogin() {
         if (rememberMe) {
           localStorage.setItem("eduManage_remember", email);
         }
-        // Redirect to root index.html
-        window.location.href = "../index.html"; // Assuming login is in pages/
+        window.location.href = "../index.html";
       } else {
         errorMsg.textContent =
           "Invalid email or password. Try the demo credentials.";
@@ -259,9 +255,13 @@ function initDashboard() {
     localStorage.getItem("eduManage_students") || "[]",
   );
   const courses = JSON.parse(localStorage.getItem("eduManage_courses") || "[]");
-  const attendanceData = JSON.parse(
-    localStorage.getItem("eduManage_attendance") || "{}",
+
+  // Use new V2 structure for attendance
+  const allAttendance = JSON.parse(
+    localStorage.getItem("eduManage_attendance_v2") || "{}",
   );
+  const todayStr = getTodayStr();
+  const attendanceData = allAttendance[todayStr] || {};
 
   document.getElementById("totalStudents").textContent = students.length;
   document.getElementById("activeCourses").textContent = courses.filter(
@@ -766,23 +766,60 @@ function initCourses() {
 
 // --- Attendance Logic ---
 function initAttendance() {
-  const students = JSON.parse(
-    localStorage.getItem("eduManage_students") || "[]",
-  );
-  const attendanceData = JSON.parse(
-    localStorage.getItem("eduManage_attendance") || "{}",
-  );
+  const filterDate = document.getElementById("filterDate");
+  const filterClass = document.getElementById("filterClass");
+  const btnApplyFilter = document.getElementById("btnApplyFilter");
+  const btnMarkAllPresent = document.getElementById("btnMarkAllPresent");
+  const btnExport = document.getElementById("btnExport");
   const tbody = document.getElementById("attendanceTbody");
 
-  if (tbody) {
+  // Set default date to today if empty
+  if (filterDate && !filterDate.value) {
+    filterDate.value = getTodayStr();
+  }
+
+  function loadAttendance() {
+    if (!tbody) return;
     tbody.innerHTML = "";
-    students.forEach((student) => {
+
+    const students = JSON.parse(
+      localStorage.getItem("eduManage_students") || "[]",
+    );
+    const allAttendance = JSON.parse(
+      localStorage.getItem("eduManage_attendance_v2") || "{}",
+    );
+    const selectedDate = filterDate ? filterDate.value : getTodayStr();
+    const selectedClass = filterClass ? filterClass.value : "All";
+
+    // Get attendance record for the selected date
+    const dailyRecord = allAttendance[selectedDate] || {};
+
+    // Filter students
+    const filteredStudents = students.filter((s) => {
+      if (s.status !== "Active") return false; // Only active students
+      if (
+        selectedClass !== "All" &&
+        selectedClass !== "All Classes" &&
+        !s.class.includes(selectedClass.split(" - ")[0])
+      )
+        return false;
+      return true;
+    });
+
+    if (filteredStudents.length === 0) {
+      tbody.innerHTML =
+        '<tr><td colspan="6" class="text-center py-4">No students found for this class</td></tr>';
+      updateAttendanceStats(0);
+      return;
+    }
+
+    filteredStudents.forEach((student) => {
       const tr = document.createElement("tr");
       tr.dataset.id = student.id;
 
       const initials = getInitials(student.firstName + " " + student.lastName);
+      const status = dailyRecord[student.id]; // Status for this specific date
 
-      const status = attendanceData[student.id];
       const presentActive = status === "present" ? "active" : "";
       const absentActive = status === "absent" ? "active" : "";
       const lateActive = status === "late" ? "active" : "";
@@ -817,9 +854,9 @@ function initAttendance() {
                 <td class="text-secondary fw-medium">${student.id}</td>
                 <td>${student.class || "N/A"}</td>
                 <td class="attendance-status">
-                    <button class="btn-status btn-present ${presentActive}" data-action="present"><i class="bi bi-check-circle-fill"></i></button>
-                    <button class="btn-status btn-absent ${absentActive}" data-action="absent"><i class="bi bi-x-circle-fill"></i></button>
-                    <button class="btn-status btn-late ${lateActive}" data-action="late"><i class="bi bi-clock-fill"></i></button>
+                    <button class="btn-status btn-present ${presentActive}" data-action="present" title="Present"><i class="bi bi-check-circle-fill"></i></button>
+                    <button class="btn-status btn-absent ${absentActive}" data-action="absent" title="Absent"><i class="bi bi-x-circle-fill"></i></button>
+                    <button class="btn-status btn-late ${lateActive}" data-action="late" title="Late"><i class="bi bi-clock-fill"></i></button>
                 </td>
                 <td class="time-log text-secondary">${timeText}</td>
                 <td><span class="badge ${badgeClass}">${badgeText}</span></td>
@@ -827,54 +864,128 @@ function initAttendance() {
       tbody.appendChild(tr);
     });
 
+    updateAttendanceStats(filteredStudents.length);
+  }
+
+  // Initial Load
+  loadAttendance();
+
+  // Filter Event
+  if (btnApplyFilter) {
+    btnApplyFilter.addEventListener("click", loadAttendance);
+  }
+
+  // Mark All Present Event
+  if (btnMarkAllPresent) {
+    btnMarkAllPresent.addEventListener("click", () => {
+      const selectedDate = filterDate.value;
+      const rows = tbody.querySelectorAll("tr");
+      const allAttendance = JSON.parse(
+        localStorage.getItem("eduManage_attendance_v2") || "{}",
+      );
+
+      if (!allAttendance[selectedDate]) allAttendance[selectedDate] = {};
+
+      rows.forEach((row) => {
+        const studentId = row.dataset.id;
+        allAttendance[selectedDate][studentId] = "present";
+      });
+
+      localStorage.setItem(
+        "eduManage_attendance_v2",
+        JSON.stringify(allAttendance),
+      );
+      loadAttendance(); // Reload to update UI
+      alert("All listed students marked as present.");
+    });
+  }
+
+  // Export Event
+  if (btnExport) {
+    btnExport.addEventListener("click", () => {
+      const selectedDate = filterDate.value;
+      const allAttendance = JSON.parse(
+        localStorage.getItem("eduManage_attendance_v2") || "{}",
+      );
+      const dailyData = allAttendance[selectedDate] || {};
+      const students = JSON.parse(
+        localStorage.getItem("eduManage_students") || "[]",
+      );
+
+      let csvContent =
+        "data:text/csv;charset=utf-8,Student ID,Name,Date,Status\n";
+
+      students.forEach((s) => {
+        if (dailyData[s.id]) {
+          csvContent += `${s.id},${s.firstName} ${s.lastName},${selectedDate},${dailyData[s.id]}\n`;
+        }
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `attendance_report_${selectedDate}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
+
+  // Individual Status Click
+  if (tbody) {
     tbody.addEventListener("click", (e) => {
       const btn = e.target.closest(".btn-status");
       if (!btn) return;
 
-      const parent = btn.closest(".attendance-status");
-      parent
-        .querySelectorAll(".btn-status")
-        .forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-
       const action = btn.dataset.action;
       const row = btn.closest("tr");
       const studentId = row.dataset.id;
+      const selectedDate = filterDate.value;
 
-      const badge = row.querySelector(".badge");
-      const timeLog = row.querySelector(".time-log");
-
-      if (action === "present") {
-        badge.className = "badge bg-success";
-        badge.textContent = "Present";
-        timeLog.textContent = new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-      } else if (action === "absent") {
-        badge.className = "badge bg-danger";
-        badge.textContent = "Absent";
-        timeLog.textContent = "-";
-      } else if (action === "late") {
-        badge.className = "badge bg-warning";
-        badge.textContent = "Late";
-        timeLog.textContent = new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-      }
-
-      const currentData = JSON.parse(
-        localStorage.getItem("eduManage_attendance") || "{}",
+      // Save to LocalStorage V2
+      const allAttendance = JSON.parse(
+        localStorage.getItem("eduManage_attendance_v2") || "{}",
       );
-      currentData[studentId] = action;
-      localStorage.setItem("eduManage_attendance", JSON.stringify(currentData));
+      if (!allAttendance[selectedDate]) allAttendance[selectedDate] = {};
 
-      updateAttendanceStats();
+      allAttendance[selectedDate][studentId] = action;
+      localStorage.setItem(
+        "eduManage_attendance_v2",
+        JSON.stringify(allAttendance),
+      );
+
+      // Reload just to refresh specific row UI logic or just re-render
+      loadAttendance();
     });
   }
+}
 
-  updateAttendanceStats();
+function updateAttendanceStats(totalVisible) {
+  const tbody = document.getElementById("attendanceTbody");
+  if (!tbody) return;
+
+  const rows = tbody.querySelectorAll("tr");
+  let present = 0;
+  let absent = 0;
+  let late = 0;
+
+  rows.forEach((row) => {
+    if (row.querySelector(".btn-present.active")) present++;
+    else if (row.querySelector(".btn-absent.active")) absent++;
+    else if (row.querySelector(".btn-late.active")) late++;
+  });
+
+  if (document.getElementById("attendancePresent")) {
+    document.getElementById("attendancePresent").textContent = present;
+    document.getElementById("attendanceAbsent").textContent = absent;
+    document.getElementById("attendanceLate").textContent = late;
+
+    // Use totalVisible for accurate percentage relative to list size
+    const total = totalVisible !== undefined ? totalVisible : rows.length;
+    const avg =
+      total > 0 ? Math.round(((present + late * 0.5) / total) * 100) : 0;
+    document.getElementById("attendanceAverage").textContent = avg + "%";
+  }
 }
 
 // --- Student Detail Logic ---
@@ -883,6 +994,9 @@ function initStudentDetail() {
   const id = urlParams.get("id");
   const students = JSON.parse(
     localStorage.getItem("eduManage_students") || "[]",
+  );
+  const allAttendance = JSON.parse(
+    localStorage.getItem("eduManage_attendance_v2") || "{}",
   );
 
   let student = students.find((s) => s.id === id);
@@ -904,6 +1018,44 @@ function initStudentDetail() {
 
     const statusBadge = document.querySelector(".profile-status-badge");
     if (statusBadge) statusBadge.textContent = student.status;
+
+    // Improve Interaction: Show Attendance History in Notes Card
+    const notesCardBody = document.querySelector(
+      ".info-card .card-body .bg-light",
+    );
+    if (notesCardBody) {
+      let historyHtml =
+        '<h6 class="fw-bold mb-2">Recent Attendance</h6><ul class="list-unstyled mb-0 small">';
+      const dates = Object.keys(allAttendance).sort().reverse().slice(0, 5); // Last 5 days
+
+      let hasHistory = false;
+      if (dates.length > 0) {
+        dates.forEach((date) => {
+          const status = allAttendance[date][student.id];
+          if (status) {
+            hasHistory = true;
+            let colorClass = "text-secondary";
+            if (status === "present") colorClass = "text-success";
+            else if (status === "absent") colorClass = "text-danger";
+            else if (status === "late") colorClass = "text-warning";
+
+            historyHtml += `<li class="d-flex justify-content-between border-bottom py-1">
+                            <span>${date}</span>
+                            <span class="fw-bold ${colorClass} text-capitalize">${status}</span>
+                        </li>`;
+          }
+        });
+      }
+
+      if (!hasHistory) {
+        historyHtml +=
+          '<li class="text-muted">No recent attendance records found.</li>';
+      }
+
+      historyHtml += "</ul>";
+      notesCardBody.innerHTML = historyHtml;
+      notesCardBody.classList.remove("text-secondary");
+    }
   }
 }
 
@@ -926,4 +1078,8 @@ function getInitials(name) {
     .join("")
     .substring(0, 2)
     .toUpperCase();
+}
+
+function getTodayStr() {
+  return new Date().toISOString().split("T")[0];
 }

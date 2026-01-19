@@ -73,11 +73,12 @@
                     </p>
                 </div>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-export">
+                    <button class="btn btn-export" id="btnExport">
                         <i class="bi bi-download me-2"></i> Export Report
                     </button>
                     <button
                         class="btn btn-filter text-primary border-primary bg-primary-subtle"
+                        id="btnMarkAllPresent"
                     >
                         <i class="bi bi-check2-circle me-2"></i> Mark All
                         Present
@@ -188,19 +189,25 @@
                     <div class="filter-bar">
                         <div class="row g-3 align-items-center">
                             <div class="col-md-4">
-                                <select class="form-select">
-                                    <option selected>
-                                        Grade 10 - Science A
-                                    </option>
+                                <select class="form-select" id="filterClass">
+                                    <option value="All">All Classes</option>
+                                    <option>Grade 10 - Science A</option>
                                     <option>Grade 9 - English Lit</option>
                                     <option>Grade 11 - Mathematics</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <input type="date" class="form-control" />
+                                <input
+                                    type="date"
+                                    class="form-control"
+                                    id="filterDate"
+                                />
                             </div>
                             <div class="col-md-4">
-                                <button class="btn btn-filter w-100">
+                                <button
+                                    class="btn btn-filter w-100"
+                                    id="btnApplyFilter"
+                                >
                                     <i class="bi bi-funnel me-2"></i> Apply
                                     Filter
                                 </button>
