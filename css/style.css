@@ -1,0 +1,813 @@
+:root {
+    --primary: #4f46e5; /* Indigo 600 */
+    --primary-light: #eef2ff;
+    --secondary: #64748b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --white: #ffffff;
+    --border: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg:
+        0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    background-color: #f1f5f9;
+    color: var(--dark);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    padding: 0 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--primary);
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.025em;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: var(--secondary);
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    margin-bottom: 0.25rem;
+}
+
+.nav-link:hover {
+    background-color: var(--light);
+    color: var(--primary);
+}
+
+.nav-link.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.nav-link i {
+    font-size: 1.1rem;
+}
+
+/* Support Card */
+.support-card {
+    background: var(--dark);
+    border-radius: 12px;
+    padding: 1.25rem;
+    color: white;
+    margin-top: auto;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 260px;
+    padding: 2rem;
+    margin-right: 320px;
+}
+
+/* Right Sidebar */
+.right-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 320px;
+    background: var(--white);
+    border-left: 1px solid var(--border);
+    padding: 2rem;
+    overflow-y: auto;
+    z-index: 900;
+}
+
+/* Cards */
+.stat-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+    height: 100%;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    border-color: transparent;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+/* Welcome Section */
+.welcome-header {
+    margin-bottom: 2.5rem;
+}
+
+.welcome-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.025em;
+}
+
+.search-input {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748B' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 1rem center;
+}
+
+/* Class Cards */
+.class-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.class-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--primary);
+}
+
+.class-card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Table */
+.table-container {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.table th {
+    background: var(--light);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--secondary);
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.table td {
+    padding: 1rem 1.5rem;
+    vertical-align: middle;
+    color: var(--dark);
+    border-bottom: 1px solid var(--border);
+}
+
+.status-badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-active {
+    background: #dcfce7;
+    color: #166534;
+}
+.status-warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+.status-danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Calendar in Right Sidebar */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+}
+.calendar-day {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: var(--secondary);
+}
+.calendar-day.active {
+    background: var(--primary);
+    color: white;
+}
+
+@media (max-width: 1400px) {
+    .main-content {
+        margin-right: 0;
+    }
+    .right-sidebar {
+        display: none;
+    }
+}
+@media (max-width: 992px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* --- Shared Page Styles (Courses, Students, etc) --- */
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark);
+    letter-spacing: -0.025em;
+}
+
+.stat-number {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.2;
+}
+
+.stat-label {
+    color: var(--secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+/* Filter Bar */
+.filter-bar,
+.search-filter-bar {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+/* --- Courses Page --- */
+.course-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+    border-color: var(--primary-light);
+}
+
+.course-header {
+    padding: 1.5rem;
+    color: white;
+    position: relative;
+}
+
+.course-header.blue {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+.course-header.purple {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+.course-header.pink {
+    background: linear-gradient(135deg, #ec4899, #db2777);
+}
+.course-header.green {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+.course-header.orange {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+.course-header.teal {
+    background: linear-gradient(135deg, #14b8a6, #0d9488);
+}
+
+.course-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--secondary);
+}
+
+.course-teacher {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.teacher-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+
+/* Renamed course action btn to avoid conflict */
+.course-action-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+.course-action-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-view {
+    background: var(--primary-light);
+    color: var(--primary);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-left: auto;
+}
+
+.btn-view:hover {
+    background: #e0e7ff;
+}
+
+.badge-status {
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    backdrop-filter: blur(4px);
+}
+
+.btn-add-course {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+}
+
+.btn-add-course:hover {
+    background: #4338ca;
+}
+
+/* --- Students Page --- */
+
+.card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.card-header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 1.5rem;
+}
+
+.student-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.student-name {
+    font-weight: 600;
+    color: var(--dark);
+}
+.student-email {
+    font-size: 0.8rem;
+    color: var(--secondary);
+}
+
+.badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.75rem;
+}
+
+.badge-active {
+    background: #dcfce7;
+    color: #166534;
+}
+.badge-inactive {
+    background: #fee2e2;
+    color: #991b1b;
+}
+.badge-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* Renamed table action btn */
+.table-action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--secondary);
+    transition: all 0.2s;
+    margin-right: 4px;
+}
+
+.table-action-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+.table-action-btn.delete:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: #fef2f2;
+}
+
+.btn-export {
+    background: var(--white);
+    border: 1px solid var(--border);
+    color: var(--dark);
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.btn-export:hover {
+    background: var(--light);
+}
+
+/* --- Attendance Page --- */
+.attendance-table-card {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.table-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.attendance-status {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.btn-status {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-status:hover {
+    background: var(--light);
+}
+
+.btn-present.active {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #166534;
+}
+.btn-absent.active {
+    background: #fee2e2;
+    color: #991b1b;
+    border-color: #991b1b;
+}
+.btn-late.active {
+    background: #fef3c7;
+    color: #92400e;
+    border-color: #92400e;
+}
+
+/* Calendar Card */
+.calendar-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+/* Reusing calendar-grid from main styles, but adding day-header */
+.calendar-day-header {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--secondary);
+    margin-bottom: 0.5rem;
+}
+
+/* Overriding or extending calendar-day if needed, but looks consistent */
+.calendar-day {
+    aspect-ratio: 1; /* Specific to attendance calendar */
+}
+.calendar-day:hover {
+    background: var(--light);
+}
+.calendar-day.today {
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+}
+
+/* Quick Actions */
+.quick-action-btn {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0.75rem;
+    transition: all 0.2s;
+    border: 1px solid var(--border); /* Ensuring border */
+}
+
+.quick-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--primary-light);
+}
+
+.quick-action-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.btn-filter {
+    background: var(--white);
+    border: 1px solid var(--border);
+    color: var(--dark);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.btn-filter:hover {
+    background: var(--light);
+}
+
+/* --- Student Enroll Page --- */
+.progress {
+    height: 8px;
+    border-radius: 99px;
+    background-color: var(--border);
+}
+
+.progress-bar {
+    background-color: var(--primary);
+    border-radius: 99px;
+}
+
+.photo-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--white);
+    box-shadow: var(--shadow);
+    background-color: var(--light);
+}
+
+.btn-secondary-custom {
+    background: var(--white);
+    border: 1px solid var(--border);
+    color: var(--secondary);
+    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn-secondary-custom:hover {
+    background: var(--light);
+    border-color: var(--secondary);
+    color: var(--dark);
+}
+
+.btn-submit {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.btn-submit:hover {
+    background: #4338ca;
+    transform: translateY(-1px);
+    color: white;
+}
+
+/* --- Student Detail Page --- */
+.profile-header {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.profile-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary-light);
+}
+
+.profile-status-badge {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    padding: 0.5rem 1rem;
+    border-radius: 99px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    background: #dcfce7;
+    color: #166534;
+}
+
+.info-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    height: 100%;
+}
+
+.data-row {
+    margin-bottom: 1rem;
+}
+
+.data-label {
+    font-size: 0.8rem;
+    color: var(--secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+
+.data-value {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.btn-action {
+    background: var(--white);
+    border: 1px solid var(--border);
+    color: var(--secondary);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.btn-action:hover {
+    background: var(--light);
+    color: var(--dark);
+}

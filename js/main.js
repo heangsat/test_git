@@ -4,236 +4,313 @@
  * Uses localStorage for data persistence.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('EduManage JS v2.3 Loaded');
-    initData();
-    routePage();
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("EduManage JS v2.3 Loaded");
+  initData();
+  routePage();
 });
 
 // --- Data Initialization ---
 function initData() {
-    if (!localStorage.getItem('eduManage_students')) {
-        const initialStudents = [
-            {
-                id: 'STD-2024-001',
-                firstName: 'Emma',
-                lastName: 'Wilson',
-                email: 'emma.wilson@email.com',
-                phone: '+1 234 567 8901',
-                class: 'Grade 10 - Science A',
-                enrollDate: '2024-05-12',
-                status: 'Active',
-                avatarColor: '#4361ee'
-            },
-            {
-                id: 'STD-2024-002',
-                firstName: 'James',
-                lastName: 'Davis',
-                email: 'james.davis@email.com',
-                phone: '+1 234 567 8902',
-                class: 'Grade 11 - Mathematics',
-                enrollDate: '2024-06-10',
-                status: 'Active',
-                avatarColor: '#f72585'
-            },
-            {
-                id: 'STD-2024-003',
-                firstName: 'Sophia',
-                lastName: 'Martinez',
-                email: 'sophia.m@email.com',
-                phone: '+1 234 567 8903',
-                class: 'Grade 9 - English Lit',
-                enrollDate: '2024-08-15',
-                status: 'Absent',
-                avatarColor: '#4cc9f0'
-            },
-            {
-                id: 'STD-2024-004',
-                firstName: 'Liam',
-                lastName: 'Brown',
-                email: 'liam.b@email.com',
-                phone: '+1 234 567 8904',
-                class: 'Grade 10 - Science A',
-                enrollDate: '2024-09-01',
-                status: 'Active',
-                avatarColor: '#7209b7'
-            }
-        ];
-        localStorage.setItem('eduManage_students', JSON.stringify(initialStudents));
-    }
+  if (!localStorage.getItem("eduManage_students")) {
+    const initialStudents = [
+      {
+        id: "STD-2024-001",
+        firstName: "Emma",
+        lastName: "Wilson",
+        email: "emma.wilson@email.com",
+        phone: "+1 234 567 8901",
+        class: "Grade 10 - Science A",
+        enrollDate: "2024-05-12",
+        status: "Active",
+        avatarColor: "#4361ee",
+      },
+      {
+        id: "STD-2024-002",
+        firstName: "James",
+        lastName: "Davis",
+        email: "james.davis@email.com",
+        phone: "+1 234 567 8902",
+        class: "Grade 11 - Mathematics",
+        enrollDate: "2024-06-10",
+        status: "Active",
+        avatarColor: "#f72585",
+      },
+      {
+        id: "STD-2024-003",
+        firstName: "Sophia",
+        lastName: "Martinez",
+        email: "sophia.m@email.com",
+        phone: "+1 234 567 8903",
+        class: "Grade 9 - English Lit",
+        enrollDate: "2024-08-15",
+        status: "Absent",
+        avatarColor: "#4cc9f0",
+      },
+      {
+        id: "STD-2024-004",
+        firstName: "Liam",
+        lastName: "Brown",
+        email: "liam.b@email.com",
+        phone: "+1 234 567 8904",
+        class: "Grade 10 - Science A",
+        enrollDate: "2024-09-01",
+        status: "Active",
+        avatarColor: "#7209b7",
+      },
+    ];
+    localStorage.setItem("eduManage_students", JSON.stringify(initialStudents));
+  }
 
-    if (!localStorage.getItem('eduManage_courses')) {
-        const initialCourses = [
-             { id: 'CRSE-001', code: 'MATH-101', title: 'Advanced Mathematics', students: 28, hours: 48, instructor: 'Michael Kumar', status: 'Active', theme: 'blue' },
-             { id: 'CRSE-002', code: 'BIOL-201', title: 'Biology & Life Sciences', students: 32, hours: 40, instructor: 'Dr. Linda Johnson', status: 'Active', theme: 'purple' },
-             { id: 'CRSE-003', code: 'CHEM-102', title: 'Chemistry Fundamentals', students: 25, hours: 44, instructor: 'Sarah Peterson', status: 'Upcoming', theme: 'teal' },
-             { id: 'CRSE-004', code: 'ENG-301', title: 'English Literature', students: 30, hours: 36, instructor: 'Dr. Sarah Smith', status: 'Active', theme: 'orange' },
-             { id: 'CRSE-005', code: 'ART-105', title: 'Digital Art & Design', students: 24, hours: 48, instructor: 'Rachel Jones', status: 'Active', theme: 'pink' },
-             { id: 'CRSE-006', code: 'PHY-202', title: 'Physics & Mechanics', students: 26, hours: 52, instructor: 'Dr. Thomas Phillips', status: 'Active', theme: 'green' }
-        ];
-        localStorage.setItem('eduManage_courses', JSON.stringify(initialCourses));
-    }
+  if (!localStorage.getItem("eduManage_courses")) {
+    const initialCourses = [
+      {
+        id: "CRSE-001",
+        code: "MATH-101",
+        title: "Advanced Mathematics",
+        students: 28,
+        hours: 48,
+        instructor: "Michael Kumar",
+        status: "Active",
+        theme: "blue",
+      },
+      {
+        id: "CRSE-002",
+        code: "BIOL-201",
+        title: "Biology & Life Sciences",
+        students: 32,
+        hours: 40,
+        instructor: "Dr. Linda Johnson",
+        status: "Active",
+        theme: "purple",
+      },
+      {
+        id: "CRSE-003",
+        code: "CHEM-102",
+        title: "Chemistry Fundamentals",
+        students: 25,
+        hours: 44,
+        instructor: "Sarah Peterson",
+        status: "Upcoming",
+        theme: "teal",
+      },
+      {
+        id: "CRSE-004",
+        code: "ENG-301",
+        title: "English Literature",
+        students: 30,
+        hours: 36,
+        instructor: "Dr. Sarah Smith",
+        status: "Active",
+        theme: "orange",
+      },
+      {
+        id: "CRSE-005",
+        code: "ART-105",
+        title: "Digital Art & Design",
+        students: 24,
+        hours: 48,
+        instructor: "Rachel Jones",
+        status: "Active",
+        theme: "pink",
+      },
+      {
+        id: "CRSE-006",
+        code: "PHY-202",
+        title: "Physics & Mechanics",
+        students: 26,
+        hours: 52,
+        instructor: "Dr. Thomas Phillips",
+        status: "Active",
+        theme: "green",
+      },
+    ];
+    localStorage.setItem("eduManage_courses", JSON.stringify(initialCourses));
+  }
 }
 
 // --- Routing ---
 function routePage() {
-    const path = window.location.pathname;
-    const page = path.split('/').pop();
+  const path = window.location.pathname;
+  const page = path.split("/").pop();
 
-    if (page === 'login.html') {
-        initLogin();
-    } else if (page === 'index.html' || page === '') {
-        if (!checkAuth()) return;
-        initDashboard();
-        initGlobalSearch();
-    } else if (page === 'student-list.html') {
-        if (!checkAuth()) return;
-        initStudentList();
-    } else if (page === 'student-enroll.html') {
-        if (!checkAuth()) return;
-        initEnrollment();
-    } else if (page === 'course.html') {
-        if (!checkAuth()) return;
-        initCourses();
-    } else if (page === 'attendence.html') {
-        if (!checkAuth()) return;
-        initAttendance();
-    } else if (page === 'student-detail.html') {
-        if (!checkAuth()) return;
-        initStudentDetail();
-    }
-    
-    highlightNav(page);
-    initLogout();
+  if (page === "login.html") {
+    initLogin();
+  } else if (page === "index.html" || page === "") {
+    if (!checkAuth()) return;
+    initDashboard();
+    initGlobalSearch();
+  } else if (page === "student-list.html") {
+    if (!checkAuth()) return;
+    initStudentList();
+  } else if (page === "student-enroll.html") {
+    if (!checkAuth()) return;
+    initEnrollment();
+  } else if (page === "course.html") {
+    if (!checkAuth()) return;
+    initCourses();
+  } else if (page === "attendance.html") {
+    // Updated to attendance.html
+    if (!checkAuth()) return;
+    initAttendance();
+  } else if (page === "student-detail.html") {
+    if (!checkAuth()) return;
+    initStudentDetail();
+  }
+
+  highlightNav(page);
+  initLogout();
 }
 
 function checkAuth() {
-    const user = localStorage.getItem('eduManage_user');
-    if (!user) {
-        window.location.href = 'login.html';
-        return false;
-    }
-    return true;
+  const user = localStorage.getItem("eduManage_user");
+  if (!user) {
+    // Check if we are in 'pages' directory based on URL structure
+    const isPages = window.location.pathname.includes("/pages/");
+    window.location.href = isPages ? "login.html" : "pages/login.html";
+    return false;
+  }
+  return true;
 }
 
 function highlightNav(page) {
-    const links = document.querySelectorAll('.nav-link');
-    links.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === page) {
-            link.classList.add('active');
-            link.classList.remove('text-muted');
-        }
-    });
+  const links = document.querySelectorAll(".nav-link");
+  links.forEach((link) => {
+    link.classList.remove("active");
+    // Handle path differences (e.g. ../index.html vs index.html)
+    const href = link.getAttribute("href");
+    if (
+      href === page ||
+      href.endsWith("/" + page) ||
+      (page === "" && href === "index.html")
+    ) {
+      link.classList.add("active");
+      link.classList.remove("text-muted");
+    }
+  });
 }
 
 function initLogout() {
-    const logoutBtn = document.querySelector('a[href="login.html"]'); 
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('eduManage_user');
-            window.location.href = 'login.html';
-        });
-    }
+  const logoutBtn = document.querySelector('a[href*="login.html"]');
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      localStorage.removeItem("eduManage_user");
+      window.location.href = logoutBtn.getAttribute("href");
+    });
+  }
 }
 
 function initGlobalSearch() {
-    const searchInput = document.querySelector('.search-input');
-    if(searchInput) {
-        searchInput.addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') {
-                e.preventDefault();
-                alert(`Searching for: ${searchInput.value} 
+  const searchInput = document.querySelector(".search-input");
+  if (searchInput) {
+    searchInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        alert(`Searching for: ${searchInput.value}
 (Global search implementation requires backend or complex client-side indexing)`);
-            }
-        });
-    }
+      }
+    });
+  }
 }
 
 // --- Login Logic ---
 function initLogin() {
-    const loginForm = document.getElementById('loginForm');
-    const errorMsg = document.getElementById('errorMessage');
+  const loginForm = document.getElementById("loginForm");
+  const errorMsg = document.getElementById("errorMessage");
 
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = loginForm.querySelector('input[type="email"]').value;
-            const password = loginForm.querySelector('input[type="password"]').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = loginForm.querySelector('input[type="email"]').value;
+      const password = loginForm.querySelector('input[type="password"]').value;
+      const rememberMe = document.getElementById("rememberMe").checked;
 
-            if ((email === 'admin@school.edu' && password === 'admin123') || 
-                (email === 'teacher@school.edu' && password === 'teacher123')) { 
-                
-                const user = { email, role: 'Admin' };
-                localStorage.setItem('eduManage_user', JSON.stringify(user));
-                if(rememberMe) {
-                    localStorage.setItem('eduManage_remember', email);
-                }
-                window.location.href = 'index.html';
-            } else {
-                errorMsg.textContent = 'Invalid email or password. Try the demo credentials.';
-                errorMsg.style.display = 'block';
-            }
-        });
-        
-        const savedEmail = localStorage.getItem('eduManage_remember');
-        if(savedEmail) {
-            loginForm.querySelector('input[type="email"]').value = savedEmail;
-            document.getElementById('rememberMe').checked = true;
+      if (
+        (email === "admin@school.edu" && password === "admin123") ||
+        (email === "teacher@school.edu" && password === "teacher123")
+      ) {
+        const user = { email, role: "Admin" };
+        localStorage.setItem("eduManage_user", JSON.stringify(user));
+        if (rememberMe) {
+          localStorage.setItem("eduManage_remember", email);
         }
+        // Redirect to root index.html
+        window.location.href = "../index.html"; // Assuming login is in pages/
+      } else {
+        errorMsg.textContent =
+          "Invalid email or password. Try the demo credentials.";
+        errorMsg.style.display = "block";
+      }
+    });
+
+    const savedEmail = localStorage.getItem("eduManage_remember");
+    if (savedEmail) {
+      loginForm.querySelector('input[type="email"]').value = savedEmail;
+      document.getElementById("rememberMe").checked = true;
     }
+  }
 }
 
 // --- Dashboard Logic ---
 function initDashboard() {
-    console.log('Initializing Dashboard components...');
-    const students = JSON.parse(localStorage.getItem('eduManage_students') || '[]');
-    const courses = JSON.parse(localStorage.getItem('eduManage_courses') || '[]');
-    const attendanceData = JSON.parse(localStorage.getItem('eduManage_attendance') || '{}');
-    
-    document.getElementById('totalStudents').textContent = students.length;
-    document.getElementById('activeCourses').textContent = courses.filter(c => c.status === 'Active').length;
-    
-    const pendingCount = students.filter(s => s.status === 'Pending').length;
-    document.getElementById('pendingStudents').textContent = pendingCount;
-    
-    const presentCount = Object.values(attendanceData).filter(status => status === 'present').length;
-    const totalStudents = students.length > 0 ? students.length : 1;
-    const avgAttendance = Math.round((presentCount / totalStudents) * 100);
-    document.getElementById('todayAttendance').textContent = avgAttendance + '%';
+  console.log("Initializing Dashboard components...");
+  const students = JSON.parse(
+    localStorage.getItem("eduManage_students") || "[]",
+  );
+  const courses = JSON.parse(localStorage.getItem("eduManage_courses") || "[]");
+  const attendanceData = JSON.parse(
+    localStorage.getItem("eduManage_attendance") || "{}",
+  );
 
-    const user = JSON.parse(localStorage.getItem('eduManage_user'));
-    if (user && user.email) {
-        document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.role}!`;
-    }
+  document.getElementById("totalStudents").textContent = students.length;
+  document.getElementById("activeCourses").textContent = courses.filter(
+    (c) => c.status === "Active",
+  ).length;
 
-    const classesGrid = document.getElementById('dashboardClassesGrid');
-    if(classesGrid) {
-        const activeCourses = courses.filter(c => c.status === 'Active').slice(0, 2);
-        
-        if(activeCourses.length > 0) classesGrid.innerHTML = ''; 
-        
-        activeCourses.forEach(course => {
-            const div = document.createElement('div');
-            div.className = 'col-md-6';
-            const initials = getInitials(course.instructor);
-            
-            let themeColor = 'primary';
-            if(course.theme === 'orange') themeColor = 'warning';
-            if(course.theme === 'green') themeColor = 'success';
-            if(course.theme === 'pink') themeColor = 'danger';
-            if(course.theme === 'purple') themeColor = 'info';
-            
-            const borderStyle = `style="border-left-color: var(--${themeColor});"`;
-            const badgeClass = `bg-${themeColor} text-${themeColor}`;
-            const avatarClass = `bg-${themeColor} bg-opacity-20 text-${themeColor}`;
-            
-            div.innerHTML = `
+  const pendingCount = students.filter((s) => s.status === "Pending").length;
+  document.getElementById("pendingStudents").textContent = pendingCount;
+
+  const presentCount = Object.values(attendanceData).filter(
+    (status) => status === "present",
+  ).length;
+  const totalStudents = students.length > 0 ? students.length : 1;
+  const avgAttendance = Math.round((presentCount / totalStudents) * 100);
+  document.getElementById("todayAttendance").textContent = avgAttendance + "%";
+
+  const user = JSON.parse(localStorage.getItem("eduManage_user"));
+  if (user && user.email) {
+    document.getElementById("welcomeMessage").textContent =
+      `Welcome back, ${user.role}!`;
+  }
+
+  const classesGrid = document.getElementById("dashboardClassesGrid");
+  if (classesGrid) {
+    const activeCourses = courses
+      .filter((c) => c.status === "Active")
+      .slice(0, 2);
+
+    if (activeCourses.length > 0) classesGrid.innerHTML = "";
+
+    activeCourses.forEach((course) => {
+      const div = document.createElement("div");
+      div.className = "col-md-6";
+      const initials = getInitials(course.instructor);
+
+      let themeColor = "primary";
+      if (course.theme === "orange") themeColor = "warning";
+      if (course.theme === "green") themeColor = "success";
+      if (course.theme === "pink") themeColor = "danger";
+      if (course.theme === "purple") themeColor = "info";
+
+      const borderStyle = `style="border-left-color: var(--${themeColor});"`;
+      const badgeClass = `bg-${themeColor} text-${themeColor}`;
+      const avatarClass = `bg-${themeColor} bg-opacity-20 text-${themeColor}`;
+
+      div.innerHTML = `
             <div class="class-card" ${borderStyle}>
               <div class="d-flex justify-content-between mb-3">
-                <span class="badge ${badgeClass} bg-opacity-10">${course.code.split('-')[0]}</span>
+                <span class="badge ${badgeClass} bg-opacity-10">${course.code.split("-")[0]}</span>
                 <i class="bi bi-three-dots text-secondary"></i>
               </div>
               <h5 class="fw-bold mb-1">${course.title}</h5>
@@ -243,25 +320,27 @@ function initDashboard() {
                 <div class="small fw-medium">${course.instructor}</div>
               </div>
             </div>`;
-            classesGrid.appendChild(div);
-        });
+      classesGrid.appendChild(div);
+    });
+  }
+
+  const recentTable = document.getElementById("dashboardRecentStudents");
+  if (recentTable) {
+    recentTable.innerHTML = "";
+    const recentStudents = students.slice().reverse().slice(0, 5);
+
+    if (recentStudents.length === 0) {
+      recentTable.innerHTML =
+        '<tr><td colspan="5" class="text-center text-secondary py-4">No recent admissions</td></tr>';
     }
 
-    const recentTable = document.getElementById('dashboardRecentStudents');
-    if(recentTable) {
-        recentTable.innerHTML = '';
-        const recentStudents = students.slice().reverse().slice(0, 5); 
-        
-        if(recentStudents.length === 0) {
-             recentTable.innerHTML = '<tr><td colspan="5" class="text-center text-secondary py-4">No recent admissions</td></tr>';
-        }
+    recentStudents.forEach((student) => {
+      const tr = document.createElement("tr");
+      const initials = getInitials(student.firstName + " " + student.lastName);
+      const statusClass =
+        student.status === "Active" ? "status-active" : "status-warning";
 
-        recentStudents.forEach(student => {
-            const tr = document.createElement('tr');
-            const initials = getInitials(student.firstName + ' ' + student.lastName);
-            const statusClass = student.status === 'Active' ? 'status-active' : 'status-warning';
-            
-            tr.innerHTML = `
+      tr.innerHTML = `
             <td>
               <div class="d-flex align-items-center gap-3">
                 <div class="avatar bg-primary text-white">${initials}</div>
@@ -272,269 +351,302 @@ function initDashboard() {
             <td>${student.class}</td>
             <td class="text-secondary">${student.enrollDate}</td>
             <td><span class="status-badge ${statusClass}">${student.status}</span></td>`;
-            recentTable.appendChild(tr);
-        });
-    }
+      recentTable.appendChild(tr);
+    });
+  }
 }
 
 // --- Student List Logic ---
 function initStudentList() {
-    const students = JSON.parse(localStorage.getItem('eduManage_students') || '[]');
-    const tbody = document.querySelector('table tbody');
-    const searchInput = document.querySelector('.search-filter-bar input');
-    const selects = document.querySelectorAll('.filter-select');
-    
-    function updateListStats() {
-        const currentStudents = JSON.parse(localStorage.getItem('eduManage_students') || '[]');
-        if(document.getElementById('totalStudentsList')) {
-            document.getElementById('totalStudentsList').textContent = currentStudents.length;
-            document.getElementById('activeStudentsList').textContent = currentStudents.filter(s => s.status === 'Active').length;
-            document.getElementById('pendingStudentsList').textContent = currentStudents.filter(s => s.status === 'Pending').length;
-            document.getElementById('inactiveStudentsList').textContent = currentStudents.filter(s => s.status === 'Absent' || s.status === 'Inactive').length;
-        }
+  const students = JSON.parse(
+    localStorage.getItem("eduManage_students") || "[]",
+  );
+  const tbody = document.querySelector("table tbody");
+  const searchInput = document.querySelector(".search-filter-bar input");
+  const selects = document.querySelectorAll(".filter-select");
+
+  function updateListStats() {
+    const currentStudents = JSON.parse(
+      localStorage.getItem("eduManage_students") || "[]",
+    );
+    if (document.getElementById("totalStudentsList")) {
+      document.getElementById("totalStudentsList").textContent =
+        currentStudents.length;
+      document.getElementById("activeStudentsList").textContent =
+        currentStudents.filter((s) => s.status === "Active").length;
+      document.getElementById("pendingStudentsList").textContent =
+        currentStudents.filter((s) => s.status === "Pending").length;
+      document.getElementById("inactiveStudentsList").textContent =
+        currentStudents.filter(
+          (s) => s.status === "Absent" || s.status === "Inactive",
+        ).length;
     }
-    
-    updateListStats();
-    
-    function renderTable(data) {
-        tbody.innerHTML = '';
-        if (data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="9" class="text-center py-4">No students found</td></tr>';
-            return;
-        }
+  }
 
-        data.forEach(student => {
-            const tr = document.createElement('tr');
-            
-            let statusBadge = '';
-            if (student.status === 'Active') statusBadge = '<span class="badge badge-active">Active</span>';
-            else if (student.status === 'Absent') statusBadge = '<span class="badge badge-inactive">Absent</span>';
-            else statusBadge = '<span class="badge badge-pending">Pending</span>';
+  updateListStats();
 
-            const initials = getInitials(student.firstName + ' ' + student.lastName);
+  function renderTable(data) {
+    tbody.innerHTML = "";
+    if (data.length === 0) {
+      tbody.innerHTML =
+        '<tr><td colspan="9" class="text-center py-4">No students found</td></tr>';
+      return;
+    }
 
-            tr.innerHTML = `
+    data.forEach((student) => {
+      const tr = document.createElement("tr");
+
+      let statusBadge = "";
+      if (student.status === "Active")
+        statusBadge = '<span class="badge badge-active">Active</span>';
+      else if (student.status === "Absent")
+        statusBadge = '<span class="badge badge-inactive">Absent</span>';
+      else statusBadge = '<span class="badge badge-pending">Pending</span>';
+
+      const initials = getInitials(student.firstName + " " + student.lastName);
+
+      tr.innerHTML = `
                 <td><input type="checkbox" class="form-check-input"></td>
                 <td>
                     <div class="student-info">
-                        <div class="avatar" style="background: linear-gradient(135deg, ${student.avatarColor || '#4361ee'}, #3f37c9);">${initials}</div>
+                        <div class="avatar" style="background: linear-gradient(135deg, ${student.avatarColor || "#4361ee"}, #3f37c9);">${initials}</div>
                         <div>
                             <div class="student-name">${student.firstName} ${student.lastName}</div>
-                            <div class="student-email">${student.email || 'N/A'}</div>
+                            <div class="student-email">${student.email || "N/A"}</div>
                         </div>
                     </div>
                 </td>
                 <td class="text-secondary fw-medium">${student.id}</td>
-                <td>${student.class || 'N/A'}</td>
-                <td>Dr. Linda Johnson</td> 
+                <td>${student.class || "N/A"}</td>
+                <td>Dr. Linda Johnson</td>
                 <td class="text-secondary">${student.phone}</td>
                 <td class="text-secondary">${student.enrollDate}</td>
                 <td>${statusBadge}</td>
                 <td class="text-end">
-                    <button class="action-btn view" title="View" data-id="${student.id}"><i class="bi bi-eye"></i></button>
-                    <button class="action-btn edit" title="Edit" data-id="${student.id}"><i class="bi bi-pencil"></i></button>
-                    <button class="action-btn delete" title="Delete" data-id="${student.id}"><i class="bi bi-trash-fill"></i></button>
+                    <button class="table-action-btn view" title="View" data-id="${student.id}"><i class="bi bi-eye"></i></button>
+                    <button class="table-action-btn edit" title="Edit" data-id="${student.id}"><i class="bi bi-pencil"></i></button>
+                    <button class="table-action-btn delete" title="Delete" data-id="${student.id}"><i class="bi bi-trash-fill"></i></button>
                 </td>
             `;
-            tbody.appendChild(tr);
-        });
+      tbody.appendChild(tr);
+    });
 
-        document.querySelectorAll('.action-btn.delete').forEach(btn => {
-            btn.removeAttribute('disabled');
-            btn.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                if(confirm('Are you sure you want to delete this student?')) {
-                    deleteStudent(id);
-                }
-            });
-        });
-        
-        document.querySelectorAll('.action-btn.view').forEach(btn => {
-            btn.removeAttribute('disabled');
-            btn.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                window.location.href = `student-detail.html?id=${id}`;
-            });
-        });
-
-        document.querySelectorAll('.action-btn.edit').forEach(btn => {
-            btn.removeAttribute('disabled');
-            btn.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                window.location.href = `student-enroll.html?id=${id}`;
-            });
-        });
-    }
-
-    function deleteStudent(id) {
-        const updatedStudents = JSON.parse(localStorage.getItem('eduManage_students') || '[]').filter(s => s.id !== id);
-        localStorage.setItem('eduManage_students', JSON.stringify(updatedStudents));
-        updateListStats();
-        filterAndRender(); 
-    }
-    
-    function filterAndRender() {
-        let filtered = JSON.parse(localStorage.getItem('eduManage_students') || '[]');
-        
-        if (searchInput && searchInput.value) {
-            const term = searchInput.value.toLowerCase();
-            filtered = filtered.filter(s => 
-                s.firstName.toLowerCase().includes(term) || 
-                s.lastName.toLowerCase().includes(term) ||
-                s.id.toLowerCase().includes(term) ||
-                (s.email && s.email.toLowerCase().includes(term))
-            );
+    document.querySelectorAll(".table-action-btn.delete").forEach((btn) => {
+      btn.removeAttribute("disabled");
+      btn.addEventListener("click", function () {
+        const id = this.getAttribute("data-id");
+        if (confirm("Are you sure you want to delete this student?")) {
+          deleteStudent(id);
         }
-        
-        if (selects[0] && selects[0].value !== 'All Classes') {
-             filtered = filtered.filter(s => s.class && s.class.includes(selects[0].value));
-        }
+      });
+    });
 
-        if (selects[1] && selects[1].value !== 'All Status') {
-            filtered = filtered.filter(s => s.status === selects[1].value);
-        }
-        
-        if(selects[2]) {
-            const sortVal = selects[2].value;
-            if(sortVal.includes('Name (A-Z)')) {
-                filtered.sort((a,b) => a.firstName.localeCompare(b.firstName));
-            } else if(sortVal.includes('Name (Z-A)')) {
-                filtered.sort((a,b) => b.firstName.localeCompare(a.firstName));
-            } else if(sortVal.includes('Newest')) {
-                filtered.sort((a,b) => new Date(b.enrollDate) - new Date(a.enrollDate));
-            }
-        }
-        
-        renderTable(filtered);
-    }
+    document.querySelectorAll(".table-action-btn.view").forEach((btn) => {
+      btn.removeAttribute("disabled");
+      btn.addEventListener("click", function () {
+        const id = this.getAttribute("data-id");
+        window.location.href = `student-detail.html?id=${id}`;
+      });
+    });
 
-    if (searchInput) searchInput.addEventListener('input', filterAndRender);
-    selects.forEach(s => s.addEventListener('change', filterAndRender));
+    document.querySelectorAll(".table-action-btn.edit").forEach((btn) => {
+      btn.removeAttribute("disabled");
+      btn.addEventListener("click", function () {
+        const id = this.getAttribute("data-id");
+        window.location.href = `student-enroll.html?id=${id}`;
+      });
+    });
+  }
 
+  function deleteStudent(id) {
+    const updatedStudents = JSON.parse(
+      localStorage.getItem("eduManage_students") || "[]",
+    ).filter((s) => s.id !== id);
+    localStorage.setItem("eduManage_students", JSON.stringify(updatedStudents));
+    updateListStats();
     filterAndRender();
+  }
+
+  function filterAndRender() {
+    let filtered = JSON.parse(
+      localStorage.getItem("eduManage_students") || "[]",
+    );
+
+    if (searchInput && searchInput.value) {
+      const term = searchInput.value.toLowerCase();
+      filtered = filtered.filter(
+        (s) =>
+          s.firstName.toLowerCase().includes(term) ||
+          s.lastName.toLowerCase().includes(term) ||
+          s.id.toLowerCase().includes(term) ||
+          (s.email && s.email.toLowerCase().includes(term)),
+      );
+    }
+
+    if (selects[0] && selects[0].value !== "All Classes") {
+      filtered = filtered.filter(
+        (s) => s.class && s.class.includes(selects[0].value),
+      );
+    }
+
+    if (selects[1] && selects[1].value !== "All Status") {
+      filtered = filtered.filter((s) => s.status === selects[1].value);
+    }
+
+    if (selects[2]) {
+      const sortVal = selects[2].value;
+      if (sortVal.includes("Name (A-Z)")) {
+        filtered.sort((a, b) => a.firstName.localeCompare(b.firstName));
+      } else if (sortVal.includes("Name (Z-A)")) {
+        filtered.sort((a, b) => b.firstName.localeCompare(a.firstName));
+      } else if (sortVal.includes("Newest")) {
+        filtered.sort(
+          (a, b) => new Date(b.enrollDate) - new Date(a.enrollDate),
+        );
+      }
+    }
+
+    renderTable(filtered);
+  }
+
+  if (searchInput) searchInput.addEventListener("input", filterAndRender);
+  selects.forEach((s) => s.addEventListener("change", filterAndRender));
+
+  filterAndRender();
 }
 
 // --- Enrollment Logic (Add/Edit) ---
 function initEnrollment() {
-    const form = document.getElementById('enrollmentForm');
-    const photoInput = document.getElementById('photoUpload');
-    const photoPreview = document.getElementById('photoPreview');
-    const urlParams = new URLSearchParams(window.location.search);
-    const editId = urlParams.get('id');
-    const titleEl = document.querySelector('.page-title');
-    const submitBtn = document.querySelector('button[type="submit"]');
+  const form = document.getElementById("enrollmentForm");
+  const photoInput = document.getElementById("photoUpload");
+  const photoPreview = document.getElementById("photoPreview");
+  const urlParams = new URLSearchParams(window.location.search);
+  const editId = urlParams.get("id");
+  const titleEl = document.querySelector(".page-title");
+  const submitBtn = document.querySelector('button[type="submit"]');
 
-    if(editId) {
-        if(titleEl) titleEl.textContent = 'Edit Student';
-        if(submitBtn) submitBtn.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i> Update Student';
-        
-        const students = JSON.parse(localStorage.getItem('eduManage_students') || '[]');
-        const student = students.find(s => s.id === editId);
-        
-        if(student) {
-            form.querySelector('[name="firstName"]').value = student.firstName || '';
-            form.querySelector('[name="lastName"]').value = student.lastName || '';
-            form.querySelector('[name="studentId"]').value = student.id || '';
-            form.querySelector('[name="studentId"]').setAttribute('readonly', true);
-            form.querySelector('[name="personalEmail"]').value = student.email || '';
-            form.querySelector('[name="phone"]').value = student.phone || '';
-            form.querySelector('[name="enrollmentDate"]').value = student.enrollDate || '';
-            form.querySelector('[name="dob"]').value = student.dob || '';
-            form.querySelector('[name="gender"]').value = student.gender || '';
-            
-            if(student.class) {
-                const parts = student.class.split(' - ');
-                if(parts[0]) form.querySelector('[name="gradeLevel"]').value = parts[0];
-                if(parts[1]) form.querySelector('[name="program"]').value = parts[1];
-            }
+  if (editId) {
+    if (titleEl) titleEl.textContent = "Edit Student";
+    if (submitBtn)
+      submitBtn.innerHTML =
+        '<i class="bi bi-check-circle-fill me-2"></i> Update Student';
+
+    const students = JSON.parse(
+      localStorage.getItem("eduManage_students") || "[]",
+    );
+    const student = students.find((s) => s.id === editId);
+
+    if (student) {
+      form.querySelector('[name="firstName"]').value = student.firstName || "";
+      form.querySelector('[name="lastName"]').value = student.lastName || "";
+      form.querySelector('[name="studentId"]').value = student.id || "";
+      form.querySelector('[name="studentId"]').setAttribute("readonly", true);
+      form.querySelector('[name="personalEmail"]').value = student.email || "";
+      form.querySelector('[name="phone"]').value = student.phone || "";
+      form.querySelector('[name="enrollmentDate"]').value =
+        student.enrollDate || "";
+      form.querySelector('[name="dob"]').value = student.dob || "";
+      form.querySelector('[name="gender"]').value = student.gender || "";
+
+      if (student.class) {
+        const parts = student.class.split(" - ");
+        if (parts[0])
+          form.querySelector('[name="gradeLevel"]').value = parts[0];
+        if (parts[1]) form.querySelector('[name="program"]').value = parts[1];
+      }
+    }
+  }
+
+  if (photoInput && photoPreview) {
+    photoInput.addEventListener("change", function (e) {
+      if (e.target.files && e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          photoPreview.src = e.target.result;
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    });
+  }
+
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const students = JSON.parse(
+        localStorage.getItem("eduManage_students") || "[]",
+      );
+
+      const studentData = {
+        id: formData.get("studentId"),
+        firstName: formData.get("firstName"),
+        lastName: formData.get("lastName"),
+        email: formData.get("personalEmail"),
+        phone: formData.get("phone"),
+        dob: formData.get("dob"),
+        gender: formData.get("gender"),
+        class:
+          formData.get("gradeLevel") +
+          (formData.get("program") ? " - " + formData.get("program") : ""),
+        enrollDate: formData.get("enrollmentDate"),
+        status: "Active",
+        avatarColor: getRandomColor(),
+      };
+
+      if (editId) {
+        const index = students.findIndex((s) => s.id === editId);
+        if (index !== -1) {
+          studentData.status = students[index].status;
+          studentData.avatarColor = students[index].avatarColor;
+          students[index] = studentData;
+          localStorage.setItem("eduManage_students", JSON.stringify(students));
+          alert("Student updated successfully!");
         }
-    }
-    
-    if (photoInput && photoPreview) {
-        photoInput.addEventListener('change', function(e) {
-            if (e.target.files && e.target.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    photoPreview.src = e.target.result;
-                }
-                reader.readAsDataURL(e.target.files[0]);
-            }
-        });
-    }
+      } else {
+        if (students.some((s) => s.id === studentData.id)) {
+          alert("Student ID already exists!");
+          return;
+        }
+        students.push(studentData);
+        localStorage.setItem("eduManage_students", JSON.stringify(students));
+        alert("Student enrolled successfully!");
+      }
 
-    if (form) {
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const formData = new FormData(form);
-            const students = JSON.parse(localStorage.getItem('eduManage_students') || '[]');
-            
-            const studentData = {
-                id: formData.get('studentId'),
-                firstName: formData.get('firstName'),
-                lastName: formData.get('lastName'),
-                email: formData.get('personalEmail'),
-                phone: formData.get('phone'),
-                dob: formData.get('dob'),
-                gender: formData.get('gender'),
-                class: formData.get('gradeLevel') + (formData.get('program') ? ' - ' + formData.get('program') : ''),
-                enrollDate: formData.get('enrollmentDate'),
-                status: 'Active',
-                avatarColor: getRandomColor()
-            };
-
-            if(editId) {
-                const index = students.findIndex(s => s.id === editId);
-                if(index !== -1) {
-                    studentData.status = students[index].status;
-                    studentData.avatarColor = students[index].avatarColor;
-                    students[index] = studentData;
-                    localStorage.setItem('eduManage_students', JSON.stringify(students));
-                    alert('Student updated successfully!');
-                }
-            } else {
-                if (students.some(s => s.id === studentData.id)) {
-                    alert('Student ID already exists!');
-                    return;
-                }
-                students.push(studentData);
-                localStorage.setItem('eduManage_students', JSON.stringify(students));
-                alert('Student enrolled successfully!');
-            }
-            
-            window.location.href = 'student-list.html';
-        });
-    }
+      window.location.href = "student-list.html";
+    });
+  }
 }
 
 // --- Course Logic (Add/Edit) ---
 function initCourses() {
-    const courses = JSON.parse(localStorage.getItem('eduManage_courses') || '[]');
-    const grid = document.getElementById('coursesGrid');
-    const modalEl = document.getElementById('courseModal');
-    const modal = new bootstrap.Modal(modalEl);
-    let editId = null;
-    
-    function renderCourses(data) {
-        grid.innerHTML = '';
-        if(data.length === 0) {
-            grid.innerHTML = '<div class="col-12 text-center py-5">No courses found</div>';
-            return;
-        }
-        
-        data.forEach(course => {
-            const col = document.createElement('div');
-            col.className = 'col-md-6 col-lg-4';
-            col.innerHTML = `
+  const courses = JSON.parse(localStorage.getItem("eduManage_courses") || "[]");
+  const grid = document.getElementById("coursesGrid");
+  const modalEl = document.getElementById("courseModal");
+  const modal = new bootstrap.Modal(modalEl);
+  let editId = null;
+
+  function renderCourses(data) {
+    grid.innerHTML = "";
+    if (data.length === 0) {
+      grid.innerHTML =
+        '<div class="col-12 text-center py-5">No courses found</div>';
+      return;
+    }
+
+    data.forEach((course) => {
+      const col = document.createElement("div");
+      col.className = "col-md-6 col-lg-4";
+      col.innerHTML = `
                 <div class="course-card">
-                    <div class="course-header ${course.theme || 'blue'}">
+                    <div class="course-header ${course.theme || "blue"}">
                         <div>
                             <div class="course-code">${course.code}</div>
                             <h5 class="course-title">${course.title}</h5>
                         </div>
                         <div class="text-end">
-                            <button class="action-btn edit-course" title="Edit" data-id="${course.id}"><i class="bi bi-pencil"></i></button>
-                            <button class="action-btn delete-course" title="Delete" data-id="${course.id}"><i class="bi bi-trash"></i></button>
+                            <button class="course-action-btn edit-course" title="Edit" data-id="${course.id}"><i class="bi bi-pencil"></i></button>
+                            <button class="course-action-btn delete-course" title="Delete" data-id="${course.id}"><i class="bi bi-trash"></i></button>
                         </div>
                     </div>
                     <div class="course-body">
@@ -557,127 +669,145 @@ function initCourses() {
                     </div>
                 </div>
             `;
-            grid.appendChild(col);
-        });
-        
-        document.querySelectorAll('.delete-course').forEach(btn => {
-            btn.removeAttribute('disabled'); 
-            btn.addEventListener('click', function() {
-                 if(confirm('Delete this course?')) {
-                     const id = this.getAttribute('data-id');
-                     const newCourses = courses.filter(c => c.id !== id);
-                     localStorage.setItem('eduManage_courses', JSON.stringify(newCourses));
-                     window.location.reload();
-                 }
-            });
-        });
+      grid.appendChild(col);
+    });
 
-        document.querySelectorAll('.edit-course').forEach(btn => {
-            btn.removeAttribute('disabled');
-            btn.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                const course = courses.find(c => c.id === id);
-                if(course) {
-                    editId = id;
-                    document.getElementById('courseModalTitle').textContent = 'Edit Course';
-                    document.getElementById('courseCode').value = course.code;
-                    document.getElementById('courseTitle').value = course.title;
-                    document.getElementById('courseTeacher').value = course.instructor;
-                    document.getElementById('courseDescription').value = course.description || '';
-                    modal.show();
-                }
-            });
-        });
-    }
-    
-    renderCourses(courses);
-    
-    const saveBtn = document.getElementById('saveCourseBtn');
-    if(saveBtn) {
-        saveBtn.addEventListener('click', () => {
-             const title = document.getElementById('courseTitle').value;
-             const code = document.getElementById('courseCode').value;
-             
-             if(!title || !code) {
-                 alert('Please fill required fields');
-                 return;
-             }
-             
-             const courseData = {
-                 id: editId || 'CRSE-' + Date.now(),
-                 code: code,
-                 title: title,
-                 students: 0,
-                 hours: 40,
-                 instructor: document.getElementById('courseTeacher').value,
-                 status: 'Active',
-                 theme: getRandomTheme(),
-                 description: document.getElementById('courseDescription').value
-             };
-             
-             if(editId) {
-                 const index = courses.findIndex(c => c.id === editId);
-                 if(index !== -1) {
-                    courseData.theme = courses[index].theme; 
-                    courseData.students = courses[index].students;
-                    courses[index] = courseData;
-                 }
-             } else {
-                 courses.push(courseData);
-             }
-             
-             localStorage.setItem('eduManage_courses', JSON.stringify(courses));
-             modal.hide();
-             editId = null; 
-             window.location.reload();
-        });
-    }
-    
-    const addBtn = document.querySelector('.btn-add-course');
-    if(addBtn) {
-        addBtn.addEventListener('click', () => {
-            editId = null;
-            document.getElementById('courseModalTitle').textContent = 'Add New Course';
-            document.getElementById('courseForm').reset();
-            modal.show();
-        });
-    }
-    
-    document.getElementById('totalCourses').textContent = courses.length;
-    document.getElementById('activeCourses').textContent = courses.filter(c => c.status === 'Active').length;
+    document.querySelectorAll(".delete-course").forEach((btn) => {
+      btn.removeAttribute("disabled");
+      btn.addEventListener("click", function () {
+        if (confirm("Delete this course?")) {
+          const id = this.getAttribute("data-id");
+          const newCourses = courses.filter((c) => c.id !== id);
+          localStorage.setItem("eduManage_courses", JSON.stringify(newCourses));
+          window.location.reload();
+        }
+      });
+    });
+
+    document.querySelectorAll(".edit-course").forEach((btn) => {
+      btn.removeAttribute("disabled");
+      btn.addEventListener("click", function () {
+        const id = this.getAttribute("data-id");
+        const course = courses.find((c) => c.id === id);
+        if (course) {
+          editId = id;
+          document.getElementById("courseModalTitle").textContent =
+            "Edit Course";
+          document.getElementById("courseCode").value = course.code;
+          document.getElementById("courseTitle").value = course.title;
+          document.getElementById("courseTeacher").value = course.instructor;
+          document.getElementById("courseDescription").value =
+            course.description || "";
+          modal.show();
+        }
+      });
+    });
+  }
+
+  renderCourses(courses);
+
+  const saveBtn = document.getElementById("saveCourseBtn");
+  if (saveBtn) {
+    saveBtn.addEventListener("click", () => {
+      const title = document.getElementById("courseTitle").value;
+      const code = document.getElementById("courseCode").value;
+
+      if (!title || !code) {
+        alert("Please fill required fields");
+        return;
+      }
+
+      const courseData = {
+        id: editId || "CRSE-" + Date.now(),
+        code: code,
+        title: title,
+        students: 0,
+        hours: 40,
+        instructor: document.getElementById("courseTeacher").value,
+        status: "Active",
+        theme: getRandomTheme(),
+        description: document.getElementById("courseDescription").value,
+      };
+
+      if (editId) {
+        const index = courses.findIndex((c) => c.id === editId);
+        if (index !== -1) {
+          courseData.theme = courses[index].theme;
+          courseData.students = courses[index].students;
+          courses[index] = courseData;
+        }
+      } else {
+        courses.push(courseData);
+      }
+
+      localStorage.setItem("eduManage_courses", JSON.stringify(courses));
+      modal.hide();
+      editId = null;
+      window.location.reload();
+    });
+  }
+
+  const addBtn = document.querySelector(".btn-add-course");
+  if (addBtn) {
+    addBtn.addEventListener("click", () => {
+      editId = null;
+      document.getElementById("courseModalTitle").textContent =
+        "Add New Course";
+      document.getElementById("courseForm").reset();
+      modal.show();
+    });
+  }
+
+  document.getElementById("totalCourses").textContent = courses.length;
+  document.getElementById("activeCourses").textContent = courses.filter(
+    (c) => c.status === "Active",
+  ).length;
 }
 
 // --- Attendance Logic ---
 function initAttendance() {
-    const students = JSON.parse(localStorage.getItem('eduManage_students') || '[]');
-    const attendanceData = JSON.parse(localStorage.getItem('eduManage_attendance') || '{}');
-    const tbody = document.getElementById('attendanceTbody');
-    
-    if(tbody) {
-        tbody.innerHTML = '';
-        students.forEach(student => {
-             const tr = document.createElement('tr');
-             tr.dataset.id = student.id; 
-             
-             const initials = getInitials(student.firstName + ' ' + student.lastName);
-             
-             const status = attendanceData[student.id];
-             const presentActive = status === 'present' ? 'active' : '';
-             const absentActive = status === 'absent' ? 'active' : '';
-             const lateActive = status === 'late' ? 'active' : '';
-             
-             let badgeClass = 'bg-secondary';
-             let badgeText = 'Pending';
-             let timeText = '-';
-             
-             if(status === 'present') { badgeClass = 'bg-success'; badgeText = 'Present'; timeText = '08:00 AM'; }
-             else if(status === 'absent') { badgeClass = 'bg-danger'; badgeText = 'Absent'; }
-             else if(status === 'late') { badgeClass = 'bg-warning'; badgeText = 'Late'; timeText = '08:15 AM'; }
+  const students = JSON.parse(
+    localStorage.getItem("eduManage_students") || "[]",
+  );
+  const attendanceData = JSON.parse(
+    localStorage.getItem("eduManage_attendance") || "{}",
+  );
+  const tbody = document.getElementById("attendanceTbody");
 
-             tr.innerHTML = `
+  if (tbody) {
+    tbody.innerHTML = "";
+    students.forEach((student) => {
+      const tr = document.createElement("tr");
+      tr.dataset.id = student.id;
+
+      const initials = getInitials(student.firstName + " " + student.lastName);
+
+      const status = attendanceData[student.id];
+      const presentActive = status === "present" ? "active" : "";
+      const absentActive = status === "absent" ? "active" : "";
+      const lateActive = status === "late" ? "active" : "";
+
+      let badgeClass = "bg-secondary";
+      let badgeText = "Pending";
+      let timeText = "-";
+
+      if (status === "present") {
+        badgeClass = "bg-success";
+        badgeText = "Present";
+        timeText = "08:00 AM";
+      } else if (status === "absent") {
+        badgeClass = "bg-danger";
+        badgeText = "Absent";
+      } else if (status === "late") {
+        badgeClass = "bg-warning";
+        badgeText = "Late";
+        timeText = "08:15 AM";
+      }
+
+      tr.innerHTML = `
                 <td>
                     <div class="student-info">
-                        <div class="student-avatar" style="background: linear-gradient(135deg, ${student.avatarColor || '#4361ee'}, #3f37c9);">${initials}</div>
+                        <div class="student-avatar" style="background: linear-gradient(135deg, ${student.avatarColor || "#4361ee"}, #3f37c9);">${initials}</div>
                         <div>
                             <div><strong>${student.firstName} ${student.lastName}</strong></div>
                             <small class="text-muted">${student.email}</small>
@@ -685,7 +815,7 @@ function initAttendance() {
                     </div>
                 </td>
                 <td class="text-secondary fw-medium">${student.id}</td>
-                <td>${student.class || 'N/A'}</td>
+                <td>${student.class || "N/A"}</td>
                 <td class="attendance-status">
                     <button class="btn-status btn-present ${presentActive}" data-action="present"><i class="bi bi-check-circle-fill"></i></button>
                     <button class="btn-status btn-absent ${absentActive}" data-action="absent"><i class="bi bi-x-circle-fill"></i></button>
@@ -694,113 +824,106 @@ function initAttendance() {
                 <td class="time-log text-secondary">${timeText}</td>
                 <td><span class="badge ${badgeClass}">${badgeText}</span></td>
              `;
-             tbody.appendChild(tr);
-        });
-        
-        tbody.addEventListener('click', (e) => {
-            const btn = e.target.closest('.btn-status');
-            if(!btn) return;
-            
-            const parent = btn.closest('.attendance-status');
-            parent.querySelectorAll('.btn-status').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            const action = btn.dataset.action;
-            const row = btn.closest('tr');
-            const studentId = row.dataset.id;
-            
-            const badge = row.querySelector('.badge');
-            const timeLog = row.querySelector('.time-log');
-            
-            if(action === 'present') {
-                badge.className = 'badge bg-success';
-                badge.textContent = 'Present';
-                timeLog.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            } else if(action === 'absent') {
-                badge.className = 'badge bg-danger';
-                badge.textContent = 'Absent';
-                timeLog.textContent = '-';
-            } else if(action === 'late') {
-                badge.className = 'badge bg-warning';
-                badge.textContent = 'Late';
-                timeLog.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            }
-            
-            const currentData = JSON.parse(localStorage.getItem('eduManage_attendance') || '{}');
-            currentData[studentId] = action;
-            localStorage.setItem('eduManage_attendance', JSON.stringify(currentData));
-            
-            updateAttendanceStats();
-        });
-    }
-    
-    updateAttendanceStats(); 
-}
-
-function updateAttendanceStats() {
-    const tbody = document.getElementById('attendanceTbody');
-    if(!tbody) return;
-    
-    const rows = tbody.querySelectorAll('tr');
-    const total = rows.length;
-    let present = 0;
-    let absent = 0;
-    let late = 0;
-    
-    rows.forEach(row => {
-        if(row.querySelector('.btn-present.active')) present++;
-        else if(row.querySelector('.btn-absent.active')) absent++;
-        else if(row.querySelector('.btn-late.active')) late++;
+      tbody.appendChild(tr);
     });
-    
-    if(document.getElementById('attendancePresent')) {
-        document.getElementById('attendancePresent').textContent = present;
-        document.getElementById('attendanceAbsent').textContent = absent;
-        document.getElementById('attendanceLate').textContent = late;
-        
-        const avg = total > 0 ? Math.round(((present + (late * 0.5)) / total) * 100) : 0;
-        document.getElementById('attendanceAverage').textContent = avg + '%';
-    }
+
+    tbody.addEventListener("click", (e) => {
+      const btn = e.target.closest(".btn-status");
+      if (!btn) return;
+
+      const parent = btn.closest(".attendance-status");
+      parent
+        .querySelectorAll(".btn-status")
+        .forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const action = btn.dataset.action;
+      const row = btn.closest("tr");
+      const studentId = row.dataset.id;
+
+      const badge = row.querySelector(".badge");
+      const timeLog = row.querySelector(".time-log");
+
+      if (action === "present") {
+        badge.className = "badge bg-success";
+        badge.textContent = "Present";
+        timeLog.textContent = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      } else if (action === "absent") {
+        badge.className = "badge bg-danger";
+        badge.textContent = "Absent";
+        timeLog.textContent = "-";
+      } else if (action === "late") {
+        badge.className = "badge bg-warning";
+        badge.textContent = "Late";
+        timeLog.textContent = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }
+
+      const currentData = JSON.parse(
+        localStorage.getItem("eduManage_attendance") || "{}",
+      );
+      currentData[studentId] = action;
+      localStorage.setItem("eduManage_attendance", JSON.stringify(currentData));
+
+      updateAttendanceStats();
+    });
+  }
+
+  updateAttendanceStats();
 }
 
 // --- Student Detail Logic ---
 function initStudentDetail() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    const students = JSON.parse(localStorage.getItem('eduManage_students') || '[]');
-    
-    let student = students.find(s => s.id === id);
-    if (!student && id) {
-        alert('Student not found!');
-        return;
-    } else if (!student) {
-        student = students[0];
-    }
-    
-    if(student) {
-        const nameEl = document.querySelector('.profile-header h2');
-        if(nameEl) nameEl.textContent = `${student.firstName} ${student.lastName}`;
-        
-        const idContainer = document.querySelector('.profile-header .text-secondary span'); 
-        if(idContainer) idContainer.textContent = student.id;
-        
-        const statusBadge = document.querySelector('.status-badge');
-        if(statusBadge) statusBadge.textContent = student.status;
-    }
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get("id");
+  const students = JSON.parse(
+    localStorage.getItem("eduManage_students") || "[]",
+  );
+
+  let student = students.find((s) => s.id === id);
+  if (!student && id) {
+    alert("Student not found!");
+    return;
+  } else if (!student) {
+    student = students[0];
+  }
+
+  if (student) {
+    const nameEl = document.querySelector(".profile-header h2");
+    if (nameEl) nameEl.textContent = `${student.firstName} ${student.lastName}`;
+
+    const idContainer = document.querySelector(
+      ".profile-header .text-secondary span",
+    );
+    if (idContainer) idContainer.textContent = student.id;
+
+    const statusBadge = document.querySelector(".profile-status-badge");
+    if (statusBadge) statusBadge.textContent = student.status;
+  }
 }
 
 // --- Utils ---
 function getRandomColor() {
-    const colors = ['#4361ee', '#3f37c9', '#f72585', '#4cc9f0', '#7209b7'];
-    return colors[Math.floor(Math.random() * colors.length)];
+  const colors = ["#4361ee", "#3f37c9", "#f72585", "#4cc9f0", "#7209b7"];
+  return colors[Math.floor(Math.random() * colors.length)];
 }
 
 function getRandomTheme() {
-    const themes = ['blue', 'purple', 'pink', 'green', 'orange', 'teal'];
-    return themes[Math.floor(Math.random() * themes.length)];
+  const themes = ["blue", "purple", "pink", "green", "orange", "teal"];
+  return themes[Math.floor(Math.random() * themes.length)];
 }
 
 function getInitials(name) {
-    if(!name) return '??';
-    return name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+  if (!name) return "??";
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .substring(0, 2)
+    .toUpperCase();
 }

@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <base href="/test_git/" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Students - EduManage</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+
+    <body>
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <i class="bi bi-mortarboard-fill"></i> EduManage
+            </div>
+
+            <div class="d-flex flex-column gap-1 flex-grow-1">
+                <a href="index.html" class="nav-link">
+                    <i class="bi bi-grid"></i> Dashboard
+                </a>
+                <a href="pages/student-list.html" class="nav-link active">
+                    <i class="bi bi-people"></i> Students
+                </a>
+                <a href="pages/course.html" class="nav-link">
+                    <i class="bi bi-book"></i> Courses
+                </a>
+                <a href="pages/attendance.html" class="nav-link">
+                    <i class="bi bi-calendar-check"></i> Attendance
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="bi bi-bar-chart"></i> Reports
+                </a>
+            </div>
+
+            <div class="support-card">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <div class="bg-white bg-opacity-10 p-2 rounded">
+                        <i class="bi bi-headset"></i>
+                    </div>
+                    <div class="fw-semibold">Support Center</div>
+                </div>
+                <p class="small opacity-75 mb-3">
+                    Need help? Contact our support team 24/7.
+                </p>
+                <button
+                    class="btn btn-sm btn-light w-100 fw-medium text-primary"
+                >
+                    Get Help
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div>
+                    <h2 class="page-title">Students Management</h2>
+                    <p class="text-secondary mb-0">
+                        Manage and view all student records.
+                    </p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-export">
+                        <i class="bi bi-download me-2"></i>Export
+                    </button>
+                    <a
+                        class="btn btn-primary-custom"
+                        href="pages/student-enroll.html"
+                    >
+                        <i class="bi bi-plus-lg me-2"></i>Add Student
+                    </a>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div
+                            class="stat-icon"
+                            style="
+                                background: var(--primary-light);
+                                color: var(--primary);
+                            "
+                        >
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <div class="stat-number" id="totalStudentsList">0</div>
+                        <div class="stat-label">Total Students</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div
+                            class="stat-icon"
+                            style="background: #ecfdf5; color: var(--success)"
+                        >
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <div class="stat-number" id="activeStudentsList">0</div>
+                        <div class="stat-label">Active Students</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div
+                            class="stat-icon"
+                            style="background: #fff7ed; color: var(--warning)"
+                        >
+                            <i class="bi bi-clock-fill"></i>
+                        </div>
+                        <div class="stat-number" id="pendingStudentsList">
+                            0
+                        </div>
+                        <div class="stat-label">Pending Approvals</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div
+                            class="stat-icon"
+                            style="background: #fef2f2; color: var(--danger)"
+                        >
+                            <i class="bi bi-person-x-fill"></i>
+                        </div>
+                        <div class="stat-number" id="inactiveStudentsList">
+                            0
+                        </div>
+                        <div class="stat-label">Inactive Students</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search & Filter Bar -->
+            <div class="search-filter-bar">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-4 position-relative">
+                        <i
+                            class="bi bi-search position-absolute start-0 ms-3 mt-3 translate-middle-y text-secondary"
+                        ></i>
+                        <input
+                            type="text"
+                            class="form-control ps-5"
+                            placeholder="Search by name, ID, or email..."
+                        />
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select filter-select">
+                            <option>All Classes</option>
+                            <option>Grade 9</option>
+                            <option>Grade 10</option>
+                            <option>Grade 11</option>
+                            <option>Grade 12</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select filter-select">
+                            <option>All Status</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                            <option>Pending</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select filter-select">
+                            <option>Sort By</option>
+                            <option>Name (A-Z)</option>
+                            <option>Name (Z-A)</option>
+                            <option>Date (Newest)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <div class="btn-group view-toggle">
+                            <button class="view-toggle-btn active">
+                                <i class="bi bi-list-ul"></i>
+                            </button>
+                            <button class="view-toggle-btn">
+                                <i class="bi bi-grid-3x3-gap-fill"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table View -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div
+                        class="d-flex justify-content-between align-items-center"
+                    >
+                        <h6 class="mb-0 fw-bold">All Students</h6>
+                        <span class="badge bg-light text-secondary border"
+                            >1,248 Records</span
+                        >
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0 align-middle">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px">
+                                        <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                        />
+                                    </th>
+                                    <th>Student</th>
+                                    <th>Student ID</th>
+                                    <th>Class</th>
+                                    <th>Teacher</th>
+                                    <th>Phone</th>
+                                    <th>Enrollment Date</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS will populate this -->
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                        />
+                                    </td>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="avatar bg-primary">
+                                                EW
+                                            </div>
+                                            <div>
+                                                <div class="student-name">
+                                                    Emma Wilson
+                                                </div>
+                                                <div class="student-email">
+                                                    emma@example.com
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-secondary fw-medium">
+                                        STD-001
+                                    </td>
+                                    <td>Grade 10</td>
+                                    <td>Dr. Linda</td>
+                                    <td class="text-secondary">+123456789</td>
+                                    <td class="text-secondary">Oct 24, 2025</td>
+                                    <td>
+                                        <span class="badge badge-active"
+                                            >Active</span
+                                        >
+                                    </td>
+                                    <td class="text-end">
+                                        <button class="table-action-btn">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="table-action-btn">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card View -->
+            <div class="row g-4" style="display: none">
+                <!-- JS will populate this -->
+            </div>
+        </div>
+
+        <!-- Add Student Modal -->
+        <div
+            class="modal fade"
+            id="addStudentModal"
+            tabindex="-1"
+            aria-labelledby="addStudentModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title" id="addStudentModalLabel">
+                            <i class="bi bi-person-plus-fill me-2"></i>Add New
+                            Student
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div
+                        class="modal-body"
+                        style="max-height: 75vh; overflow-y: auto"
+                    >
+                        <form>
+                            <!-- Form Content Preserved/Simplifed for visual demo - Logic handled by main.js -->
+                            <div class="p-3">
+                                <h6 class="text-primary mb-3">
+                                    Student Information
+                                </h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label"
+                                            >First Name</label
+                                        ><input
+                                            type="text"
+                                            class="form-control"
+                                        />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label"
+                                            >Last Name</label
+                                        ><input
+                                            type="text"
+                                            class="form-control"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-light border"
+                            data-bs-dismiss="modal"
+                        >
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary">
+                            Save Student
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>

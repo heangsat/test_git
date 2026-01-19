@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <base href="/test_git/" />
+        <title>Enroll New Student - EduManage</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <i class="bi bi-mortarboard-fill"></i> EduManage
+            </div>
+
+            <div class="d-flex flex-column gap-1 flex-grow-1">
+                <a href="index.html" class="nav-link">
+                    <i class="bi bi-grid"></i> Dashboard
+                </a>
+                <a href="pages/student-list.html" class="nav-link active">
+                    <i class="bi bi-people"></i> Students
+                </a>
+                <a href="pages/course.html" class="nav-link">
+                    <i class="bi bi-book"></i> Courses
+                </a>
+                <a href="pages/attendance.html" class="nav-link">
+                    <i class="bi bi-calendar-check"></i> Attendance
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="bi bi-bar-chart"></i> Reports
+                </a>
+            </div>
+
+            <div class="support-card">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <div class="bg-white bg-opacity-10 p-2 rounded">
+                        <i class="bi bi-headset"></i>
+                    </div>
+                    <div class="fw-semibold">Support Center</div>
+                </div>
+                <p class="small opacity-75 mb-3">
+                    Need help? Contact our support team 24/7.
+                </p>
+                <button
+                    class="btn btn-sm btn-light w-100 fw-medium text-primary"
+                >
+                    Get Help
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="page-title">Enroll New Student</h2>
+                    <p class="text-secondary mb-0">
+                        Fill out the form below to register a new student.
+                    </p>
+                </div>
+                <div style="width: 200px">
+                    <div
+                        class="d-flex justify-content-between text-secondary small fw-bold mb-1"
+                    >
+                        <span>Progress</span>
+                        <span>25%</span>
+                    </div>
+                    <div class="progress">
+                        <div
+                            class="progress-bar"
+                            role="progressbar"
+                            style="width: 25%"
+                            id="progressBar"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="enrollmentForm">
+                <div class="row g-4">
+                    <!-- 1. Personal Information -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-person-circle me-2"></i>
+                                Personal Information
+                            </div>
+                            <div class="card-body">
+                                <div
+                                    class="d-flex align-items-center mb-4 gap-4"
+                                >
+                                    <img
+                                        src="https://via.placeholder.com/140x140/EEF2FF/4F46E5?text=Photo"
+                                        alt="Student Photo"
+                                        class="photo-preview"
+                                        id="photoPreview"
+                                    />
+                                    <div>
+                                        <h6 class="fw-bold mb-1">
+                                            Profile Photo
+                                        </h6>
+                                        <p class="text-secondary small mb-3">
+                                            Upload a clear passport-sized photo.
+                                        </p>
+                                        <label
+                                            class="btn btn-sm btn-secondary-custom"
+                                        >
+                                            <i class="bi bi-camera me-2"></i>
+                                            Upload Image
+                                            <input
+                                                type="file"
+                                                class="d-none"
+                                                accept="image/*"
+                                                id="photoUpload"
+                                            />
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label"
+                                            >First Name
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="firstName"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label"
+                                            >Middle Name</label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="middleName"
+                                        />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label"
+                                            >Last Name
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="lastName"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label"
+                                            >Student ID
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="studentId"
+                                            placeholder="e.g. STD-2025-001"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label"
+                                            >Date of Birth
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="date"
+                                            class="form-control"
+                                            name="dob"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Gender</label>
+                                        <select
+                                            class="form-select"
+                                            name="gender"
+                                        >
+                                            <option selected value="">
+                                                Select...
+                                            </option>
+                                            <option>Male</option>
+                                            <option>Female</option>
+                                            <option>Non-binary</option>
+                                            <option>Prefer not to say</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label"
+                                            >Nationality</label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="nationality"
+                                            placeholder="e.g. Cambodian"
+                                        />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label"
+                                            >Ethnicity (Optional)</label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="ethnicity"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Contact Information -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-telephone-fill me-2"></i>
+                                Contact Information
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label"
+                                            >Personal Email</label
+                                        >
+                                        <input
+                                            type="email"
+                                            class="form-control"
+                                            name="personalEmail"
+                                        />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label"
+                                            >Mobile Phone
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="tel"
+                                            class="form-control"
+                                            name="phone"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label"
+                                            >Address</label
+                                        >
+                                        <div class="row g-3">
+                                            <div class="col-md-8">
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    name="address"
+                                                    placeholder="Street Address"
+                                                />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    name="addressCity"
+                                                    placeholder="City"
+                                                />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    name="province"
+                                                    placeholder="State/Province"
+                                                />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    name="postalCode"
+                                                    placeholder="Postal/ZIP Code"
+                                                />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select
+                                                    class="form-select"
+                                                    name="country"
+                                                >
+                                                    <option>Country</option>
+                                                    <option selected>
+                                                        Cambodia
+                                                    </option>
+                                                    <option>Thailand</option>
+                                                    <option>Vietnam</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mt-4">
+                                        <h6 class="fw-bold text-primary mb-3">
+                                            Emergency Contact
+                                        </h6>
+                                        <div
+                                            class="row g-3 p-3 bg-light rounded border border-light"
+                                        >
+                                            <div class="col-md-4">
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    name="emergencyName"
+                                                    placeholder="Full Name"
+                                                    required
+                                                />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    name="emergencyRelationship"
+                                                    placeholder="Relationship"
+                                                    required
+                                                />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input
+                                                    type="tel"
+                                                    class="form-control"
+                                                    name="emergencyPhone"
+                                                    placeholder="Phone"
+                                                    required
+                                                />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input
+                                                    type="email"
+                                                    class="form-control"
+                                                    name="emergencyEmail"
+                                                    placeholder="Email"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Academic Information -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-book-fill me-2"></i> Academic
+                                Details
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label"
+                                            >Enrollment Date
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <input
+                                            type="date"
+                                            class="form-control"
+                                            name="enrollmentDate"
+                                            required
+                                        />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label"
+                                            >Grade Level
+                                            <span class="text-danger"
+                                                >*</span
+                                            ></label
+                                        >
+                                        <select
+                                            class="form-select"
+                                            name="gradeLevel"
+                                            required
+                                        >
+                                            <option selected>Choose...</option>
+                                            <option>Grade 9</option>
+                                            <option>Grade 10</option>
+                                            <option>Grade 11</option>
+                                            <option>Grade 12</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label"
+                                            >Program / Major</label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="program"
+                                            placeholder="e.g. Science, IB"
+                                        />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label"
+                                            >Previous School</label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="previousSchool"
+                                        />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label"
+                                            >Graduation Year (Expected)</label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="graduationYear"
+                                            placeholder="e.g. 2028"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Additional Details -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="bi bi-folder-fill me-2"></i>
+                                Additional Information
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label"
+                                            >Parent/Guardian Name</label
+                                        >
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="parentGuardianName"
+                                        />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label"
+                                            >Language Preference</label
+                                        >
+                                        <select
+                                            class="form-select"
+                                            name="languagePreference"
+                                        >
+                                            <option>English</option>
+                                            <option>ភាសាខ្មែរ (Khmer)</option>
+                                            <option>Français</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label"
+                                            >Medical / Accessibility
+                                            Needs</label
+                                        >
+                                        <textarea
+                                            class="form-control"
+                                            rows="3"
+                                            name="accessibilityNeeds"
+                                            placeholder="Allergies, disabilities, or specific accommodations..."
+                                        ></textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label"
+                                            >Scholarship Status</label
+                                        >
+                                        <select
+                                            class="form-select"
+                                            name="scholarship"
+                                        >
+                                            <option>None</option>
+                                            <option>Full Scholarship</option>
+                                            <option>Partial Scholarship</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="col-12 text-end pt-3">
+                        <button
+                            type="button"
+                            class="btn btn-secondary-custom me-2"
+                            onclick="history.back()"
+                        >
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-submit px-4">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            Complete Enrollment
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
