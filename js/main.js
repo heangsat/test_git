@@ -58,6 +58,50 @@ function initData() {
         status: "Active",
         avatarColor: "#7209b7",
       },
+      {
+        id: "STD-2024-005",
+        firstName: "Ava",
+        lastName: "Garcia",
+        email: "ava.g@email.com",
+        phone: "+1 234 567 8905",
+        class: "Grade 11 - Mathematics",
+        enrollDate: "2024-08-20",
+        status: "Active",
+        avatarColor: "#f77f00",
+      },
+      {
+        id: "STD-2024-006",
+        firstName: "Noah",
+        lastName: "Martinez",
+        email: "noah.m@email.com",
+        phone: "+1 234 567 8906",
+        class: "Grade 9 - English Lit",
+        enrollDate: "2024-07-15",
+        status: "Active",
+        avatarColor: "#d62828",
+      },
+      {
+        id: "STD-2024-007",
+        firstName: "Isabella",
+        lastName: "Davis",
+        email: "isabella.d@email.com",
+        phone: "+1 234 567 8907",
+        class: "Grade 12 - Physics",
+        enrollDate: "2024-06-01",
+        status: "Active",
+        avatarColor: "#003566",
+      },
+      {
+        id: "STD-2024-008",
+        firstName: "Mason",
+        lastName: "Rodriguez",
+        email: "mason.r@email.com",
+        phone: "+1 234 567 8908",
+        class: "Grade 10 - Science A",
+        enrollDate: "2024-05-10",
+        status: "Inactive",
+        avatarColor: "#588157",
+      },
     ];
     localStorage.setItem("eduManage_students", JSON.stringify(initialStudents));
   }
@@ -847,6 +891,9 @@ function initAttendance() {
     filterDate.value = getTodayStr();
   }
 
+  // Populate class filter options
+  populateClassFilter();
+
   function loadAttendance() {
     if (!tbody) return;
     tbody.innerHTML = "";
@@ -863,9 +910,9 @@ function initAttendance() {
     // Get attendance record for the selected date
     const dailyRecord = allAttendance[selectedDate] || {};
 
-    // Filter students
+    // Filter students - Show ALL students for attendance tracking
     const filteredStudents = students.filter((s) => {
-      if (s.status !== "Active") return false; // Only active students
+      // Include all students regardless of status for attendance tracking
       if (
         selectedClass !== "All" &&
         selectedClass !== "All Classes" &&
@@ -879,8 +926,12 @@ function initAttendance() {
       tbody.innerHTML =
         '<tr><td colspan="6" class="text-center py-4">No students found for this class</td></tr>';
       updateAttendanceStats(0);
+      updateStudentCountBadge(0);
       return;
     }
+
+    // Update student count badge
+    updateStudentCountBadge(filteredStudents.length);
 
     filteredStudents.forEach((student) => {
       const tr = document.createElement("tr");
@@ -910,12 +961,16 @@ function initAttendance() {
         timeText = "08:15 AM";
       }
 
+      // Show status indicator for inactive students
+      const statusIndicator = student.status !== "Active" ?
+        `<span class="badge bg-secondary ms-2" style="font-size: 0.7rem;">${student.status}</span>` : "";
+
       tr.innerHTML = `
                 <td>
                     <div class="student-info">
                         <div class="student-avatar" style="background: linear-gradient(135deg, ${student.avatarColor || "#4361ee"}, #3f37c9);">${initials}</div>
                         <div>
-                            <div><strong>${student.firstName} ${student.lastName}</strong></div>
+                            <div><strong>${student.firstName} ${student.lastName}</strong>${statusIndicator}</div>
                             <small class="text-muted">${student.email}</small>
                         </div>
                     </div>
@@ -923,9 +978,9 @@ function initAttendance() {
                 <td class="text-secondary fw-medium">${student.id}</td>
                 <td>${student.class || "N/A"}</td>
                 <td class="attendance-status">
-                    <button class="btn-status btn-present ${presentActive}" data-action="present" title="Present"><i class="bi bi-check-circle-fill"></i></button>
-                    <button class="btn-status btn-absent ${absentActive}" data-action="absent" title="Absent"><i class="bi bi-x-circle-fill"></i></button>
-                    <button class="btn-status btn-late ${lateActive}" data-action="late" title="Late"><i class="bi bi-clock-fill"></i></button>
+                    <button class="btn-status btn-present ${presentActive}" data-action="present" title="Mark Present"><i class="bi bi-check-circle-fill"></i></button>
+                    <button class="btn-status btn-absent ${absentActive}" data-action="absent" title="Mark Absent"><i class="bi bi-x-circle-fill"></i></button>
+                    <button class="btn-status btn-late ${lateActive}" data-action="late" title="Mark Late"><i class="bi bi-clock-fill"></i></button>
                 </td>
                 <td class="time-log text-secondary">${timeText}</td>
                 <td><span class="badge ${badgeClass}">${badgeText}</span></td>
@@ -982,12 +1037,19 @@ function initAttendance() {
       );
 
       let csvContent =
-        "data:text/csv;charset=utf-8,Student ID,Name,Date,Status\n";
+        "data:text/csv;charset=utf-8,Student ID,Name,Class,Status,Date,Time\n";
 
       students.forEach((s) => {
-        if (dailyData[s.id]) {
-          csvContent += `${s.id},${s.firstName} ${s.lastName},${selectedDate},${dailyData[s.id]}\n`;
+        const attendanceStatus = dailyData[s.id] || "Not Marked";
+        let timeEntry = "";
+
+        if (attendanceStatus === "present") {
+          timeEntry = "08:00 AM";
+        } else if (attendanceStatus === "late") {
+          timeEntry = "08:15 AM";
         }
+
+        csvContent += `"${s.id}","${s.firstName} ${s.lastName}","${s.class || 'N/A'}","${attendanceStatus}","${selectedDate}","${timeEntry}"\n`;
       });
 
       const encodedUri = encodeURI(csvContent);
@@ -997,6 +1059,8 @@ function initAttendance() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      alert(`Attendance report exported successfully!\nDate: ${selectedDate}\nTotal Students: ${students.length}`);
     });
   }
 
@@ -1029,6 +1093,43 @@ function initAttendance() {
   }
 }
 
+function populateClassFilter() {
+  const filterClass = document.getElementById("filterClass");
+  if (!filterClass) return;
+
+  const students = JSON.parse(
+    localStorage.getItem("eduManage_students") || "[]",
+  );
+
+  // Get unique classes
+  const classes = new Set();
+  students.forEach(student => {
+    if (student.class) {
+      classes.add(student.class);
+    }
+  });
+
+  // Clear existing options except "All Classes"
+  while (filterClass.options.length > 1) {
+    filterClass.remove(1);
+  }
+
+  // Add class options
+  Array.from(classes).sort().forEach(className => {
+    const option = document.createElement("option");
+    option.value = className;
+    option.textContent = className;
+    filterClass.appendChild(option);
+  });
+}
+
+function updateStudentCountBadge(count) {
+  const badge = document.getElementById("studentCountBadge");
+  if (badge) {
+    badge.textContent = `${count} Student${count !== 1 ? 's' : ''}`;
+  }
+}
+
 function updateAttendanceStats(totalVisible) {
   const tbody = document.getElementById("attendanceTbody");
   if (!tbody) return;
@@ -1037,11 +1138,13 @@ function updateAttendanceStats(totalVisible) {
   let present = 0;
   let absent = 0;
   let late = 0;
+  let pending = 0;
 
   rows.forEach((row) => {
     if (row.querySelector(".btn-present.active")) present++;
     else if (row.querySelector(".btn-absent.active")) absent++;
     else if (row.querySelector(".btn-late.active")) late++;
+    else pending++;
   });
 
   if (document.getElementById("attendancePresent")) {
@@ -1049,10 +1152,10 @@ function updateAttendanceStats(totalVisible) {
     document.getElementById("attendanceAbsent").textContent = absent;
     document.getElementById("attendanceLate").textContent = late;
 
-    // Use totalVisible for accurate percentage relative to list size
+    // Calculate attendance percentage (present + half late count as full attendance)
     const total = totalVisible !== undefined ? totalVisible : rows.length;
-    const avg =
-      total > 0 ? Math.round(((present + late * 0.5) / total) * 100) : 0;
+    const attendanceScore = present + (late * 0.5); // Late students get half credit
+    const avg = total > 0 ? Math.round((attendanceScore / total) * 100) : 0;
     document.getElementById("attendanceAverage").textContent = avg + "%";
   }
 }
