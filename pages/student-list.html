@@ -16,7 +16,7 @@
             href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
             rel="stylesheet"
         />
-        <link rel="stylesheet" href="../css/style.css" />
+        <link rel="stylesheet" href="../css/style.css?v=1737734400" />
     </head>
 
     <body>
@@ -55,7 +55,7 @@
                     Need help? Contact our support team 24/7.
                 </p>
                 <button
-                    class="btn btn-sm btn-light w-100 fw-medium text-primary"
+                    class="btn btn-sm btn-light w-100 fw-medium text-white"
                 >
                     Get Help
                 </button>
@@ -63,7 +63,7 @@
         </nav>
 
         <!-- Main Content -->
-        <div class="main-content">
+        <main class="main-content">
             <div class="d-flex justify-content-between align-items-center mb-5">
                 <div>
                     <h2 class="page-title">Students Management</h2>
@@ -202,19 +202,19 @@
             </div>
 
             <!-- Table View -->
-            <div class="card mb-4">
+            <div class="card mb-4 table-card">
                 <div class="card-header">
                     <div
                         class="d-flex justify-content-between align-items-center"
                     >
                         <h6 class="mb-0 fw-bold">All Students</h6>
-                        <span class="badge bg-light text-secondary border"
-                            >1,248 Records</span
+                        <span class="badge bg-light text-secondary border" id="recordCount"
+                            >0 Records</span
                         >
                     </div>
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive">
+                    <div class="table-responsive table-scroll">
                         <table class="table mb-0 align-middle">
                             <thead>
                                 <tr>
@@ -289,7 +289,7 @@
             <div class="row g-4" style="display: none">
                 <!-- JS will populate this -->
             </div>
-        </div>
+        </main>
 
         <!-- Add Student Modal -->
         <div

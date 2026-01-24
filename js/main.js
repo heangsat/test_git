@@ -1,17 +1,86 @@
 /**
  * EduManage - Main JavaScript File
- * Handles logic for Login, Dashboard, Student List, and Enrollment.
- * Uses localStorage for data persistence.
+ * ===================================
+ * 
+ * This file handles all client-side logic for the EduManage Student Management System.
+ * 
+ * FEATURES:
+ * - User Authentication (Login/Logout)
+ * - Dashboard Statistics & Overview
+ * - Student Management (List, Add, Edit, Delete)
+ * - Course Management (CRUD operations)
+ * - Attendance Tracking (Daily records with export)
+ * - Student Detail View
+ * 
+ * DATA PERSISTENCE:
+ * All data is stored in localStorage with the following keys:
+ * - eduManage_user: Current logged-in user session
+ * - eduManage_remember: Remembered email for "Remember Me" feature
+ * - eduManage_students: Array of student objects
+ * - eduManage_courses: Array of course objects
+ * - eduManage_attendance_v2: Nested object {date: {studentId: status}}
+ * 
+ * CREDENTIALS FOR TESTING:
+ * - Admin: admin@school.edu / admin123
+ * - Teacher: teacher@school.edu / teacher123
  */
 
+/**
+ * APPLICATION ENTRY POINT
+ * -----------------------
+ * Waits for DOM to fully load before initializing the application.
+ * This ensures all HTML elements are available for JavaScript manipulation.
+ * 
+ * Flow: DOM Ready → Initialize Data → Route to Page
+ */
 document.addEventListener("DOMContentLoaded", () => {
   console.log("EduManage JS v2.3 Loaded");
-  initData();
-  routePage();
+  initData();   // Seed initial data if localStorage is empty
+  routePage();  // Determine current page and initialize appropriate functions
 });
 
-// --- Data Initialization ---
+// ============================================================================
+// DATA INITIALIZATION
+// ============================================================================
+
+/**
+ * initData() - Seeds localStorage with sample data
+ * ------------------------------------------------
+ * PURPOSE: Provides initial sample data for demonstration purposes.
+ * 
+ * HOW IT WORKS:
+ * 1. Checks if 'eduManage_students' key exists in localStorage
+ * 2. If NOT exists → Creates 8 sample student records
+ * 3. Checks if 'eduManage_courses' key exists in localStorage  
+ * 4. If NOT exists → Creates 6 sample course records
+ * 
+ * STUDENT OBJECT STRUCTURE:
+ * {
+ *   id: "STD-2024-001",      // Unique student identifier
+ *   firstName: "Emma",        // Student's first name
+ *   lastName: "Wilson",       // Student's last name
+ *   email: "email@email.com", // Contact email
+ *   phone: "+1 234 567 8901", // Phone number
+ *   class: "Grade 10 - Science A", // Enrolled class
+ *   enrollDate: "2024-05-12", // Enrollment date (YYYY-MM-DD)
+ *   status: "Active",         // Status: Active, Inactive, Pending
+ *   avatarColor: "#4361ee"    // Avatar background color
+ * }
+ * 
+ * COURSE OBJECT STRUCTURE:
+ * {
+ *   id: "CRSE-001",           // Unique course identifier
+ *   code: "MATH-101",         // Course code for display
+ *   title: "Advanced Mathematics", // Course title
+ *   students: 28,             // Number of enrolled students
+ *   hours: 48,                // Total course hours
+ *   instructor: "Michael Kumar", // Instructor name
+ *   status: "Active",         // Status: Active, Upcoming, Completed
+ *   theme: "blue"             // Card theme color
+ * }
+ */
 function initData() {
+  // Check if student data already exists, if not, seed with sample data
   if (!localStorage.getItem("eduManage_students")) {
     const initialStudents = [
       {
@@ -44,7 +113,7 @@ function initData() {
         phone: "+1 234 567 8903",
         class: "Grade 9 - English Lit",
         enrollDate: "2024-08-15",
-        status: "Absent",
+        status: "Active",
         avatarColor: "#4cc9f0",
       },
       {
@@ -173,10 +242,37 @@ function initData() {
   }
 }
 
-// --- Routing ---
+// ============================================================================
+// PAGE ROUTING & NAVIGATION
+// ============================================================================
+
+/**
+ * routePage() - Page Router / Controller
+ * ---------------------------------------
+ * PURPOSE: Determines which page is currently loaded and initializes
+ *          the appropriate functions for that page.
+ * 
+ * HOW IT WORKS:
+ * 1. Gets current URL pathname (e.g., "/pages/student-list.html")
+ * 2. Extracts the filename (e.g., "student-list.html")
+ * 3. Uses if-else to match page and call corresponding init function
+ * 4. Protected pages check authentication before initializing
+ * 
+ * PAGE → FUNCTION MAPPING:
+ * - login.html        → initLogin()
+ * - index.html        → initDashboard() + initGlobalSearch()
+ * - student-list.html → initStudentList()
+ * - student-enroll.html → initEnrollment()
+ * - course.html       → initCourses()
+ * - attendance.html   → initAttendance()
+ * - student-detail.html → initStudentDetail()
+ * 
+ * SECURITY: All pages except login.html require authentication.
+ *           If not authenticated, user is redirected to login page.
+ */
 function routePage() {
-  const path = window.location.pathname;
-  const page = path.split("/").pop();
+  const path = window.location.pathname;  // Get full URL path
+  const page = path.split("/").pop();     // Extract filename from path
 
   if (page === "login.html") {
     initLogin();
@@ -201,10 +297,26 @@ function routePage() {
     initStudentDetail();
   }
 
-  highlightNav(page);
-  initLogout();
+  highlightNav(page);  // Highlight current page in navigation
+  initLogout();         // Setup logout button event listener
 }
 
+/**
+ * checkAuth() - Authentication Guard
+ * -----------------------------------
+ * PURPOSE: Protects pages from unauthorized access.
+ * 
+ * HOW IT WORKS:
+ * 1. Checks if 'eduManage_user' exists in localStorage
+ * 2. If user NOT found → Redirects to login page
+ * 3. If user found → Returns true (allows page access)
+ * 
+ * REDIRECT LOGIC:
+ * - If current path includes '/pages/' → redirect to 'login.html' (same folder)
+ * - Otherwise → redirect to 'pages/login.html' (from root)
+ * 
+ * @returns {boolean} - true if authenticated, false if redirected
+ */
 function checkAuth() {
   const user = localStorage.getItem("eduManage_user");
   if (!user) {
@@ -215,6 +327,19 @@ function checkAuth() {
   return true;
 }
 
+/**
+ * highlightNav(page) - Navigation Active State
+ * ---------------------------------------------
+ * PURPOSE: Visually indicates which page is currently active in the sidebar.
+ * 
+ * HOW IT WORKS:
+ * 1. Selects all elements with class '.nav-link'
+ * 2. Removes 'active' class from all links
+ * 3. Compares each link's href with current page
+ * 4. Adds 'active' class to matching link
+ * 
+ * @param {string} page - Current page filename (e.g., "student-list.html")
+ */
 function highlightNav(page) {
   const links = document.querySelectorAll(".nav-link");
   links.forEach((link) => {
@@ -231,17 +356,42 @@ function highlightNav(page) {
   });
 }
 
+/**
+ * initLogout() - Logout Button Handler
+ * -------------------------------------
+ * PURPOSE: Handles user logout by clearing session and redirecting.
+ * 
+ * HOW IT WORKS:
+ * 1. Finds the logout link (any link containing 'login.html' in href)
+ * 2. Attaches click event listener
+ * 3. On click: Prevents default navigation
+ * 4. Removes 'eduManage_user' from localStorage (clears session)
+ * 5. Redirects to login page
+ */
 function initLogout() {
   const logoutBtn = document.querySelector('a[href*="login.html"]');
   if (logoutBtn) {
     logoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.removeItem("eduManage_user");
+      e.preventDefault();  // Stop normal link behavior
+      localStorage.removeItem("eduManage_user");  // Clear user session
       window.location.href = logoutBtn.getAttribute("href");
     });
   }
 }
 
+/**
+ * initGlobalSearch() - Global Search Handler
+ * -------------------------------------------
+ * PURPOSE: Placeholder for global search functionality on dashboard.
+ * 
+ * HOW IT WORKS:
+ * 1. Finds the search input element
+ * 2. Listens for 'Enter' key press
+ * 3. Currently shows alert (placeholder for future backend implementation)
+ * 
+ * NOTE: Full implementation would require backend search API or
+ *       complex client-side indexing across all data.
+ */
 function initGlobalSearch() {
   const searchInput = document.querySelector(".search-input");
   if (searchInput) {
@@ -255,7 +405,33 @@ function initGlobalSearch() {
   }
 }
 
-// --- Login Logic ---
+// ============================================================================
+// LOGIN / AUTHENTICATION
+// ============================================================================
+
+/**
+ * initLogin() - Login Form Handler
+ * ---------------------------------
+ * PURPOSE: Handles user authentication via login form.
+ * 
+ * HOW IT WORKS:
+ * 1. Gets login form and error message elements
+ * 2. Attaches submit event listener to form
+ * 3. On submit:
+ *    a. Prevents default form submission
+ *    b. Extracts email and password from inputs
+ *    c. Validates against hardcoded credentials
+ *    d. If valid: Stores user in localStorage, redirects to dashboard
+ *    e. If invalid: Shows error message
+ * 
+ * VALID CREDENTIALS:
+ * - admin@school.edu / admin123 (Role: Admin)
+ * - teacher@school.edu / teacher123 (Role: Admin)
+ * 
+ * REMEMBER ME FEATURE:
+ * - If checked: Saves email to 'eduManage_remember'
+ * - On page load: Pre-fills email if previously saved
+ */
 function initLogin() {
   const loginForm = document.getElementById("loginForm");
   const errorMsg = document.getElementById("errorMessage");
@@ -292,9 +468,34 @@ function initLogin() {
   }
 }
 
-// --- Dashboard Logic ---
+// ============================================================================
+// DASHBOARD
+// ============================================================================
+
+/**
+ * initDashboard() - Dashboard Initialization
+ * -------------------------------------------
+ * PURPOSE: Displays overview statistics and recent data on the main dashboard.
+ * 
+ * STATISTICS DISPLAYED:
+ * 1. Total Students - Count of all students in system
+ * 2. Active Courses - Count of courses with status 'Active'
+ * 3. Pending Students - Students awaiting approval
+ * 4. Today's Attendance - Percentage of students marked present today
+ * 
+ * DYNAMIC CONTENT:
+ * - Welcome Message: Greets user by role (from localStorage)
+ * - Class Cards: Shows up to 2 active courses with instructor info
+ * - Recent Admissions Table: Last 5 enrolled students (newest first)
+ * 
+ * DATA SOURCES:
+ * - eduManage_students (localStorage)
+ * - eduManage_courses (localStorage)
+ * - eduManage_attendance_v2 (localStorage)
+ */
 function initDashboard() {
   console.log("Initializing Dashboard components...");
+  // Load data from localStorage
   const students = JSON.parse(
     localStorage.getItem("eduManage_students") || "[]",
   );
@@ -400,14 +601,41 @@ function initDashboard() {
   }
 }
 
-// --- Student List Logic ---
+// ============================================================================
+// STUDENT LIST
+// ============================================================================
+
+/**
+ * initStudentList() - Student List Page Handler
+ * -----------------------------------------------
+ * PURPOSE: Displays, filters, and manages the student list with CRUD operations.
+ * 
+ * FEATURES:
+ * 1. Display all students in a data table
+ * 2. Real-time search (by name, ID, or email)
+ * 3. Filter by class
+ * 4. Filter by status (Active, Pending, Inactive)
+ * 5. Sort by name (A-Z, Z-A) or date (Newest)
+ * 6. View, Edit, Delete actions for each student
+ * 
+ * INNER FUNCTIONS:
+ * - updateListStats(): Updates counter badges (total, active, pending, inactive)
+ * - renderTable(data): Renders filtered student data into HTML table
+ * - attachActionEvents(): Binds click handlers to View/Edit/Delete buttons
+ * - deleteStudent(id): Removes student from localStorage
+ * - filterAndRender(): Applies all filters and re-renders table
+ * 
+ * TABLE COLUMNS:
+ * Checkbox | Student Info | ID | Class | Advisor | Phone | Enroll Date | Status | Actions
+ */
 function initStudentList() {
+  // Load students from localStorage
   const students = JSON.parse(
     localStorage.getItem("eduManage_students") || "[]",
   );
   const tbody = document.querySelector("table tbody");
 
-  // Filter Elements
+  // Filter Elements - Get references to filter inputs
   const searchInput = document.getElementById("studentSearch");
   const filterClass = document.getElementById("studentFilterClass");
   const filterStatus = document.getElementById("studentFilterStatus");
@@ -452,12 +680,15 @@ function initStudentList() {
       else statusBadge = '<span class="badge badge-pending">Pending</span>';
 
       const initials = getInitials(student.firstName + " " + student.lastName);
+      const avatarHtml = student.photo 
+        ? `<img src="${student.photo}" class="avatar" style="object-fit: cover;" alt="${student.firstName}">`
+        : `<div class="avatar" style="background: linear-gradient(135deg, ${student.avatarColor || "#4361ee"}, #3f37c9);">${initials}</div>`;
 
       tr.innerHTML = `
                 <td><input type="checkbox" class="form-check-input"></td>
                 <td>
                     <div class="student-info">
-                        <div class="avatar" style="background: linear-gradient(135deg, ${student.avatarColor || "#4361ee"}, #3f37c9);">${initials}</div>
+                        ${avatarHtml}
                         <div>
                             <div class="student-name">${student.firstName} ${student.lastName}</div>
                             <div class="student-email">${student.email || "N/A"}</div>
@@ -569,15 +800,47 @@ function initStudentList() {
   filterAndRender();
 }
 
-// --- Enrollment Logic (Add/Edit) ---
+// ============================================================================
+// STUDENT ENROLLMENT (ADD / EDIT)
+// ============================================================================
+
+/**
+ * initEnrollment() - Student Enrollment Form Handler
+ * ----------------------------------------------------
+ * PURPOSE: Handles both adding new students and editing existing students.
+ * 
+ * MODE DETECTION:
+ * - ADD MODE: URL has no 'id' parameter (e.g., student-enroll.html)
+ * - EDIT MODE: URL has 'id' parameter (e.g., student-enroll.html?id=STD-2024-001)
+ * 
+ * FEATURES:
+ * 1. Photo upload with preview (uses FileReader API)
+ * 2. Form validation (HTML5 required attributes)
+ * 3. Duplicate ID check for new students
+ * 4. Pre-fills form when editing existing student
+ * 
+ * FORM FIELDS:
+ * - Personal: firstName, lastName, studentId, dob, gender
+ * - Contact: personalEmail, phone
+ * - Academic: gradeLevel, program, enrollmentDate
+ * - Emergency: emergencyName, emergencyRelationship, emergencyPhone
+ * - Photo: photoUpload (optional)
+ * 
+ * ON SUBMIT:
+ * - Creates student object from form data
+ * - For new: Validates unique ID, adds to array
+ * - For edit: Updates existing student in array
+ * - Saves to localStorage and redirects to student list
+ */
 function initEnrollment() {
   const form = document.getElementById("enrollmentForm");
   const photoInput = document.getElementById("photoUpload");
   const photoPreview = document.getElementById("photoPreview");
-  const urlParams = new URLSearchParams(window.location.search);
-  const editId = urlParams.get("id");
+  const urlParams = new URLSearchParams(window.location.search);  // Parse URL query string
+  const editId = urlParams.get("id");  // Get 'id' param if exists (edit mode)
   const titleEl = document.querySelector(".page-title");
   const submitBtn = document.querySelector('button[type="submit"]');
+  let uploadedPhoto = null;
 
   if (editId) {
     if (titleEl) titleEl.textContent = "Edit Student";
@@ -608,6 +871,35 @@ function initEnrollment() {
           form.querySelector('[name="gradeLevel"]').value = parts[0];
         if (parts[1]) form.querySelector('[name="program"]').value = parts[1];
       }
+
+      // Populate emergency contact fields if available, or remove required attribute
+      const emergencyName = form.querySelector('[name="emergencyName"]');
+      const emergencyRelationship = form.querySelector('[name="emergencyRelationship"]');
+      const emergencyPhone = form.querySelector('[name="emergencyPhone"]');
+      
+      if (student.emergencyName) {
+        emergencyName.value = student.emergencyName;
+      } else {
+        emergencyName.removeAttribute("required");
+      }
+      
+      if (student.emergencyRelationship) {
+        emergencyRelationship.value = student.emergencyRelationship;
+      } else {
+        emergencyRelationship.removeAttribute("required");
+      }
+      
+      if (student.emergencyPhone) {
+        emergencyPhone.value = student.emergencyPhone;
+      } else {
+        emergencyPhone.removeAttribute("required");
+      }
+
+      // Load existing photo if available
+      if (student.photo && photoPreview) {
+        photoPreview.src = student.photo;
+        uploadedPhoto = student.photo;
+      }
     }
   }
 
@@ -617,6 +909,7 @@ function initEnrollment() {
         const reader = new FileReader();
         reader.onload = function (e) {
           photoPreview.src = e.target.result;
+          uploadedPhoto = e.target.result;
         };
         reader.readAsDataURL(e.target.files[0]);
       }
@@ -644,6 +937,10 @@ function initEnrollment() {
           formData.get("gradeLevel") +
           (formData.get("program") ? " - " + formData.get("program") : ""),
         enrollDate: formData.get("enrollmentDate"),
+        emergencyName: formData.get("emergencyName"),
+        emergencyRelationship: formData.get("emergencyRelationship"),
+        emergencyPhone: formData.get("emergencyPhone"),
+        photo: uploadedPhoto,
         status: "Active",
         avatarColor: getRandomColor(),
       };
@@ -653,6 +950,10 @@ function initEnrollment() {
         if (index !== -1) {
           studentData.status = students[index].status;
           studentData.avatarColor = students[index].avatarColor;
+          // Preserve existing photo if no new photo uploaded
+          if (!uploadedPhoto && students[index].photo) {
+            studentData.photo = students[index].photo;
+          }
           students[index] = studentData;
           localStorage.setItem("eduManage_students", JSON.stringify(students));
           alert("Student updated successfully!");
@@ -672,13 +973,42 @@ function initEnrollment() {
   }
 }
 
-// --- Course Logic (Add/Edit) ---
+// ============================================================================
+// COURSE MANAGEMENT
+// ============================================================================
+
+/**
+ * initCourses() - Course Management Page Handler
+ * ------------------------------------------------
+ * PURPOSE: Manages courses with card-based UI and CRUD operations.
+ * 
+ * FEATURES:
+ * 1. Display courses as styled cards with color themes
+ * 2. Search courses by title, code, or instructor
+ * 3. Filter by status (Active, Upcoming, Completed)
+ * 4. Filter by subject
+ * 5. Add new course via modal
+ * 6. Edit existing course via modal
+ * 7. Delete course with confirmation
+ * 
+ * INNER FUNCTIONS:
+ * - renderCourses(data): Creates course cards from data array
+ * - attachCourseEvents(): Binds edit/delete button handlers
+ * - filterCourses(): Applies search and filter criteria
+ * 
+ * COURSE CARD DISPLAYS:
+ * - Header: Code badge, title, edit/delete buttons
+ * - Body: Student count, hours, description
+ * - Footer: Instructor avatar, status badge, view button
+ * 
+ * MODAL: Bootstrap Modal for add/edit course form
+ */
 function initCourses() {
   const courses = JSON.parse(localStorage.getItem("eduManage_courses") || "[]");
-  const grid = document.getElementById("coursesGrid");
+  const grid = document.getElementById("coursesGrid");  // Container for course cards
   const modalEl = document.getElementById("courseModal");
-  const modal = new bootstrap.Modal(modalEl);
-  let editId = null;
+  const modal = new bootstrap.Modal(modalEl);  // Bootstrap Modal instance
+  let editId = null;  // Tracks which course is being edited (null = add mode)
 
   // Filters
   const searchInput = document.getElementById("filterCourseSearch");
@@ -877,8 +1207,46 @@ function initCourses() {
   ).length;
 }
 
-// --- Attendance Logic ---
+// ============================================================================
+// ATTENDANCE TRACKING
+// ============================================================================
+
+/**
+ * initAttendance() - Attendance Management Page Handler
+ * -------------------------------------------------------
+ * PURPOSE: Tracks daily student attendance with date-based records.
+ * 
+ * DATA STRUCTURE (eduManage_attendance_v2):
+ * {
+ *   "2024-01-15": {
+ *     "STD-2024-001": "present",
+ *     "STD-2024-002": "absent",
+ *     "STD-2024-003": "late"
+ *   },
+ *   "2024-01-16": { ... }
+ * }
+ * 
+ * FEATURES:
+ * 1. Date picker for viewing/editing historical attendance
+ * 2. Filter by class
+ * 3. Three status buttons per student: Present ✅, Absent ❌, Late ⏰
+ * 4. "Mark All Present" bulk action
+ * 5. Export to CSV functionality
+ * 6. Real-time statistics (present, absent, late, percentage)
+ * 
+ * INNER FUNCTION - loadAttendance():
+ * - Reads students and attendance data
+ * - Filters by selected date and class
+ * - Renders table rows with status buttons
+ * - Updates statistics
+ * 
+ * ATTENDANCE CALCULATION:
+ * - Present = 100% credit
+ * - Late = 50% credit
+ * - Absent = 0% credit
+ */
 function initAttendance() {
+  // Get references to filter and action elements
   const filterDate = document.getElementById("filterDate");
   const filterClass = document.getElementById("filterClass");
   const btnApplyFilter = document.getElementById("btnApplyFilter");
@@ -961,22 +1329,18 @@ function initAttendance() {
         timeText = "08:15 AM";
       }
 
-      // Show status indicator for inactive students
-      const statusIndicator = student.status !== "Active" ?
-        `<span class="badge bg-secondary ms-2" style="font-size: 0.7rem;">${student.status}</span>` : "";
-
       tr.innerHTML = `
                 <td>
                     <div class="student-info">
                         <div class="student-avatar" style="background: linear-gradient(135deg, ${student.avatarColor || "#4361ee"}, #3f37c9);">${initials}</div>
                         <div>
-                            <div><strong>${student.firstName} ${student.lastName}</strong>${statusIndicator}</div>
-                            <small class="text-muted">${student.email}</small>
+                            <div><strong>${student.firstName} ${student.lastName}</strong></div>
                         </div>
                     </div>
                 </td>
                 <td class="text-secondary fw-medium">${student.id}</td>
                 <td>${student.class || "N/A"}</td>
+                <td class="text-secondary small">${student.email}</td>
                 <td class="attendance-status">
                     <button class="btn-status btn-present ${presentActive}" data-action="present" title="Mark Present"><i class="bi bi-check-circle-fill"></i></button>
                     <button class="btn-status btn-absent ${absentActive}" data-action="absent" title="Mark Absent"><i class="bi bi-x-circle-fill"></i></button>
@@ -1093,6 +1457,18 @@ function initAttendance() {
   }
 }
 
+/**
+ * populateClassFilter() - Dynamic Class Dropdown
+ * ------------------------------------------------
+ * PURPOSE: Populates the class filter dropdown with unique class values
+ *          from existing student data.
+ * 
+ * HOW IT WORKS:
+ * 1. Gets all students from localStorage
+ * 2. Extracts unique class names using Set
+ * 3. Clears existing options (except "All Classes")
+ * 4. Adds sorted class names as new options
+ */
 function populateClassFilter() {
   const filterClass = document.getElementById("filterClass");
   if (!filterClass) return;
@@ -1123,6 +1499,13 @@ function populateClassFilter() {
   });
 }
 
+/**
+ * updateStudentCountBadge(count) - Updates Student Count Display
+ * ---------------------------------------------------------------
+ * PURPOSE: Shows the number of students currently displayed in attendance table.
+ * 
+ * @param {number} count - Number of students to display
+ */
 function updateStudentCountBadge(count) {
   const badge = document.getElementById("studentCountBadge");
   if (badge) {
@@ -1130,6 +1513,19 @@ function updateStudentCountBadge(count) {
   }
 }
 
+/**
+ * updateAttendanceStats(totalVisible) - Updates Attendance Statistics
+ * ---------------------------------------------------------------------
+ * PURPOSE: Calculates and displays attendance summary (present, absent, late, %).
+ * 
+ * HOW IT WORKS:
+ * 1. Loops through all table rows
+ * 2. Checks which status button is active
+ * 3. Counts present, absent, late, pending
+ * 4. Calculates percentage: (present + late*0.5) / total * 100
+ * 
+ * @param {number} totalVisible - Total number of students displayed
+ */
 function updateAttendanceStats(totalVisible) {
   const tbody = document.getElementById("attendanceTbody");
   if (!tbody) return;
@@ -1160,10 +1556,31 @@ function updateAttendanceStats(totalVisible) {
   }
 }
 
-// --- Student Detail Logic ---
+// ============================================================================
+// STUDENT DETAIL VIEW
+// ============================================================================
+
+/**
+ * initStudentDetail() - Student Profile Page Handler
+ * ----------------------------------------------------
+ * PURPOSE: Displays detailed information for a single student.
+ * 
+ * URL PARAMETER:
+ * - student-detail.html?id=STD-2024-001
+ * - If no ID provided, shows first student in list
+ * 
+ * DISPLAYS:
+ * 1. Student name and ID
+ * 2. Status badge (Active, Inactive, Pending)
+ * 3. Attendance history (last 5 days)
+ * 
+ * ATTENDANCE HISTORY:
+ * - Shows date and status for last 5 recorded days
+ * - Color-coded: Green=Present, Red=Absent, Yellow=Late
+ */
 function initStudentDetail() {
   const urlParams = new URLSearchParams(window.location.search);
-  const id = urlParams.get("id");
+  const id = urlParams.get("id");  // Get student ID from URL
   const students = JSON.parse(
     localStorage.getItem("eduManage_students") || "[]",
   );
@@ -1231,27 +1648,65 @@ function initStudentDetail() {
   }
 }
 
-// --- Utils ---
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * getRandomColor() - Random Avatar Color Generator
+ * -------------------------------------------------
+ * PURPOSE: Returns a random hex color for student avatars.
+ * 
+ * @returns {string} - Hex color code (e.g., "#4361ee")
+ */
 function getRandomColor() {
   const colors = ["#4361ee", "#3f37c9", "#f72585", "#4cc9f0", "#7209b7"];
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
+/**
+ * getRandomTheme() - Random Course Theme Generator
+ * -------------------------------------------------
+ * PURPOSE: Returns a random theme name for course card styling.
+ * 
+ * @returns {string} - Theme name (e.g., "blue", "purple")
+ */
 function getRandomTheme() {
   const themes = ["blue", "purple", "pink", "green", "orange", "teal"];
   return themes[Math.floor(Math.random() * themes.length)];
 }
 
+/**
+ * getInitials(name) - Extract Initials from Name
+ * ------------------------------------------------
+ * PURPOSE: Converts full name to initials for avatar display.
+ * 
+ * EXAMPLES:
+ * - "John Doe" → "JD"
+ * - "Emma Wilson" → "EW"
+ * - "Michael" → "M"
+ * - null/undefined → "??"
+ * 
+ * @param {string} name - Full name
+ * @returns {string} - 1-2 character initials (uppercase)
+ */
 function getInitials(name) {
   if (!name) return "??";
   return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .substring(0, 2)
-    .toUpperCase();
+    .split(" ")           // Split by spaces
+    .map((n) => n[0])     // Get first letter of each word
+    .join("")             // Join letters
+    .substring(0, 2)      // Take first 2 characters
+    .toUpperCase();       // Convert to uppercase
 }
 
+/**
+ * getTodayStr() - Get Today's Date as String
+ * -------------------------------------------
+ * PURPOSE: Returns current date in YYYY-MM-DD format for attendance keys.
+ * 
+ * @returns {string} - Date string (e.g., "2024-01-15")
+ */
 function getTodayStr() {
   return new Date().toISOString().split("T")[0];
 }

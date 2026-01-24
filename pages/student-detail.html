@@ -16,7 +16,7 @@
             href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
             rel="stylesheet"
         />
-        <link rel="stylesheet" href="../css/style.css" />
+        <link rel="stylesheet" href="../css/style.css?v=1737662400" />
     </head>
 
     <body>
@@ -55,7 +55,7 @@
                     Need help? Contact our support team 24/7.
                 </p>
                 <button
-                    class="btn btn-sm btn-light w-100 fw-medium text-primary"
+                    class="btn btn-sm btn-light w-100 fw-medium text-white"
                 >
                     Get Help
                 </button>
@@ -63,41 +63,67 @@
         </nav>
 
         <!-- Main Content -->
-        <div class="main-content">
+        <main class="main-content main-content-with-sidebar">
+            <!-- Breadcrumb Navigation -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="../index.html" class="text-decoration-none text-secondary">
+                            <i class="bi bi-house-door me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="student-list.html" class="text-decoration-none text-secondary">Students</a>
+                    </li>
+                    <li class="breadcrumb-item active text-primary fw-semibold" aria-current="page">
+                        Emma Wilson
+                    </li>
+                </ol>
+            </nav>
+
             <!-- Profile Header -->
             <div class="profile-header">
-                <div class="profile-status-badge">Active</div>
-                <div class="d-flex align-items-center gap-4">
-                    <img
-                        src="https://ui-avatars.com/api/?name=Emma+Wilson&background=4F46E5&color=fff&size=120"
-                        alt="Profile"
-                        class="profile-photo"
-                    />
-                    <div>
+                <div class="profile-status-badge">
+                    <i class="bi bi-check-circle-fill me-1"></i> Active
+                </div>
+                <div class="d-flex align-items-center gap-4 flex-wrap">
+                    <div class="profile-photo-wrapper">
+                        <img
+                            src="https://ui-avatars.com/api/?name=Emma+Wilson&background=4F46E5&color=fff&size=160"
+                            alt="Emma Wilson"
+                            class="profile-photo"
+                        />
+                        <div class="profile-photo-overlay">
+                            <i class="bi bi-camera-fill"></i>
+                        </div>
+                    </div>
+                    <div class="profile-info">
                         <h2 class="fw-bold mb-1">Emma Wilson</h2>
                         <p class="text-secondary mb-3">
                             Student ID:
-                            <span class="fw-medium text-dark"
-                                >STD-2024-001</span
-                            >
+                            <span class="fw-semibold text-dark badge bg-light px-2 py-1 ms-1">STD-2024-001</span>
                         </p>
-                        <div class="d-flex gap-3 text-secondary small">
-                            <span
-                                ><i class="bi bi-book me-1"></i> Grade 10 -
-                                Science A</span
-                            >
-                            <span
-                                ><i class="bi bi-calendar-check me-1"></i>
-                                Enrolled: May 12, 2024</span
-                            >
+                        <div class="d-flex gap-3 flex-wrap text-secondary small profile-meta">
+                            <span class="d-flex align-items-center gap-1">
+                                <i class="bi bi-book text-primary"></i> Grade 10 - Science A
+                            </span>
+                            <span class="d-flex align-items-center gap-1">
+                                <i class="bi bi-calendar-check text-success"></i> Enrolled: May 12, 2024
+                            </span>
+                            <span class="d-flex align-items-center gap-1">
+                                <i class="bi bi-envelope text-info"></i> emma.wilson@student.edu
+                            </span>
                         </div>
                     </div>
-                    <div class="ms-auto d-flex flex-column gap-2">
-                        <button class="btn-action">
-                            <i class="bi bi-pencil me-2"></i> Edit Profile
+                    <div class="ms-auto profile-actions">
+                        <button class="btn-action btn-action-primary">
+                            <i class="bi bi-pencil-square me-2"></i> Edit Profile
                         </button>
                         <button class="btn-action">
                             <i class="bi bi-printer me-2"></i> Print ID Card
+                        </button>
+                        <button class="btn-action btn-action-danger">
+                            <i class="bi bi-trash me-2"></i> Delete
                         </button>
                     </div>
                 </div>
@@ -107,59 +133,74 @@
                 <!-- Personal Information -->
                 <div class="col-lg-8">
                     <div class="info-card">
-                        <div class="card-header">
-                            <i class="bi bi-person text-primary"></i> Personal
-                            Information
+                        <div class="info-card-header">
+                            <div class="info-card-icon bg-primary bg-opacity-10">
+                                <i class="bi bi-person-fill text-primary"></i>
+                            </div>
+                            <h5 class="mb-0 fw-bold">Personal Information</h5>
                         </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6 data-row">
-                                    <div class="data-label">Date of Birth</div>
-                                    <div class="data-value">
-                                        15 March 2009 (16 Yrs)
+                        <div class="info-card-body">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="data-item">
+                                        <div class="data-label">
+                                            <i class="bi bi-calendar3 me-1"></i> Date of Birth
+                                        </div>
+                                        <div class="data-value">15 March 2009 (16 Yrs)</div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 data-row">
-                                    <div class="data-label">Gender</div>
-                                    <div class="data-value">Female</div>
-                                </div>
-                                <div class="col-md-6 data-row">
-                                    <div class="data-label">Nationality</div>
-                                    <div class="data-value">Canadian</div>
-                                </div>
-                                <div class="col-md-6 data-row">
-                                    <div class="data-label">Language</div>
-                                    <div class="data-value">
-                                        English (Native), French
+                                <div class="col-md-6">
+                                    <div class="data-item">
+                                        <div class="data-label">
+                                            <i class="bi bi-gender-ambiguous me-1"></i> Gender
+                                        </div>
+                                        <div class="data-value">Female</div>
                                     </div>
                                 </div>
-                                <div class="col-12 border-top pt-3 mt-2">
-                                    <div class="row">
-                                        <div class="col-md-6 data-row">
-                                            <div class="data-label">
-                                                Email Address
-                                            </div>
-                                            <div class="data-value">
+                                <div class="col-md-6">
+                                    <div class="data-item">
+                                        <div class="data-label">
+                                            <i class="bi bi-globe me-1"></i> Nationality
+                                        </div>
+                                        <div class="data-value">Canadian</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="data-item">
+                                        <div class="data-label">
+                                            <i class="bi bi-translate me-1"></i> Language
+                                        </div>
+                                        <div class="data-value">English (Native), French</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4 opacity-25" />
+                            
+                            <h6 class="fw-bold text-secondary mb-3">
+                                <i class="bi bi-geo-alt me-1"></i> Contact Details
+                            </h6>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="data-item">
+                                        <div class="data-label">Email Address</div>
+                                        <div class="data-value">
+                                            <a href="mailto:emma.wilson@student.edu" class="text-decoration-none text-dark">
                                                 emma.wilson@student.edu
-                                            </div>
+                                            </a>
                                         </div>
-                                        <div class="col-md-6 data-row">
-                                            <div class="data-label">
-                                                Phone Number
-                                            </div>
-                                            <div class="data-value">
-                                                +1 234 567 8901
-                                            </div>
-                                        </div>
-                                        <div class="col-12 data-row">
-                                            <div class="data-label">
-                                                Home Address
-                                            </div>
-                                            <div class="data-value">
-                                                123 Maple Avenue, Toronto,
-                                                Canada
-                                            </div>
-                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="data-item">
+                                        <div class="data-label">Phone Number</div>
+                                        <div class="data-value">+1 234 567 8901</div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="data-item">
+                                        <div class="data-label">Home Address</div>
+                                        <div class="data-value">123 Maple Avenue, Toronto, Canada</div>
                                     </div>
                                 </div>
                             </div>
@@ -170,45 +211,41 @@
                 <!-- Academic Summary -->
                 <div class="col-lg-4">
                     <div class="info-card">
-                        <div class="card-header">
-                            <i class="bi bi-mortarboard text-primary"></i>
-                            Academic Status
+                        <div class="info-card-header">
+                            <div class="info-card-icon bg-success bg-opacity-10">
+                                <i class="bi bi-mortarboard-fill text-success"></i>
+                            </div>
+                            <h5 class="mb-0 fw-bold">Academic Status</h5>
                         </div>
-                        <div class="card-body">
-                            <div
-                                class="data-row d-flex justify-content-between"
-                            >
+                        <div class="info-card-body">
+                            <div class="academic-stat-item">
                                 <span class="text-secondary">Grade Level</span>
                                 <span class="fw-bold">Grade 10</span>
                             </div>
-                            <div
-                                class="data-row d-flex justify-content-between"
-                            >
+                            <div class="academic-stat-item">
                                 <span class="text-secondary">Program</span>
                                 <span class="fw-bold">Science Stream</span>
                             </div>
-                            <div
-                                class="data-row d-flex justify-content-between"
-                            >
+                            <div class="academic-stat-item">
                                 <span class="text-secondary">Graduation</span>
-                                <span class="fw-bold text-success"
-                                    >June 2027</span
-                                >
+                                <span class="fw-bold text-success">
+                                    <i class="bi bi-award me-1"></i>June 2027
+                                </span>
                             </div>
-                            <div
-                                class="data-row d-flex justify-content-between"
-                            >
+                            <div class="academic-stat-item">
                                 <span class="text-secondary">Attendance</span>
-                                <span class="fw-bold text-primary">98.5%</span>
+                                <span class="fw-bold text-primary">
+                                    <i class="bi bi-graph-up me-1"></i>98.5%
+                                </span>
                             </div>
-                            <hr />
-                            <div class="data-row">
+                            
+                            <hr class="my-3 opacity-25" />
+                            
+                            <div class="data-item">
                                 <div class="data-label">Financial Aid</div>
-                                <div
-                                    class="badge bg-warning bg-opacity-10 text-warning px-3 py-2"
-                                >
-                                    Partial Scholarship
-                                </div>
+                                <span class="badge bg-warning bg-opacity-15 text-warning px-3 py-2 mt-1">
+                                    <i class="bi bi-coin me-1"></i> Partial Scholarship
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -217,33 +254,34 @@
                 <!-- Emergency Contact -->
                 <div class="col-md-6">
                     <div class="info-card">
-                        <div class="card-header">
-                            <i class="bi bi-telephone-plus text-danger"></i>
-                            Emergency Contact
+                        <div class="info-card-header">
+                            <div class="info-card-icon bg-danger bg-opacity-10">
+                                <i class="bi bi-telephone-plus-fill text-danger"></i>
+                            </div>
+                            <h5 class="mb-0 fw-bold">Emergency Contact</h5>
                         </div>
-                        <div class="card-body">
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <div class="bg-light p-3 rounded-circle">
-                                    <i
-                                        class="bi bi-person-heart text-danger"
-                                    ></i>
+                        <div class="info-card-body">
+                            <div class="d-flex align-items-center gap-3 mb-4 p-3 bg-light rounded-3">
+                                <div class="emergency-contact-avatar">
+                                    <i class="bi bi-person-heart text-danger"></i>
                                 </div>
                                 <div>
                                     <h6 class="fw-bold mb-0">Sarah Wilson</h6>
                                     <div class="text-secondary small">
+                                        <i class="bi bi-heart-fill text-danger me-1" style="font-size: 0.6rem;"></i>
                                         Mother
                                     </div>
                                 </div>
                             </div>
-                            <div class="data-row mb-1">
-                                <i class="bi bi-phone me-2 text-secondary"></i>
-                                +1 555 0192 834
+                            <div class="contact-info-item mb-3">
+                                <i class="bi bi-phone-fill text-primary me-2"></i>
+                                <span>+1 555 0192 834</span>
                             </div>
-                            <div class="data-row">
-                                <i
-                                    class="bi bi-envelope me-2 text-secondary"
-                                ></i>
-                                sarah.w@example.com
+                            <div class="contact-info-item">
+                                <i class="bi bi-envelope-fill text-primary me-2"></i>
+                                <a href="mailto:sarah.w@example.com" class="text-decoration-none text-dark">
+                                    sarah.w@example.com
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -252,23 +290,140 @@
                 <!-- Notes -->
                 <div class="col-md-6">
                     <div class="info-card">
-                        <div class="card-header">
-                            <i class="bi bi-journal-text text-primary"></i>
-                            Notes & Remarks
+                        <div class="info-card-header">
+                            <div class="info-card-icon bg-info bg-opacity-10">
+                                <i class="bi bi-journal-text text-info"></i>
+                            </div>
+                            <h5 class="mb-0 fw-bold">Notes & Remarks</h5>
                         </div>
-                        <div class="card-body">
-                            <div
-                                class="p-3 bg-light rounded border border-light small text-secondary"
-                            >
-                                Student has mild dyslexia accommodation (extra
-                                time on exams). Allergic to peanuts (EpiPen in
-                                nurse office).
+                        <div class="info-card-body">
+                            <div class="notes-container">
+                                <div class="note-item">
+                                    <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                                    <span>Student has mild dyslexia accommodation (extra time on exams).</span>
+                                </div>
+                                <div class="note-item">
+                                    <i class="bi bi-shield-exclamation text-danger me-2"></i>
+                                    <span>Allergic to peanuts (EpiPen in nurse office).</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div class="text-center mb-5">
+                <div class="position-relative d-inline-block">
+                    <img
+                        src="https://ui-avatars.com/api/?name=Admin+User&background=4F46E5&color=fff"
+                        class="rounded-circle mb-3"
+                        width="80"
+                        height="80"
+                    />
+                    <span
+                        class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle p-2"
+                    ></span>
+                </div>
+                <h5 class="fw-bold mb-1">Admin User</h5>
+                <p class="text-secondary small">Administrator</p>
+                <a
+                    href="login.html"
+                    class="btn btn-outline-danger btn-sm w-100 rounded-pill"
+                    >Logout</a
+                >
+            </div>
+
+            <h6 class="fw-bold mb-3">January 2026</h6>
+            <div class="calendar-grid mb-5">
+                <div class="text-secondary small">M</div>
+                <div class="text-secondary small">T</div>
+                <div class="text-secondary small">W</div>
+                <div class="text-secondary small">T</div>
+                <div class="text-secondary small">F</div>
+                <div class="text-secondary small">S</div>
+                <div class="text-secondary small">S</div>
+
+                <span></span><span></span><span></span>
+                <div class="calendar-day">1</div>
+                <div class="calendar-day">2</div>
+                <div class="calendar-day">3</div>
+                <div class="calendar-day">4</div>
+                <div class="calendar-day">5</div>
+                <div class="calendar-day">6</div>
+                <div class="calendar-day">7</div>
+                <div class="calendar-day">8</div>
+                <div class="calendar-day">9</div>
+                <div class="calendar-day">10</div>
+                <div class="calendar-day">11</div>
+                <div class="calendar-day">12</div>
+                <div class="calendar-day">13</div>
+                <div class="calendar-day">14</div>
+                <div class="calendar-day">15</div>
+                <div class="calendar-day">16</div>
+                <div class="calendar-day">17</div>
+                <div class="calendar-day">18</div>
+                <div class="calendar-day">19</div>
+                <div class="calendar-day">20</div>
+                <div class="calendar-day">21</div>
+                <div class="calendar-day">22</div>
+                <div class="calendar-day">23</div>
+                <div class="calendar-day active">24</div>
+                <div class="calendar-day">25</div>
+                <div class="calendar-day">26</div>
+                <div class="calendar-day">27</div>
+                <div class="calendar-day">28</div>
+                <div class="calendar-day">29</div>
+                <div class="calendar-day">30</div>
+                <div class="calendar-day">31</div>
+            </div>
+
+            <h6 class="fw-bold mb-3">Upcoming Events</h6>
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex gap-3">
+                    <div
+                        class="bg-primary bg-opacity-10 p-2 rounded text-center"
+                        style="min-width: 50px"
+                    >
+                        <div class="fw-bold text-white">28</div>
+                        <div
+                            class="small text-white"
+                            style="font-size: 0.7rem"
+                        >
+                            JAN
+                        </div>
+                    </div>
+                    <div>
+                        <div class="fw-semibold small">Parent Meeting</div>
+                        <div class="text-secondary" style="font-size: 0.75rem">
+                            10:00 AM - Conference Hall
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex gap-3">
+                    <div
+                        class="bg-warning bg-opacity-10 p-2 rounded text-center"
+                        style="min-width: 50px"
+                    >
+                        <div class="fw-bold text-white">01</div>
+                        <div
+                            class="small text-white"
+                            style="font-size: 0.7rem"
+                        >
+                            FEB
+                        </div>
+                    </div>
+                    <div>
+                        <div class="fw-semibold small">Mid-Term Exams</div>
+                        <div class="text-secondary" style="font-size: 0.75rem">
+                            All Grades
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="../js/main.js"></script>
