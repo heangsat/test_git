@@ -519,8 +519,13 @@ function initDashboard() {
   const presentCount = Object.values(attendanceData).filter(
     (status) => status === "present",
   ).length;
+  const lateCount = Object.values(attendanceData).filter(
+    (status) => status === "late",
+  ).length;
+
   const totalStudents = students.length > 0 ? students.length : 1;
-  const avgAttendance = Math.round((presentCount / totalStudents) * 100);
+  const attendanceScore = presentCount + (lateCount * 0.5);
+  const avgAttendance = Math.round((attendanceScore / totalStudents) * 100);
   document.getElementById("todayAttendance").textContent = avgAttendance + "%";
 
   const user = JSON.parse(localStorage.getItem("eduManage_user"));
@@ -669,15 +674,34 @@ function initStudentList() {
       return;
     }
 
+    // Get attendance data for today
+    const allAttendance = JSON.parse(
+      localStorage.getItem("eduManage_attendance_v2") || "{}",
+    );
+    const todayStr = getTodayStr();
+    const attendanceData = allAttendance[todayStr] || {};
+
     data.forEach((student) => {
       const tr = document.createElement("tr");
 
       let statusBadge = "";
-      if (student.status === "Active")
-        statusBadge = '<span class="badge badge-active">Active</span>';
-      else if (student.status === "Absent")
-        statusBadge = '<span class="badge badge-inactive">Absent</span>';
-      else statusBadge = '<span class="badge badge-pending">Pending</span>';
+      const dailyStatus = attendanceData[student.id];
+
+      // Check daily attendance status first
+      if (dailyStatus === "present") {
+        statusBadge = '<span class="badge badge-success">Present</span>';
+      } else if (dailyStatus === "absent") {
+        statusBadge = '<span class="badge badge-danger">Absent</span>';
+      } else if (dailyStatus === "late") {
+        statusBadge = '<span class="badge badge-warning">Late</span>';
+      } else {
+        // Fallback to enrollment status
+        if (student.status === "Active")
+          statusBadge = '<span class="badge badge-active">Active</span>';
+        else if (student.status === "Absent")
+          statusBadge = '<span class="badge badge-inactive">Absent</span>';
+        else statusBadge = '<span class="badge badge-pending">Pending</span>';
+      }
 
       const initials = getInitials(student.firstName + " " + student.lastName);
       const avatarHtml = student.photo 
@@ -757,13 +781,14 @@ function initStudentList() {
 
     if (searchInput && searchInput.value) {
       const term = searchInput.value.toLowerCase();
-      filtered = filtered.filter(
-        (s) =>
-          s.firstName.toLowerCase().includes(term) ||
-          s.lastName.toLowerCase().includes(term) ||
+      filtered = filtered.filter((s) => {
+        const fullName = (s.firstName + " " + s.lastName).toLowerCase();
+        return (
+          fullName.includes(term) ||
           s.id.toLowerCase().includes(term) ||
-          (s.email && s.email.toLowerCase().includes(term)),
-      );
+          (s.email && s.email.toLowerCase().includes(term))
+        );
+      });
     }
 
     if (filterClass && filterClass.value !== "All Classes") {
@@ -963,7 +988,7 @@ function initEnrollment() {
           alert("Student ID already exists!");
           return;
         }
-        students.push(studentData);
+        students.unshift(studentData);
         localStorage.setItem("eduManage_students", JSON.stringify(students));
         alert("Student enrolled successfully!");
       }
